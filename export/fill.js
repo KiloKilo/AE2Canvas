@@ -28,6 +28,7 @@ function normalizeColor(frames) {
             Math.round(color[1] * 255),
             Math.round(color[2] * 255)
         ]
+
     }
 
     return frames;
