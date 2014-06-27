@@ -1,0 +1,9 @@
+{
+    "name"           : "ae2canvas",
+    "version"        : "1.0.0",
+    "devDependencies": {
+        "grunt-contrib-watch" : "*",
+        "grunt-browserify"    : "*",
+        "grunt-contrib-uglify": "*"
+    }
+}
