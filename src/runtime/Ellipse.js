@@ -37,7 +37,7 @@ Ellipse.prototype = {
         ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
         ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
         ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-        ctx.stroke();
+        ctx.closePath();
 
     }
 };

@@ -77,21 +77,12 @@ function getKeyframes(data, split) {
             easeOut = data.keyOutTemporalEase(i)[0];
         }
 
-        obj.t = data.keyTime(i) * 1000;
+        obj.t = Math.round(data.keyTime(i) * 1000);
 
         if (typeof split === 'number') {
             obj.v = data.keyValue(i)[split || 0];
         } else {
             obj.v = data.keyValue(i);
-        }
-
-        for (key in KeyframeInterpolationType) {
-            $.writeln('------------------------------');
-            $.writeln(key);
-            $.writeln(KeyframeInterpolationType[key]);
-            $.writeln('------------------------------');
-            if (outType === key) {
-            }
         }
 
         if (i > 1 && inType === KeyframeInterpolationType.BEZIER) {
@@ -111,37 +102,37 @@ function getKeyframes(data, split) {
     return arr;
 }
 
-function getKeyframe(data, keyIndex, arrIndex) {
-
-    var obj = {},
-        numKeys = data.numKeys,
-        inType,
-        outType,
-        easeIn,
-        easeOut;
-
-    inType = data.keyInInterpolationType(keyIndex);
-    outType = data.keyOutInterpolationType(keyIndex);
-
-    easeIn = data.keyInTemporalEase(keyIndex)[arrIndex];
-    easeOut = data.keyOutTemporalEase(keyIndex)[arrIndex];
-
-    obj.t = data.keyTime(keyIndex) * 1000;
-    obj.v = data.keyValue(keyIndex)[arrIndex];
-
-    if (easeIn && keyIndex > 1 && inType === KeyframeInterpolationType.BEZIER) {
-        obj.easeIn = [];
-        obj.easeIn[0] = easeIn.influence;
-        obj.easeIn[1] = easeIn.speed;
-    }
-    if (easeOut && keyIndex < numKeys && outType === KeyframeInterpolationType.BEZIER) {
-        obj.easeOut = [];
-        obj.easeOut[0] = easeOut.influence;
-        obj.easeOut[1] = easeOut.speed;
-    }
-
-    return obj;
-}
+//function getKeyframe(data, keyIndex, arrIndex) {
+//
+//    var obj = {},
+//        numKeys = data.numKeys,
+//        inType,
+//        outType,
+//        easeIn,
+//        easeOut;
+//
+//    inType = data.keyInInterpolationType(keyIndex);
+//    outType = data.keyOutInterpolationType(keyIndex);
+//
+//    easeIn = data.keyInTemporalEase(keyIndex)[arrIndex];
+//    easeOut = data.keyOutTemporalEase(keyIndex)[arrIndex];
+//
+//    obj.t = data.keyTime(keyIndex) * 1000;
+//    obj.v = data.keyValue(keyIndex)[arrIndex];
+//
+//    if (easeIn && keyIndex > 1 && inType === KeyframeInterpolationType.BEZIER) {
+//        obj.easeIn = [];
+//        obj.easeIn[0] = easeIn.influence;
+//        obj.easeIn[1] = easeIn.speed;
+//    }
+//    if (easeOut && keyIndex < numKeys && outType === KeyframeInterpolationType.BEZIER) {
+//        obj.easeOut = [];
+//        obj.easeOut[0] = easeOut.influence;
+//        obj.easeOut[1] = easeOut.speed;
+//    }
+//
+//    return obj;
+//}
 
 function normalizeKeyframes(frames) {
 
@@ -153,8 +144,8 @@ function normalizeKeyframes(frames) {
             diff,
             x, y, z;
 
-        // multidimensional properties, fill
-        if (key.v instanceof Array && key.v.length === 3) {
+        // multidimensional properties, fill array has 4 fields. dont need last one
+        if (key.v instanceof Array && key.v.length > 2) {
             x = Math.abs(key.v[0] - lastKey.v[0]);
             y = Math.abs(key.v[1] - lastKey.v[1]);
             z = Math.abs(key.v[1] - lastKey.v[2]);
@@ -177,7 +168,11 @@ function normalizeKeyframes(frames) {
             var normSpeedIn = key.easeIn[1] / averageTempo * normInfluenceIn;
             var easeIn = [];
             easeIn[0] = 1 - normInfluenceIn;
+            //round
+            easeIn[0] = Math.round(easeIn[0] * 1000) / 1000;
             easeIn[1] = 1 - normSpeedIn;
+            //round
+            easeIn[1] = Math.round(easeIn[1] * 1000) / 1000;
             key.easeIn = easeIn;
 
             //easeOut
@@ -186,7 +181,11 @@ function normalizeKeyframes(frames) {
                 var normSpeedOut = lastKey.easeOut[1] / averageTempo * normInfluenceOut;
                 var easeOut = [];
                 easeOut[0] = normInfluenceOut;
+                //round
+                easeOut[0] = Math.round(easeOut[0] * 1000) / 1000;
                 easeOut[1] = normSpeedOut;
+                //round
+                easeOut[1] = Math.round(easeOut[1] * 1000) / 1000;
                 lastKey.easeOut = easeOut;
             } else {
                 var easeOut = [];

@@ -1,5 +1,421 @@
-{"groups":[{"name":"Shape Layer 1","matchName":"ADBE Vector Layer","groups":[{"name":"Shape 1","matchName":"ADBE Vector Group","groups":[
+{"groups": [
+    {
+        "out"      : 1233,
+        "name"     : "circle",
+        "matchName": "ADBE Vector Layer",
+        "groups"   : [
+            {
+                "name"     : "Ellipse 1",
+                "matchName": "ADBE Vector Group",
+                "groups"   : [
 
-],"shapes":[{"name":"Path","type":"path","closed":true,"frames":[{"v":[[-108,-253,52,-349,-28,-301],[-532,-220,-264,-260,-398,-240],[-465,365,-709,9,-587,187],[97,317,-316,252,-94,287],[448,-418,676,208,562,-105]],"t":0,"easeOut":[0,0]},{"v":[[-33,-187,127,-283,47,-235],[-162,-146,106,-186,-28,-166],[-188,85,-432,-271,-310,-93],[133,116,-213,-170,-40,-27],[337,-130,565,496,451,183]],"t":1666.66666666667,"easeIn":[0,1]}],"isAnimated":true}],"fill":{"color":[{"t":0,"v":[234,0,255]},{"t":1666.66666666667,"v":[0,255,48]}],"opacity":[{"t":0,"v":1}]},"transform":{"anchorX":[{"t":0,"v":0}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":0}],"positionY":[{"t":0,"v":0}],"scaleX":[{"t":0,"v":1}],"scaleY":[{"t":0,"v":1}],"skew":[{"t":0,"v":0}],"skewAxis":[{"t":0,"v":0}],"rotation":[{"t":0,"v":0}],"opacity":[{"t":0,"v":1}]}}],"shapes":[
+                ],
+                "shapes"   : [
+                    {
+                        "name"    : "Ellipse Path 1",
+                        "type"    : "ellipse",
+                        "size"    : [
+                            {
+                                "t": 0,
+                                "v": [82, 82]
+                            }
+                        ],
+                        "position": [
+                            {
+                                "t": 0,
+                                "v": [0, 0]
+                            }
+                        ]
+                    }
+                ],
+                "transform": {
+                    "anchorX"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "anchorY"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "positionX": [
+                        {
+                            "t"      : 200,
+                            "v"      : 49,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 567,
+                            "v"     : 565,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "positionY": [
+                        {
+                            "t"      : 200,
+                            "v"      : 9,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 567,
+                            "v"     : -297,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "scaleX"   : [
+                        {
+                            "t"      : 200,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1922.649]
+                        },
+                        {
+                            "t"     : 933,
+                            "v"     : 0,
+                            "easeIn": [0.213, 416.363]
+                        }
+                    ],
+                    "scaleY"   : [
+                        {
+                            "t"      : 200,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1922.649]
+                        },
+                        {
+                            "t"     : 933,
+                            "v"     : 0,
+                            "easeIn": [0.213, 416.363]
+                        }
+                    ],
+                    "skew"     : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "skewAxis" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "rotation" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "opacity"  : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "name"     : "Ellipse 2",
+                "matchName": "ADBE Vector Group",
+                "groups"   : [
 
-],"transform":{"anchorX":[{"t":0,"v":0}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":640}],"positionY":[{"t":0,"v":360}],"scaleX":[{"t":0,"v":1}],"scaleY":[{"t":0,"v":1}],"skew":[{"t":0,"v":0}],"skewAxis":[{"t":0,"v":0}],"rotation":[{"t":0,"v":0}],"opacity":[{"t":0,"v":1}]}}]}
+                ],
+                "shapes"   : [
+                    {
+                        "name"    : "Ellipse Path 1",
+                        "type"    : "ellipse",
+                        "size"    : [
+                            {
+                                "t": 0,
+                                "v": [82, 82]
+                            }
+                        ],
+                        "position": [
+                            {
+                                "t": 0,
+                                "v": [0, 0]
+                            }
+                        ]
+                    }
+                ],
+                "transform": {
+                    "anchorX"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "anchorY"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "positionX": [
+                        {
+                            "t"      : 300,
+                            "v"      : -85,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 667,
+                            "v"     : -548,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "positionY": [
+                        {
+                            "t"      : 300,
+                            "v"      : 93,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 667,
+                            "v"     : -71,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "scaleX"   : [
+                        {
+                            "t"      : 300,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1487.233]
+                        },
+                        {
+                            "t"     : 867,
+                            "v"     : 0,
+                            "easeIn": [0.213, 322.297]
+                        }
+                    ],
+                    "scaleY"   : [
+                        {
+                            "t"      : 300,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1487.233]
+                        },
+                        {
+                            "t"     : 867,
+                            "v"     : 0,
+                            "easeIn": [0.213, 322.297]
+                        }
+                    ],
+                    "skew"     : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "skewAxis" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "rotation" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "opacity"  : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "name"     : "Ellipse 3",
+                "matchName": "ADBE Vector Group",
+                "groups"   : [
+
+                ],
+                "shapes"   : [
+                    {
+                        "name"    : "Ellipse Path 1",
+                        "type"    : "ellipse",
+                        "size"    : [
+                            {
+                                "t": 0,
+                                "v": [82, 82]
+                            }
+                        ],
+                        "position": [
+                            {
+                                "t": 0,
+                                "v": [0, 0]
+                            }
+                        ]
+                    }
+                ],
+                "transform": {
+                    "anchorX"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "anchorY"  : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "positionX": [
+                        {
+                            "t"      : 367,
+                            "v"      : 8,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 733,
+                            "v"     : -198,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "positionY": [
+                        {
+                            "t"      : 367,
+                            "v"      : 93,
+                            "easeOut": [0, 0]
+                        },
+                        {
+                            "t"     : 733,
+                            "v"     : 239,
+                            "easeIn": [0, 1]
+                        }
+                    ],
+                    "scaleX"   : [
+                        {
+                            "t"      : 367,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1484.61]
+                        },
+                        {
+                            "t"     : 933,
+                            "v"     : 0,
+                            "easeIn": [0.213, 321.73]
+                        }
+                    ],
+                    "scaleY"   : [
+                        {
+                            "t"      : 367,
+                            "v"      : 0,
+                            "easeOut": [0.008, 1484.61]
+                        },
+                        {
+                            "t"     : 933,
+                            "v"     : 0,
+                            "easeIn": [0.213, 321.73]
+                        }
+                    ],
+                    "skew"     : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "skewAxis" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "rotation" : [
+                        {
+                            "t": 0,
+                            "v": 0
+                        }
+                    ],
+                    "opacity"  : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ]
+                }
+            }
+        ],
+        "shapes"   : [
+
+        ],
+        "fill"     : {
+            "color"  : [
+                {
+                    "t": 0,
+                    "v": [255, 0, 0]
+                }
+            ],
+            "opacity": [
+                {
+                    "t": 0,
+                    "v": 1
+                }
+            ]
+        },
+        "transform": {
+            "anchorX"  : [
+                {
+                    "t": 0,
+                    "v": 0
+                }
+            ],
+            "anchorY"  : [
+                {
+                    "t": 0,
+                    "v": 0
+                }
+            ],
+            "positionX": [
+                {
+                    "t": 0,
+                    "v": 640
+                }
+            ],
+            "positionY": [
+                {
+                    "t": 0,
+                    "v": 360
+                }
+            ],
+            "scaleX"   : [
+                {
+                    "t": 0,
+                    "v": 0.667
+                }
+            ],
+            "scaleY"   : [
+                {
+                    "t": 0,
+                    "v": 0.667
+                }
+            ],
+            "skew"     : [
+                {
+                    "t": 0,
+                    "v": 0
+                }
+            ],
+            "skewAxis" : [
+                {
+                    "t": 0,
+                    "v": 0
+                }
+            ],
+            "rotation" : [
+                {
+                    "t": 0,
+                    "v": 0
+                }
+            ],
+            "opacity"  : [
+                {
+                    "t": 0,
+                    "v": 1
+                }
+            ]
+        }
+    }
+]}

@@ -12,11 +12,11 @@ function Path(data) {
 Path.prototype = {
 
     draw: function (ctx, time) {
-        ctx.save();
+//        ctx.save();
 
         var vertices = this.getValue(time);
 
-        ctx.beginPath();
+//        ctx.beginPath();
         ctx.moveTo(vertices[0][4], vertices[0][5]);
 
         for (var j = 1; j < vertices.length; j++) {
@@ -38,7 +38,7 @@ Path.prototype = {
         }
         if (this.closed) {
             ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
-            ctx.closePath();
+//            ctx.closePath();
 
 //            ctx.save();
 //            ctx.fillStyle = 'rgba(255,0,0,0.5)';
@@ -47,7 +47,9 @@ Path.prototype = {
 //            ctx.restore();
         }
 
-        ctx.restore();
+//        ctx.closePath();
+
+//        ctx.restore();
     },
 
     getValue: function (time) {

@@ -17,7 +17,7 @@
             var obj = {};
 
             obj.v = getPoint(data.keyValue(i));
-            obj.t = data.keyTime(i) * 1000; // sec -> millisec
+            obj.t = Math.round(data.keyTime(i) * 1000);
 
             if (obj.inInterpolation !== KeyframeInterpolationType.HOLD ||
                 obj.outInterpolation !== KeyframeInterpolationType.HOLD) {

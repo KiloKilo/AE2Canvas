@@ -10,7 +10,9 @@ function getComp(data) {
     for (var i = data.numLayers; i > 0; i--) {
         var layer = data.layer(i);
 
-        if (layer instanceof ShapeLayer) {
+        $.writeln(layer.inPoint);
+
+        if (layer instanceof ShapeLayer && layer.enabled) {
             content.groups.push(getGroup(layer));
         }
     }

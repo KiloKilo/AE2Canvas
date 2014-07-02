@@ -15,6 +15,13 @@ function Group(data) {
 
     this.name = data.name;
     this.index = data.index;
+
+    if (data.in) this.in = data.in;
+    else this.in = 0;
+
+    if (data.out) this.out = data.out;
+    else this.out = 500000; // FIXME get comp total duration
+
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
     this.transform = new Transform(data.transform);
@@ -56,12 +63,13 @@ Group.prototype = {
         if (this.stroke) this.stroke.setStroke(ctx, time);
 
         this.transform.transform(ctx, time);
-
+        ctx.beginPath();
         if (this.shapes) {
             for (var i = 0; i < this.shapes.length; i++) {
                 this.shapes[i].draw(ctx, time);
             }
         }
+        ctx.closePath();
 
         //TODO get order stroke - fill
         if (this.fill) ctx.fill();
@@ -69,7 +77,9 @@ Group.prototype = {
 
         if (this.groups) {
             for (var j = 0; j < this.groups.length; j++) {
-                this.groups[j].draw(ctx, time);
+                if (time >= this.groups[j].in && time < this.groups[j].out) {
+                    this.groups[j].draw(ctx, time);
+                }
             }
         }
 

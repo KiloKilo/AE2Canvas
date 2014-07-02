@@ -49,7 +49,6 @@ function Transform(data) {
     }
 
     if (data.rotation) {
-        console.log(data.rotation);
         if (data.rotation.length > 1) this.rotation = new AnimatedProperty(data.rotation);
         else this.rotation = new Property(data.rotation);
     }
@@ -75,7 +74,7 @@ Transform.prototype = {
             scaleY = this.scaleY.getValue(time),
             opacity = this.opacity.getValue(time) * ctx.globalAlpha; // FIXME wrong transparency if nested
 
-//        console.log(rotation);
+        console.log(scaleX, scaleY);
 
         //order very very important :)
         ctx.transform(1, 0, 0, 1, positionX - anchorX, positionY - anchorY);

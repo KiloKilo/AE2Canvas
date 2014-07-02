@@ -34,7 +34,6 @@ AnimatedProperty.prototype.lerp = function (a, b, t) {
 };
 
 AnimatedProperty.prototype.setEasing = function () {
-//    if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
     if (this.nextFrame.easeIn) {
         this.easing = new BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
     } else {

@@ -1,6 +1,13 @@
 var Runtime = require('./Runtime');
 
 var stats, ctx, runtime;
+var file = 'animation';
+
+if (location.hash) {
+    console.log(location.hash);
+    file = location.hash.substring(1);
+}
+
 
 function fetchJSONFile(path, callback) {
     var httpRequest = new XMLHttpRequest();
@@ -15,13 +22,6 @@ function fetchJSONFile(path, callback) {
     httpRequest.open('GET', path);
     httpRequest.send();
 }
-
-window.onload = function () {
-    fetchJSONFile('json/animation.json', function (data) {
-        runtime = new Runtime(data);
-        start();
-    });
-};
 
 function loop(time) {
     requestAnimationFrame(loop);
@@ -46,6 +46,12 @@ function start() {
     }, false);
 
     var canvas = document.getElementById('canvas');
+//    window.addEventListener('resize', function () {
+////        var width = window.innerWidth,
+////            height = width * 9 /16;
+////        runtime.resize(width, height);
+//    });
+
     if (canvas.getContext) {
         ctx = canvas.getContext('2d');
         runtime.canvas = canvas;
@@ -60,3 +66,7 @@ function render(time) {
     stats.update();
 }
 
+fetchJSONFile('json/' + file + '.json', function (data) {
+    runtime = new Runtime(data);
+    start();
+});

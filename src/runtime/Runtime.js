@@ -10,6 +10,7 @@ function Runtime(data) {
     this.started = false;
     this.time = 0;
     this.startTime = 0;
+    this.pausedTime = 0;
 
     this.groups = [];
     for (var i = 0; i < data.groups.length; i++) {
@@ -23,6 +24,7 @@ Runtime.prototype = {
 
     start: function () {
         this.startTime = this.time;
+        console.log('------------------------------- RESTART ---------------------------------------');
         this.started = true;
     },
 
@@ -32,6 +34,7 @@ Runtime.prototype = {
     },
 
     pause: function () {
+        this.pausedTime = this.time;
         this.startTime = this.time;
         this.started = false;
     },
@@ -39,6 +42,8 @@ Runtime.prototype = {
     update: function (time) {
         this.time = time;
         if (this.started) {
+//            console.log('tick', this.time - this.startTime);
+//            console.log(this.time);
             this.draw(this.time - this.startTime);
         }
     },
@@ -47,9 +52,16 @@ Runtime.prototype = {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
         for (var i = 0; i < this.groups.length; i++) {
-            this.groups[i].draw(this.ctx, time);
+            if (time >= this.groups[i].in && time < this.groups[i].out) {
+                this.groups[i].draw(this.ctx, time);
+            }
         }
         this.ctx.restore();
+    },
+
+    resize: function (width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height;
     }
 };
 
