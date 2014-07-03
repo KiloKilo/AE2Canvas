@@ -8,16 +8,7 @@ function AnimatedPath(data) {
     if (!data) return null;
 
     Path.call(this, data);
-
-    this.finished = false;
-    this.started = false;
-    this.pointer = 0;
-
     this.frameCount = this.frames.length;
-    this.nextFrame = this.frames[this.pointer];
-    this.lastFrame = this.nextFrame;
-
-    this.easing = null;
 }
 
 AnimatedPath.prototype = Object.create(Path.prototype);
@@ -72,6 +63,15 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
         actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
     }
     return actualVertices;
+};
+
+AnimatedPath.prototype.reset = function () {
+    this.finished = false;
+    this.started = false;
+    this.pointer = 0;
+    this.nextFrame = this.frames[this.pointer];
+    this.lastFrame = this.nextFrame;
+    this.easing = null;
 };
 
 module.exports = AnimatedPath;

@@ -158,7 +158,14 @@ function normalizeKeyframes(frames) {
             diff = Math.abs(key.v - lastKey.v);
         }
 
-        if (diff <= 0) diff = 0.1;
+        $.writeln(diff);
+
+        //FIXME hackiest shit ever :)
+        // fix problem if lastKey.v === key.v, but with easing
+        if (diff === 0) {
+            diff = 0.1;
+            key.v += 0.1;
+        }
 
         var averageTempo = diff / duration * 1000;
 

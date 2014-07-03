@@ -21,17 +21,20 @@ function Fill(data) {
 //    }
 }
 
-Fill.prototype = {
-    getValue: function (time) {
-        var color = this.color.getValue(time);
-        var opacity = this.opacity.getValue(time);
-        return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
-    },
+Fill.prototype.getValue = function (time) {
+    var color = this.color.getValue(time);
+    var opacity = this.opacity.getValue(time);
+    return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
+};
 
-    setColor: function (ctx, time) {
-        var color = this.getValue(time);
-        ctx.fillStyle = color;
-    }
+Fill.prototype.setColor = function (ctx, time) {
+    var color = this.getValue(time);
+    ctx.fillStyle = color;
+};
+
+Fill.prototype.reset = function () {
+    this.color.reset();
+    this.opacity.reset();
 };
 
 module.exports = Fill;

@@ -3,28 +3,41 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=1280, initial-scale=0.5">
-    <script src="src/lib/stats.min.js"></script>
-    <!--<script src="src/lib/Tween.js"></script>-->
-    <!--<script src="src/lib/BezierEasing.js"></script>-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
     <style>
         body {
             background: #333333;
+            margin: 0;
+            text-align: center;
         }
 
         #canvas {
-            width: 1280px;
-            height: 720px;
+            margin: 20px 10%;
+            /*width: 80%;*/
+            /*width: 1280px;*/
+            /*height: 720px;*/
             background: url(img/grid.png) no-repeat white;
+            background-size: contain;
             /*background: #0072C6;*/
+        }
+
+        button {
+
         }
     </style>
 </head>
 <body>
 <canvas id="canvas" width="1280" height="720"></canvas>
-<button id="start">Start</button>
-<button id="stop">Stop</button>
-<button id="pause">Pause</button>
+<div class="btn-group">
+    <button id="start" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-play"></span></button>
+    <button id="stop" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-stop"></span></button>
+    <button id="pause" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pause"></span></button>
+</div>
+<script src="src/lib/stats.min.js"></script>
 <script src="build/runtime.js"></script>
 </body>
 </html>

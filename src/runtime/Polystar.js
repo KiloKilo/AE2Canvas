@@ -31,81 +31,88 @@ function Polystar(data) {
 
 }
 
-Polystar.prototype = {
-    draw: function (ctx, time) {
+Polystar.prototype.draw = function (ctx, time) {
 
-        var points = this.points.getValue(time),
-            position = this.position.getValue(time),
-            innerRadius = this.innerRadius.getValue(time),
-            outerRadius = this.outerRadius.getValue(time),
-            innerRoundness = this.innerRoundness.getValue(time),
-            outerRoundness = this.outerRoundness.getValue(time);
+    var points = this.points.getValue(time),
+        position = this.position.getValue(time),
+        innerRadius = this.innerRadius.getValue(time),
+        outerRadius = this.outerRadius.getValue(time),
+        innerRoundness = this.innerRoundness.getValue(time),
+        outerRoundness = this.outerRoundness.getValue(time);
 
-        var x = position[0],
-            y = position[1],
-            bezierOffset = outerRadius / 2;
+    var x = position[0],
+        y = position[1],
+        bezierOffset = outerRadius / 2;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(x, y);
+    ctx.moveTo(0, 0 - outerRadius);
+
+    ctx.save();
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0 - outerRadius, 5, 5);
+    ctx.restore();
+
+    for (var i = 0; i < points; i++) {
+        ctx.rotate(Math.PI / points);
+
+        var b1x = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[0],
+            b1y = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[1],
+            b2x = 0,
+            b2y = 0 - innerRadius;
+
+        ctx.bezierCurveTo(b1x, b1y, b2x, b2y, 0, 0 - innerRadius);
 
         ctx.save();
-        ctx.beginPath();
-        ctx.translate(x, y);
-        ctx.moveTo(0, 0 - outerRadius);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(b1x, b1y, 5, 5);
+        ctx.fillRect(b2x, b2y, 5, 5);
+        ctx.restore();
+
+//            break;
+
+        ctx.rotate(Math.PI / points);
+
+        var b3x = 0,
+            b3y = 0 - innerRadius,
+            b4x = -bezierOffset,
+            b4y = 0 - outerRadius;
+
+        ctx.bezierCurveTo(b3x, b3y, b4x, b4y, 0, 0 - outerRadius);
+
+        ctx.save();
+        ctx.fillStyle = "green";
+        ctx.fillRect(b3x, b3y, 5, 5);
+        ctx.fillRect(b4x, b4y, 5, 5);
+        ctx.restore();
 
         ctx.save();
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0 - outerRadius, 5, 5);
         ctx.restore();
 
-        for (var i = 0; i < points; i++) {
-            ctx.rotate(Math.PI / points);
-
-            var b1x = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[0],
-                b1y = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[1],
-                b2x = 0,
-                b2y = 0 - innerRadius;
-
-            ctx.bezierCurveTo(b1x, b1y, b2x, b2y, 0, 0 - innerRadius);
-
-            ctx.save();
-            ctx.fillStyle = "blue";
-            ctx.fillRect(b1x, b1y, 5, 5);
-            ctx.fillRect(b2x, b2y, 5, 5);
-            ctx.restore();
-
 //            break;
 
-            ctx.rotate(Math.PI / points);
-
-            var b3x = 0,
-                b3y = 0 - innerRadius,
-                b4x = -bezierOffset,
-                b4y = 0 - outerRadius;
-
-            ctx.bezierCurveTo(b3x, b3y, b4x, b4y, 0, 0 - outerRadius);
-
-            ctx.save();
-            ctx.fillStyle = "green";
-            ctx.fillRect(b3x, b3y, 5, 5);
-            ctx.fillRect(b4x, b4y, 5, 5);
-            ctx.restore();
-
-            ctx.save();
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0 - outerRadius, 5, 5);
-            ctx.restore();
-
-//            break;
-
-        }
-        ctx.restore();
-    },
-
-    rotatePoint: function (cx, cy, x, y, radians) {
-        var cos = Math.cos(radians),
-            sin = Math.sin(radians),
-            nx = (cos * (x - cx)) - (sin * (y - cy)) + cx,
-            ny = (sin * (x - cx)) + (cos * (y - cy)) + cy;
-        return [nx, ny];
     }
+    ctx.restore();
+};
+
+Polystar.prototype.rotatePoint = function (cx, cy, x, y, radians) {
+    var cos = Math.cos(radians),
+        sin = Math.sin(radians),
+        nx = (cos * (x - cx)) - (sin * (y - cy)) + cx,
+        ny = (sin * (x - cx)) + (cos * (y - cy)) + cy;
+    return [nx, ny];
+};
+
+Polystar.prototype.reset = function () {
+    this.points.reset();
+    this.position = this.position.reset();
+    this.innerRadius = this.innerRadius.reset();
+    this.outerRadius = this.outerRadius.reset();
+    this.innerRoundness = this.innerRoundness.reset();
+    this.outerRoundness = this.outerRoundness.reset();
 };
 
 module.exports = Polystar;

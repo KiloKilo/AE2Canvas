@@ -23,25 +23,32 @@ function Stroke(data) {
     }
 }
 
-Stroke.prototype = {
-
-    getValue: function (time) {
-        var color = this.color.getValue(time);
-        var opacity = this.opacity.getValue(time);
-        return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
-    },
-
-    setStroke: function (ctx, time) {
-        var strokeColor = this.getValue(time);
-        var strokeWidth = this.width.getValue(time);
-        var strokeJoin = this.join;
-        if (strokeJoin === 'miter') var miterLimit = this.miterLimit.getValue(time);
-
-        ctx.lineWidth = strokeWidth;
-        ctx.lineJoin = strokeJoin;
-        if (miterLimit) ctx.miterLimit = miterLimit;
-        ctx.strokeStyle = strokeColor;
-    }
+Stroke.prototype.getValue = function (time) {
+    var color = this.color.getValue(time);
+    var opacity = this.opacity.getValue(time);
+    return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
 };
+
+Stroke.prototype.setStroke = function (ctx, time) {
+    var strokeColor = this.getValue(time);
+    var strokeWidth = this.width.getValue(time);
+    var strokeJoin = this.join;
+    if (strokeJoin === 'miter') var miterLimit = this.miterLimit.getValue(time);
+
+    ctx.lineWidth = strokeWidth;
+    ctx.lineJoin = strokeJoin;
+    if (miterLimit) ctx.miterLimit = miterLimit;
+    ctx.lineCap = this.cap;
+    ctx.strokeStyle = strokeColor;
+};
+
+Stroke.prototype.reset = function () {
+    this.color.reset();
+    this.opacity.reset();
+    this.width.reset();
+    if(this.miterLimit) this.miterLimit.reset();
+};
+
+
 
 module.exports = Stroke;

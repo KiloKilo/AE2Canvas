@@ -8,15 +8,8 @@ function AnimatedProperty(data) {
 
     Property.call(this, data);
 
-    this.finished = false;
-    this.started = false;
-
-    this.pointer = 0;
     this.frameCount = this.frames.length;
-    this.nextFrame = this.frames[this.pointer];
-    this.lastFrame = this.nextFrame;
-
-    this.easing = null;
+//    this.reset();
 }
 
 AnimatedProperty.prototype = Object.create(Property.prototype);
@@ -67,6 +60,15 @@ AnimatedProperty.prototype.getValueAtTime = function (time) {
     if (elapsed > 1) elapsed = 1;
     else if (this.easing) elapsed = this.easing(elapsed);
     return this.lerp(this.lastFrame.v, this.nextFrame.v, elapsed);
+};
+
+AnimatedProperty.prototype.reset = function () {
+    this.finished = false;
+    this.started = false;
+    this.pointer = 0;
+    this.nextFrame = this.frames[this.pointer];
+    this.lastFrame = this.nextFrame;
+    this.easing = null;
 };
 
 module.exports = AnimatedProperty;

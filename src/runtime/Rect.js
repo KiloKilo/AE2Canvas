@@ -17,28 +17,32 @@ function Rect(data) {
 
 }
 
-Rect.prototype = {
-    draw: function (ctx, time) {
+Rect.prototype.draw = function (ctx, time) {
 
-        var size = this.size.getValue(time),
-            position = this.position.getValue(time),
-            roundness = this.roundness.getValue(time);
+    var size = this.size.getValue(time),
+        position = this.position.getValue(time),
+        roundness = this.roundness.getValue(time);
 
-        if (size[0] < 2 * roundness) roundness = size[0] / 2;
-        if (size[1] < 2 * roundness) roundness = size[1] / 2;
+    if (size[0] < 2 * roundness) roundness = size[0] / 2;
+    if (size[1] < 2 * roundness) roundness = size[1] / 2;
 
-        var x = position[0] - size[0] / 2,
-            y = position[1] - size[1] / 2;
+    var x = position[0] - size[0] / 2,
+        y = position[1] - size[1] / 2;
 
-        ctx.beginPath();
-        ctx.moveTo(x + roundness, y);
-        ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
-        ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
-        ctx.arcTo(x, y + size[1], x, y, roundness);
-        ctx.arcTo(x, y, x + size[0], y, roundness);
-        ctx.closePath();
+//        ctx.beginPath();
+    ctx.moveTo(x + roundness, y);
+    ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
+    ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
+    ctx.arcTo(x, y + size[1], x, y, roundness);
+    ctx.arcTo(x, y, x + size[0], y, roundness);
+//        ctx.closePath();
 
-    }
+};
+
+Rect.prototype.reset = function () {
+    this.size.reset();
+    this.position.reset();
+    this.roundness.reset();
 };
 
 module.exports = Rect;

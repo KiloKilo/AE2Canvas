@@ -13,33 +13,36 @@ function Ellipse(data) {
     else this.position = new Property(data.position);
 }
 
-Ellipse.prototype = {
-    draw: function (ctx, time) {
+Ellipse.prototype.draw = function (ctx, time) {
 
-        var size = this.size.getValue(time);
-        var position = this.position.getValue(time);
+    var size = this.size.getValue(time);
+    var position = this.position.getValue(time);
 
-        var x = position[0] - size[0] / 2,
-            y = position[1] - size[1] / 2,
-            w = size[0],
-            h = size[1];
+    var x = position[0] - size[0] / 2,
+        y = position[1] - size[1] / 2,
+        w = size[0],
+        h = size[1];
 
-        var ox = (w / 2) * .5522848, // control point offset horizontal
-            oy = (h / 2) * .5522848, // control point offset vertical
-            xe = x + w,           // x-end
-            ye = y + h,           // y-end
-            xm = x + w / 2,       // x-middle
-            ym = y + h / 2;       // y-middle
+    var ox = (w / 2) * .5522848, // control point offset horizontal
+        oy = (h / 2) * .5522848, // control point offset vertical
+        xe = x + w,           // x-end
+        ye = y + h,           // y-end
+        xm = x + w / 2,       // x-middle
+        ym = y + h / 2;       // y-middle
 
-        ctx.beginPath();
-        ctx.moveTo(x, ym);
-        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-        ctx.closePath();
+//        ctx.beginPath();
+    ctx.moveTo(x, ym);
+    ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+    ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+    ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+    ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+//        ctx.closePath();
 
-    }
+};
+
+Ellipse.prototype.reset = function () {
+    this.size.reset();
+    this.position.reset();
 };
 
 module.exports = Ellipse;

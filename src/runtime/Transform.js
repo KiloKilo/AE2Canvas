@@ -4,7 +4,7 @@ var Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Transform(data) {
-    if (!data) return null;
+    if (!data) return;
 
     this.name = data.name;
 
@@ -60,52 +60,60 @@ function Transform(data) {
 
 }
 
-Transform.prototype = {
+Transform.prototype.transform = function (ctx, time) {
+    var anchorX = this.anchorX.getValue(time),
+        anchorY = this.anchorY.getValue(time),
+        rotation = this.deg2rad(this.rotation.getValue(time)),
+        skew = this.deg2rad(this.skew.getValue(time)),
+        skewAxis = this.deg2rad(this.skewAxis.getValue(time)),
+        positionX = this.positionX.getValue(time),
+        positionY = this.positionY.getValue(time),
+        scaleX = this.scaleX.getValue(time),
+        scaleY = this.scaleY.getValue(time),
+        opacity = this.opacity.getValue(time) * ctx.globalAlpha; // FIXME wrong transparency if nested
 
-    transform: function (ctx, time) {
-        var anchorX = this.anchorX.getValue(time),
-            anchorY = this.anchorY.getValue(time),
-            rotation = this.deg2rad(this.rotation.getValue(time)),
-            skew = this.deg2rad(this.skew.getValue(time)),
-            skewAxis = this.deg2rad(this.skewAxis.getValue(time)),
-            positionX = this.positionX.getValue(time),
-            positionY = this.positionY.getValue(time),
-            scaleX = this.scaleX.getValue(time),
-            scaleY = this.scaleY.getValue(time),
-            opacity = this.opacity.getValue(time) * ctx.globalAlpha; // FIXME wrong transparency if nested
+    //order very very important :)
+    ctx.transform(1, 0, 0, 1, positionX - anchorX, positionY - anchorY);
+    this.setRotation(ctx, rotation, anchorX, anchorY);
+    this.setSkew(ctx, skew, skewAxis, anchorX, anchorY);
+    this.setScale(ctx, scaleX, scaleY, anchorX, anchorY);
+    ctx.globalAlpha = opacity;
+};
 
-        console.log(scaleX, scaleY);
+Transform.prototype.setRotation = function (ctx, rad, x, y) {
+    var c = Math.cos(rad);
+    var s = Math.sin(rad);
+    var dx = x - c * x + s * y;
+    var dy = y - s * x - c * y;
+    ctx.transform(c, s, -s, c, dx, dy);
+};
 
-        //order very very important :)
-        ctx.transform(1, 0, 0, 1, positionX - anchorX, positionY - anchorY);
-        this.setRotation(ctx, rotation, anchorX, anchorY);
-        this.setSkew(ctx, skew, skewAxis, anchorX, anchorY);
-        this.setScale(ctx, scaleX, scaleY, anchorX, anchorY);
-        ctx.globalAlpha = opacity;
-    },
+Transform.prototype.setScale = function (ctx, sx, sy, x, y) {
+    ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y);
+};
 
-    setRotation: function (ctx, rad, x, y) {
-        var c = Math.cos(rad);
-        var s = Math.sin(rad);
-        var dx = x - c * x + s * y;
-        var dy = y - s * x - c * y;
-        ctx.transform(c, s, -s, c, dx, dy);
-    },
+Transform.prototype.setSkew = function (ctx, skew, axis, x, y) {
+    var t = Math.tan(-skew);
+    this.setRotation(ctx, -axis, x, y);
+    ctx.transform(1, 0, t, 1, -y * t, 0);
+    this.setRotation(ctx, axis, x, y);
+};
 
-    setScale: function (ctx, sx, sy, x, y) {
-        ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y);
-    },
+Transform.prototype.deg2rad = function (deg) {
+    return deg * (Math.PI / 180);
+};
 
-    setSkew: function (ctx, skew, axis, x, y) {
-        var t = Math.tan(-skew);
-        this.setRotation(ctx, -axis, x, y);
-        ctx.transform(1, 0, t, 1, -y * t, 0);
-        this.setRotation(ctx, axis, x, y);
-    },
-
-    deg2rad: function (deg) {
-        return deg * (Math.PI / 180);
-    }
+Transform.prototype.reset = function () {
+    this.anchorX.reset();
+    this.anchorY.reset();
+    this.rotation.reset();
+    this.skew.reset();
+    this.skewAxis.reset();
+    this.positionX.reset();
+    this.positionY.reset();
+    this.scaleX.reset();
+    this.scaleY.reset();
+    this.opacity.reset();
 };
 
 module.exports = Transform;

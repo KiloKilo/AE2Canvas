@@ -8,7 +8,6 @@ if (location.hash) {
     file = location.hash.substring(1);
 }
 
-
 function fetchJSONFile(path, callback) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function () {
@@ -46,18 +45,18 @@ function start() {
     }, false);
 
     var canvas = document.getElementById('canvas');
-//    window.addEventListener('resize', function () {
-////        var width = window.innerWidth,
-////            height = width * 9 /16;
-////        runtime.resize(width, height);
-//    });
-
     if (canvas.getContext) {
         ctx = canvas.getContext('2d');
         runtime.canvas = canvas;
         runtime.ctx = ctx;
         loop();
     }
+
+    runtime.setWidth(window.innerWidth * 0.8);
+
+    window.addEventListener('resize', function () {
+        runtime.setWidth(window.innerWidth * 0.8);
+    }, false);
 }
 
 function render(time) {

@@ -51,39 +51,65 @@ function Group(data) {
     }
 }
 
-Group.prototype = {
+Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
+    ctx.save();
 
-    draw: function (ctx, time) {
-        ctx.save();
+    //TODO check if color/stroke is changing over time
 
-        //TODO check if color/stroke is changing over time
-        //TODO set functionality inside fill/stroke class
+    var fill = this.fill || parentFill;
+    var stroke = this.stroke || parentStroke;
 
-        if (this.fill) this.fill.setColor(ctx, time);
-        if (this.stroke) this.stroke.setStroke(ctx, time);
+//        console.log(this.name, fill);
+    if (fill) fill.setColor(ctx, time);
+    if (stroke) stroke.setStroke(ctx, time);
 
-        this.transform.transform(ctx, time);
-        ctx.beginPath();
-        if (this.shapes) {
-            for (var i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(ctx, time);
+    this.transform.transform(ctx, time);
+
+    ctx.beginPath();
+    if (this.shapes) {
+        for (var i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].draw(ctx, time);
+        }
+    }
+//            if (this.shapes[this.shapes.length - 1].closed) {
+////                ctx.beginPath();
+//                ctx.closePath();
+//            }
+    ctx.closePath();
+
+    //TODO get order
+    if (fill) ctx.fill();
+    if (stroke) ctx.stroke();
+
+    if (this.groups) {
+        for (var j = 0; j < this.groups.length; j++) {
+            if (time >= this.groups[j].in && time < this.groups[j].out) {
+                this.groups[j].draw(ctx, time, fill, stroke);
             }
         }
-        ctx.closePath();
+    }
 
-        //TODO get order stroke - fill
-        if (this.fill) ctx.fill();
-        if (this.stroke) ctx.stroke();
+    ctx.restore();
+};
 
-        if (this.groups) {
-            for (var j = 0; j < this.groups.length; j++) {
-                if (time >= this.groups[j].in && time < this.groups[j].out) {
-                    this.groups[j].draw(ctx, time);
-                }
-            }
+Group.prototype.reset = function () {
+    this.transform.reset();
+
+    if (this.shapes) {
+        for (var i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].reset();
         }
-
-        ctx.restore();
+    }
+    if (this.groups) {
+        for (var j = 0; j < this.groups.length; j++) {
+            this.groups[j].reset();
+        }
+    }
+    if (this.fill) {
+        this.fill.reset();
+    }
+    if (this.stroke) {
+        this.stroke.reset();
     }
 };
 

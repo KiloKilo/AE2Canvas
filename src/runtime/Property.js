@@ -5,10 +5,11 @@ function Property(data) {
     this.frames = data;
 }
 
-Property.prototype = {
-    getValue: function (time) {
-        return this.frames[0].v;
-    }
+Property.prototype.getValue = function (time) {
+    return this.frames[0].v;
+};
+
+Property.prototype.reset = function () {
 };
 
 module.exports = Property;

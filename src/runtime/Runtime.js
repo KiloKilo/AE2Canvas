@@ -3,19 +3,19 @@
 var Group = require('./Group');
 
 function Runtime(data) {
-    if (!data) return null;
+    if (!data) return;
 
-//    this.shapeCount = 0;
-
-    this.started = false;
-    this.time = 0;
-    this.startTime = 0;
-    this.pausedTime = 0;
+    this.duration = data.duration;
+    this.baseWidth = data.width;
+    this.baseHeight = data.height;
+    this.ratio = data.width / data.height;
 
     this.groups = [];
     for (var i = 0; i < data.groups.length; i++) {
         this.groups.push(new Group(data.groups[i]));
     }
+    this.reset();
+    this.started = false;
 
     console.log(this);
 }
@@ -23,45 +23,63 @@ function Runtime(data) {
 Runtime.prototype = {
 
     start: function () {
-        this.startTime = this.time;
-        console.log('------------------------------- RESTART ---------------------------------------');
-        this.started = true;
+        if (!this.started) {
+            this.startTime = this.time;
+            this.started = true;
+        }
     },
 
     stop: function () {
-        this.startTime = 0;
+        this.reset();
+        this.draw();
         this.started = false;
     },
 
     pause: function () {
-        this.pausedTime = this.time;
-        this.startTime = this.time;
-        this.started = false;
+        if (this.started) {
+            this.pausedTime = this.compTime;
+            this.started = false;
+        }
     },
 
     update: function (time) {
         this.time = time;
         if (this.started) {
-//            console.log('tick', this.time - this.startTime);
-//            console.log(this.time);
-            this.draw(this.time - this.startTime);
+            this.compTime = this.time - this.startTime + this.pausedTime;
+            if (this.compTime <= this.duration) {
+                this.draw();
+            }
         }
     },
 
     draw: function (time) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
+
         for (var i = 0; i < this.groups.length; i++) {
-            if (time >= this.groups[i].in && time < this.groups[i].out) {
-                this.groups[i].draw(this.ctx, time);
+            if (this.compTime >= this.groups[i].in &&
+                this.compTime < this.groups[i].out) {
+                this.groups[i].draw(this.ctx, this.compTime);
             }
         }
         this.ctx.restore();
     },
 
-    resize: function (width, height) {
+    reset: function () {
+        this.startTime = 0;
+        this.pausedTime = 0;
+        this.compTime = 0;
+        for (var i = 0; i < this.groups.length; i++) {
+            this.groups[i].reset();
+        }
+    },
+
+    setWidth: function (width) {
         this.canvas.width = width;
-        this.canvas.height = height;
+        this.canvas.height = width / this.ratio;
+
+        var scaleFactor = width / this.baseWidth;
+        console.log(scaleFactor);
     }
 };
 
