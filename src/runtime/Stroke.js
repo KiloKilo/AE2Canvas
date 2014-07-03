@@ -6,6 +6,7 @@ var Property = require('./Property'),
 function Stroke(data) {
     if (data) {
         this.join = data.join;
+        this.cap = data.cap;
 
         if (data.miterLimit) {
             if (data.miterLimit.length > 1) this.miterLimit = new AnimatedProperty(data.miterLimit);
@@ -38,6 +39,7 @@ Stroke.prototype.setStroke = function (ctx, time) {
     ctx.lineWidth = strokeWidth;
     ctx.lineJoin = strokeJoin;
     if (miterLimit) ctx.miterLimit = miterLimit;
+    console.log(this.cap);
     ctx.lineCap = this.cap;
     ctx.strokeStyle = strokeColor;
 };
@@ -46,9 +48,7 @@ Stroke.prototype.reset = function () {
     this.color.reset();
     this.opacity.reset();
     this.width.reset();
-    if(this.miterLimit) this.miterLimit.reset();
+    if (this.miterLimit) this.miterLimit.reset();
 };
-
-
 
 module.exports = Stroke;

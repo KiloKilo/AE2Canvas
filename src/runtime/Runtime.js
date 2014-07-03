@@ -52,7 +52,7 @@ Runtime.prototype = {
         }
     },
 
-    draw: function (time) {
+    draw: function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
 
@@ -79,7 +79,7 @@ Runtime.prototype = {
         this.canvas.height = width / this.ratio;
 
         var scaleFactor = width / this.baseWidth;
-        console.log(scaleFactor);
+        this.ctx.transform(scaleFactor, 0, 0, scaleFactor, 0, 0);
     }
 };
 

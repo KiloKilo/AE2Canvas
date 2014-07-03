@@ -61,16 +61,16 @@ function Transform(data) {
 }
 
 Transform.prototype.transform = function (ctx, time) {
-    var anchorX = this.anchorX.getValue(time),
-        anchorY = this.anchorY.getValue(time),
-        rotation = this.deg2rad(this.rotation.getValue(time)),
-        skew = this.deg2rad(this.skew.getValue(time)),
-        skewAxis = this.deg2rad(this.skewAxis.getValue(time)),
-        positionX = this.positionX.getValue(time),
-        positionY = this.positionY.getValue(time),
-        scaleX = this.scaleX.getValue(time),
-        scaleY = this.scaleY.getValue(time),
-        opacity = this.opacity.getValue(time) * ctx.globalAlpha; // FIXME wrong transparency if nested
+    var anchorX = this.anchorX ? this.anchorX.getValue(time) : 0,
+        anchorY = this.anchorY ? this.anchorY.getValue(time) : 0,
+        rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0,
+        skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0,
+        skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0,
+        positionX = this.positionX ? this.positionX.getValue(time) : 0,
+        positionY = this.positionY ? this.positionY.getValue(time) : 0,
+        scaleX = this.scaleX ? this.scaleX.getValue(time) : 1,
+        scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
+        opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : 1 * ctx.globalAlpha; // FIXME wrong transparency if nested
 
     //order very very important :)
     ctx.transform(1, 0, 0, 1, positionX - anchorX, positionY - anchorY);
@@ -104,16 +104,16 @@ Transform.prototype.deg2rad = function (deg) {
 };
 
 Transform.prototype.reset = function () {
-    this.anchorX.reset();
-    this.anchorY.reset();
-    this.rotation.reset();
-    this.skew.reset();
-    this.skewAxis.reset();
-    this.positionX.reset();
-    this.positionY.reset();
-    this.scaleX.reset();
-    this.scaleY.reset();
-    this.opacity.reset();
+    if (this.anchorX) this.anchorX.reset();
+    if (this.anchorY) this.anchorY.reset();
+    if (this.rotation) this.rotation.reset();
+    if (this.skew) this.skew.reset();
+    if (this.skewAxis) this.skewAxis.reset();
+    if (this.positionX) this.positionX.reset();
+    if (this.positionY) this.positionY.reset();
+    if (this.scaleX) this.scaleX.reset();
+    if (this.scaleY) this.scaleY.reset();
+    if (this.opacity) this.opacity.reset();
 };
 
 module.exports = Transform;

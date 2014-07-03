@@ -25,14 +25,14 @@ function Group(data) {
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
     this.transform = new Transform(data.transform);
-    if (data.groups.length) {
+    if (data.groups) {
         this.groups = [];
         for (var i = 0; i < data.groups.length; i++) {
             this.groups.push(new Group(data.groups[i]));
         }
     }
 
-    if (data.shapes.length) {
+    if (data.shapes) {
         this.shapes = [];
         for (var j = 0; j < data.shapes.length; j++) {
             var shape = data.shapes[j];
@@ -70,12 +70,11 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         for (var i = 0; i < this.shapes.length; i++) {
             this.shapes[i].draw(ctx, time);
         }
+        if (this.shapes[this.shapes.length - 1].closed) {
+            ctx.closePath();
+        }
     }
-//            if (this.shapes[this.shapes.length - 1].closed) {
-////                ctx.beginPath();
-//                ctx.closePath();
-//            }
-    ctx.closePath();
+//    ctx.closePath();
 
     //TODO get order
     if (fill) ctx.fill();
