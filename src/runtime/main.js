@@ -102,10 +102,14 @@ function start() {
         loop();
     }
 
-    runtime.setWidth(window.innerWidth * 0.8);
+    var width = window.innerWidth;
+    canvas.style.width = width + 'px';
+    runtime.setWidth(width);
 
     window.addEventListener('resize', function () {
-        runtime.setWidth(window.innerWidth * 0.8);
+        width = window.innerWidth;
+        canvas.style.width = width + 'px';
+        runtime.setWidth(width);
     }, false);
 }
 

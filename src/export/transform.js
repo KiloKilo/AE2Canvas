@@ -4,8 +4,7 @@ function getVectorTransform(data) {
     if (!(data instanceof PropertyGroup)) return null;
 
     var transform = {},
-        prop,
-        opacity;
+        prop;
 
     if (data.property('ADBE Anchor Point') instanceof Property) {
         prop = data.property('ADBE Anchor Point');
@@ -50,9 +49,22 @@ function getVectorTransform(data) {
         transform.scaleY = normalizeScale(getProperty(prop, 1));
     }
 
-    if (data.property('ADBE Vector Skew')instanceof Property && data.property('ADBE Vector Skew Axis')instanceof Property) {
-        transform.skew = getProperty(data.property('ADBE Vector Skew'));
-        transform.skewAxis = getProperty(data.property('ADBE Vector Skew Axis'));
+    if (data.property('ADBE Vector Skew')instanceof Property) {
+        prop = data.property('ADBE Vector Skew');
+    }
+
+    if (prop.isTimeVarying ||
+        prop.value !== 0) {
+        transform.skew = getProperty(prop);
+    }
+
+    if (data.property('ADBE Vector Skew Axis')instanceof Property) {
+        prop = data.property('ADBE Vector Skew Axis');
+    }
+
+    if (prop.isTimeVarying ||
+        prop.value !== 0) {
+        transform.skewAxis = getProperty(prop);
     }
 
     if (data.property('ADBE Rotate Z')instanceof Property) {
@@ -63,7 +75,7 @@ function getVectorTransform(data) {
 
     if (prop.isTimeVarying ||
         prop.value !== 0) {
-        transform.rotation = normalizeRotation(getProperty(prop));
+        transform.rotation = roundRotation(getProperty(prop));
     }
 
     if (data.property('ADBE Opacity')instanceof Property) {
@@ -83,7 +95,7 @@ function getVectorTransform(data) {
 function normalizeScale(frames) {
     for (var i = 0; i < frames.length; i++) {
         frames[i].v = frames[i].v / 100;
-        frames[i].v = Math.round(frames[i].v * 1000) / 1000;
+        frames[i].v = Math.round(frames[i].v * 10000) / 10000;
     }
 
     return frames;
@@ -92,6 +104,7 @@ function normalizeScale(frames) {
 function normalizeOpacity(frames) {
     for (var i = 0; i < frames.length; i++) {
         frames[i].v = frames[i].v / 100;
+        frames[i].v = Math.round(frames[i].v * 10000) / 10000;
     }
 
     return frames;
@@ -113,9 +126,9 @@ function roundAnchor(frames) {
     return frames;
 }
 
-function normalizeRotation(frames) {
+function roundRotation(frames) {
     for (var i = 0; i < frames.length; i++) {
-        frames[i].v = Math.round(frames[i].v * 1000) / 1000;
+        frames[i].v = Math.round(frames[i].v * 10000) / 10000;
     }
 
     return frames;
