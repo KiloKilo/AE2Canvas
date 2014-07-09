@@ -5,6 +5,7 @@ var Property = require('./Property'),
 
 function Rect(data) {
     this.name = data.name;
+    this.closed = true;
 
     if (data.size.length > 1) this.size = new AnimatedProperty(data.size);
     else this.size = new Property(data.size);
@@ -29,13 +30,11 @@ Rect.prototype.draw = function (ctx, time) {
     var x = position[0] - size[0] / 2,
         y = position[1] - size[1] / 2;
 
-//        ctx.beginPath();
     ctx.moveTo(x + roundness, y);
     ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
     ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
     ctx.arcTo(x, y + size[1], x, y, roundness);
     ctx.arcTo(x, y, x + size[0], y, roundness);
-//        ctx.closePath();
 
 };
 

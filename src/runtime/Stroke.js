@@ -39,7 +39,6 @@ Stroke.prototype.setStroke = function (ctx, time) {
     ctx.lineWidth = strokeWidth;
     ctx.lineJoin = strokeJoin;
     if (miterLimit) ctx.miterLimit = miterLimit;
-    console.log(this.cap);
     ctx.lineCap = this.cap;
     ctx.strokeStyle = strokeColor;
 };

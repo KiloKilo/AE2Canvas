@@ -102,12 +102,12 @@ function start() {
         loop();
     }
 
-    var width = window.innerWidth;
+    var width = window.innerWidth * 0.8;
     canvas.style.width = width + 'px';
     runtime.setWidth(width);
 
     window.addEventListener('resize', function () {
-        width = window.innerWidth;
+        width = window.innerWidth * 0.5;
         canvas.style.width = width + 'px';
         runtime.setWidth(width);
     }, false);

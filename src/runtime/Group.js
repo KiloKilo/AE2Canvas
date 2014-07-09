@@ -7,7 +7,8 @@ var Stroke = require('./Stroke'),
     Polystar = require('./Polystar'),
     AnimatedPath = require('./AnimatedPath'),
     Fill = require('./Fill'),
-    Transform = require('./Transform');
+    Transform = require('./Transform'),
+    Merge = require('./Merge');
 
 function Group(data) {
 
@@ -24,6 +25,9 @@ function Group(data) {
 
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
+
+    if (data.merge) this.merge = new Merge(data.merge);
+
     this.transform = new Transform(data.transform);
     if (data.groups) {
         this.groups = [];
@@ -52,6 +56,7 @@ function Group(data) {
 }
 
 Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
+
     ctx.save();
 
     //TODO check if color/stroke is changing over time
@@ -59,11 +64,14 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
     var fill = this.fill || parentFill;
     var stroke = this.stroke || parentStroke;
 
-//        console.log(this.name, fill);
     if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
 
     this.transform.transform(ctx, time);
+//    if (this.merge) this.merge.setCompositeOperation(ctx);
+//    ctx.globalCompositeOperation = 'source-over';
+
+//    console.log(this.name, ctx.globalCompositeOperation);
 
     ctx.beginPath();
     if (this.shapes) {
@@ -74,7 +82,6 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
             ctx.closePath();
         }
     }
-//    ctx.closePath();
 
     //TODO get order
     if (fill) ctx.fill();
@@ -84,9 +91,15 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         for (var j = 0; j < this.groups.length; j++) {
             if (time >= this.groups[j].in && time < this.groups[j].out) {
                 this.groups[j].draw(ctx, time, fill, stroke);
+                if (j === this.groups.length - 2)
+                    if (this.merge) this.merge.setCompositeOperation(ctx);
+//                if (j === 0 && this.merge) this.merge.setCompositeOperation(ctx);
+
             }
         }
     }
+
+    //    reset
 
     ctx.restore();
 };

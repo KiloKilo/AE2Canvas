@@ -5,6 +5,7 @@ var Property = require('./Property'),
 
 function Ellipse(data) {
     this.name = data.name;
+    this.closed = true;
 
     if (data.size.length > 1) this.size = new AnimatedProperty(data.size);
     else this.size = new Property(data.size);
@@ -23,21 +24,18 @@ Ellipse.prototype.draw = function (ctx, time) {
         w = size[0],
         h = size[1];
 
-    var ox = (w / 2) * .5522848, // control point offset horizontal
-        oy = (h / 2) * .5522848, // control point offset vertical
-        xe = x + w,           // x-end
-        ye = y + h,           // y-end
-        xm = x + w / 2,       // x-middle
-        ym = y + h / 2;       // y-middle
+    var ox = (w / 2) * .5522848,
+        oy = (h / 2) * .5522848,
+        xe = x + w,
+        ye = y + h,
+        xm = x + w / 2,
+        ym = y + h / 2;
 
-//        ctx.beginPath();
     ctx.moveTo(x, ym);
     ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
     ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
     ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
     ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-//        ctx.closePath();
-
 };
 
 Ellipse.prototype.reset = function () {

@@ -10,6 +10,7 @@
 #include 'gradient.js'
 #include 'stroke.js'
 #include 'property.js'
+#include 'merge.js'
 #include 'vectorTrim.js'
 #include 'optimize/optimize.js'
 #include 'optimize/groupOptimize.js'

@@ -5,6 +5,7 @@ var Property = require('./Property'),
 
 function Polystar(data) {
     this.name = data.name;
+    this.closed = true;
 
     this.starType = data.starType;
 
