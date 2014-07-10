@@ -68,18 +68,39 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
     if (stroke) stroke.setStroke(ctx, time);
 
     this.transform.transform(ctx, time);
-//    if (this.merge) this.merge.setCompositeOperation(ctx);
-//    ctx.globalCompositeOperation = 'source-over';
-
-//    console.log(this.name, ctx.globalCompositeOperation);
 
     ctx.beginPath();
     if (this.shapes) {
-        for (var i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].draw(ctx, time);
-        }
-        if (this.shapes[this.shapes.length - 1].closed) {
-            ctx.closePath();
+        var i;
+
+        //draw on off screen canvas if merge
+        if (this.merge) {
+            var buffer = document.createElement('canvas');
+            buffer.width = ctx.canvas.width;
+            buffer.height = ctx.canvas.height;
+            var bufferCtx = buffer.getContext('2d');
+
+            this.transform.transform(bufferCtx, time);
+            if (fill) fill.setColor(bufferCtx, time);
+
+            for (i = 0; i < this.shapes.length; i++) {
+                this.shapes[i].draw(bufferCtx, time);
+                if (fill) bufferCtx.fill();
+                bufferCtx.beginPath();
+                this.merge.setCompositeOperation(bufferCtx);
+            }
+            if (this.shapes[this.shapes.length - 1].closed) {
+                bufferCtx.closePath();
+            }
+            ctx.restore();
+            ctx.drawImage(buffer, 0, 0);
+        } else {
+            for (i = 0; i < this.shapes.length; i++) {
+                this.shapes[i].draw(ctx, time);
+            }
+            if (this.shapes[this.shapes.length - 1].closed) {
+                ctx.closePath();
+            }
         }
     }
 
@@ -91,10 +112,6 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         for (var j = 0; j < this.groups.length; j++) {
             if (time >= this.groups[j].in && time < this.groups[j].out) {
                 this.groups[j].draw(ctx, time, fill, stroke);
-                if (j === this.groups.length - 2)
-                    if (this.merge) this.merge.setCompositeOperation(ctx);
-//                if (j === 0 && this.merge) this.merge.setCompositeOperation(ctx);
-
             }
         }
     }

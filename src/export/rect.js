@@ -4,6 +4,7 @@
 
     var rect = {};
     rect.name = data.name;
+    rect.index = data.propertyIndex;
     rect.type = 'rect';
     rect.size = getProperty(data.property('ADBE Vector Rect Size'));
     rect.position = getProperty(data.property('ADBE Vector Rect Position'));

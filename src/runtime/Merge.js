@@ -12,11 +12,15 @@ Merge.prototype.setCompositeOperation = function (ctx) {
             ctx.globalCompositeOperation = 'source-out';
             break;
         case 4:
-            ctx.globalCompositeOperation = 'destination-in';
+            ctx.globalCompositeOperation = 'source-in';
+            break;
+        case 5:
+            ctx.globalCompositeOperation = 'xor';
             break;
         default:
             ctx.globalCompositeOperation = 'source-over';
     }
+    console.log('set composite',ctx.globalCompositeOperation );
 };
 
 module.exports = Merge;

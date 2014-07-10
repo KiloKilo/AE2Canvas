@@ -3,6 +3,7 @@
     if (!(data instanceof PropertyGroup)) return null;
 
     var fill = {};
+    fill.index = data.propertyIndex;
 //    fill.composite = data.property('ADBE Vector Composite Order');
     fill.color = getProperty(data.property('ADBE Vector Fill Color'));
     fill.color = normalizeColor(fill.color);

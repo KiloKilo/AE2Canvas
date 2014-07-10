@@ -80,8 +80,8 @@ function loop(time) {
 function start() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
-    stats.domElement.style.right = '0px';
+    stats.domElement.style.top = '0';
+    stats.domElement.style.left = '0';
     document.getElementsByTagName('body')[0].appendChild(stats.domElement);
 
     document.getElementById('start').addEventListener('click', function () {
@@ -102,12 +102,14 @@ function start() {
         loop();
     }
 
+    runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
     var width = window.innerWidth * 0.8;
     canvas.style.width = width + 'px';
     runtime.setWidth(width);
 
     window.addEventListener('resize', function () {
-        width = window.innerWidth * 0.5;
+        width = window.innerWidth * 0.8;
         canvas.style.width = width + 'px';
         runtime.setWidth(width);
     }, false);

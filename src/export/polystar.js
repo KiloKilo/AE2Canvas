@@ -4,6 +4,7 @@
 
     var polystar = {};
     polystar.name = data.name;
+    polystar.index = data.propertyIndex;
     polystar.type = 'polystar';
     polystar.starType = data.property('ADBE Vector Star Type').value;
     polystar.points = getProperty(data.property('ADBE Vector Star Points'));
