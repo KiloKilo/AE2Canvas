@@ -1,1 +1,163 @@
-{"groups":[{"out":16667,"name":"Shape Layer 1","groups":[{"name":"Polystar 1","index":1,"shapes":[{"name":"Polystar Path 1","index":1,"type":"polystar","starType":1,"points":[{"t":0,"v":5}],"position":[{"t":0,"v":[0,0]}],"rotation":[{"t":0,"v":46.4688007143858}],"innerRadius":[{"t":0,"v":106.896635237036}],"outerRadius":[{"t":0,"v":213.793270474073}],"innerRoundness":[{"t":0,"v":0}],"outerRoundness":[{"t":0,"v":0}]}],"stroke":{"index":2,"join":"miter","miterLimit":[{"t":0,"v":4}],"cap":"butt","color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":2}]},"fill":{"index":3,"color":[{"t":0,"v":[0,132,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":-17}],"positionY":[{"t":0,"v":28}]}}],"transform":{"positionX":[{"t":0,"v":640}],"positionY":[{"t":0,"v":360}]}}],"duration":16666.6666666667,"width":1280,"height":720}
+{"groups"    : [
+    {
+        "out"      : 10000,
+        "name"     : "Shape Layer 7",
+        "groups"   : [
+            {
+                "name"     : "Shape 1",
+                "index"    : 5,
+                "shapes"   : [
+                    {
+                        "name"      : "Path",
+                        "index"     : 2,
+                        "type"      : "path",
+                        "closed"    : false,
+                        "frames"    : [
+                            {
+                                "t": 0,
+                                "v": [
+                                    [-256, -286, -836, -266, -546, -276],
+                                    [553.5712890625, 940.017578125, 552, -238, 560, 280]
+                                ]
+                            }
+                        ],
+                        "isAnimated": false
+                    }
+                ],
+                "stroke"   : {
+                    "index"     : 2,
+                    "join"      : "miter",
+                    "miterLimit": [
+                        {
+                            "t": 0,
+                            "v": 4
+                        }
+                    ],
+                    "cap"       : "butt",
+                    "color"     : [
+                        {
+                            "t": 0,
+                            "v": [255, 0, 0]
+                        }
+                    ],
+                    "opacity"   : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ],
+                    "width"     : [
+                        {
+                            "t": 0,
+                            "v": 2
+                        }
+                    ]
+                },
+                "transform": {
+
+                }
+            }
+        ],
+        "transform": {
+            "positionX": [
+                {
+                    "t": 0,
+                    "v": 640
+                }
+            ],
+            "positionY": [
+                {
+                    "t": 0,
+                    "v": 360
+                }
+            ]
+        }
+    },
+    {
+        "out"      : 10000,
+        "name"     : "Shape Layer 2",
+        "groups"   : [
+            {
+                "name"     : "Rectangle 1",
+                "index"    : 1,
+                "shapes"   : [
+                    {
+                        "name"     : "Rectangle Path 1",
+                        "index"    : 1,
+                        "type"     : "rect",
+                        "size"     : [
+                            {
+                                "t": 0,
+                                "v": [122, 132.586776859504]
+                            }
+                        ],
+                        "position" : [
+                            {
+                                "t": 0,
+                                "v": [0, 0]
+                            }
+                        ],
+                        "roundness": [
+                            {
+                                "t": 0,
+                                "v": 0
+                            }
+                        ]
+                    }
+                ],
+                "fill"     : {
+                    "index"  : 2,
+                    "color"  : [
+                        {
+                            "t": 0,
+                            "v": [255, 0, 0]
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ]
+                },
+                "transform": {
+
+                }
+            }
+        ],
+        "transform": {
+            "positionX": [
+                {
+                    "t"         : 0,
+                    "v"         : 96,
+                    "easeOut"   : [0.05, 0.71855923719022],
+                    "outTangent": 784.666687011719,
+                    "oldEaseOut": [49.8918537302172, 0]
+                },
+                {
+                    "t"        : 10000,
+                    "v"        : 1188,
+                    "inTangent": 39.3333320617676,
+                    "easeIn"   : [0.05, 1.0360195348551],
+                    "oldEaseIn": [16.666666667, 136.59379092736]
+                }
+            ],
+            "positionY": [
+                {
+                    "t"         : 0,
+                    "v"         : 81,
+                    "easeOut"   : [0.05, -0.04389086482364],
+                    "outTangent": -24.6666660308838,
+                    "oldEaseOut": [49.8918537302172, 0]
+                },
+                {
+                    "t"        : 10000,
+                    "v"        : 643,
+                    "inTangent": -261.333343505859,
+                    "easeIn"   : [0.05, 0.53499405070132],
+                    "oldEaseIn": [16.666666667, 136.59379092736]
+                }
+            ]
+        }
+    }
+], "duration": 10000, "width": 1280, "height": 720}

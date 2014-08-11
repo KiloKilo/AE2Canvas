@@ -53,19 +53,19 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
     var actualVertices = [];
 
     for (var i = 0; i < this.verticesCount; i++) {
-        var cp1x = Math.round(this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed)),
-            cp1y = Math.round(this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed)),
-            cp2x = Math.round(this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed)),
-            cp2y = Math.round(this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed)),
-            x = Math.round(this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed)),
-            y = Math.round(this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed));
+//        var cp1x = Math.round(this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed)),
+//            cp1y = Math.round(this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed)),
+//            cp2x = Math.round(this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed)),
+//            cp2y = Math.round(this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed)),
+//            x = Math.round(this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed)),
+//            y = Math.round(this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed));
 
-//        var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed),
-//            cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed),
-//            cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed),
-//            cp2y = this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed),
-//            x = this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed),
-//            y = this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed);
+        var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed),
+            cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed),
+            cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed),
+            cp2y = this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed),
+            x = this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed),
+            y = this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed);
 
         actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
     }

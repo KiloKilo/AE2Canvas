@@ -70,7 +70,7 @@ Transform.prototype.transform = function (ctx, time) {
         positionY = this.positionY ? this.positionY.getValue(time) : 0,
         scaleX = this.scaleX ? this.scaleX.getValue(time) : 1,
         scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
-        opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : 1 * ctx.globalAlpha; // FIXME wrong transparency if nested
+        opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha; // FIXME wrong transparency if nested
 
     //order very very important :)
     ctx.transform(1, 0, 0, 1, positionX - anchorX, positionY - anchorY);

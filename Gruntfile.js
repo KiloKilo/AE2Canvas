@@ -8,12 +8,13 @@ module.exports = function (grunt) {
         browserify: {
             dist: {
                 files  : {
-                    'build/runtime.js': ['src/runtime/main.js']
+                    'build/ae2canvas.js': ['src/runtime/Runtime.js']
 //                    'build/export.js' : ['js/export/main.js']
                 },
                 options: {
                     bundleOptions: {
-                        debug: true
+                        standalone: 'ae2canvas',
+                        debug     : true
                     }
                 }
             }
@@ -21,7 +22,7 @@ module.exports = function (grunt) {
         uglify    : {
             my_target: {
                 files: {
-                    'build/runtime.min.js': ['build/runtime.js']
+                    'build/ae2canvas.min.js': ['build/ae2canvas.js']
                 }
             }
         }

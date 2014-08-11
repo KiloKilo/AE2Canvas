@@ -87,10 +87,7 @@ Runtime.prototype = {
     setWidth: function () {
         var factor = 1;
         if (this.isHD) factor = 2;
-
         var width = this.canvas.getBoundingClientRect().width;
-        console.log(width);
-
         this.canvas.width = width * factor;
         this.canvas.height = width / this.ratio * factor;
         this.scale = width / this.baseWidth * factor;

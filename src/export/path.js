@@ -17,38 +17,29 @@
         for (var i = 1; i <= numKeys; i++) {
             var obj = {};
 
+            $.writeln(data.keyInInterpolationType(i));
+            $.writeln(data.keyOutInterpolationType(i));
+
             obj.v = getPoint(data.keyValue(i));
             obj.t = Math.round(data.keyTime(i) * 1000);
 
-            //FIXME buggy if no easing set in ae
-//            if (obj.inInterpolation !== KeyframeInterpolationType.HOLD ||
-//                obj.outInterpolation !== KeyframeInterpolationType.HOLD) {
-//
-//                var easeIn = data.keyInTemporalEase(i)[0];
-//                var easeOut = data.keyOutTemporalEase(i)[0];
-//
-//                //check for frame before
-//                if (path.frames[i - 2]) {
-//                    var lastKey = path.frames[i - 2];
-//
-//                    obj.easeIn = [];
-//                    obj.easeIn[0] = 1 - easeIn.influence / 100;
-//                    obj.easeIn[1] = 1 - Math.round(easeIn.speed * 10000) / 10000;
-//
-//                    //easeOut
-//                    lastKey.easeOut = [];
-//                    lastKey.easeOut[0] = easeOut.influence / 100;
-//                    lastKey.easeOut[1] = Math.round(easeOut.speed * 10000) / 10000;
-//
-//                    // FIXME
-//                    // dirty fix. removes standard 0.166 easing
-//                    if (obj.easeIn[1] === 0) obj.easeIn[0] = 0;
-//                    if (lastKey.easeOut[1] === 0) lastKey.easeOut[0] = 0;
-//
-//                }
-//            }
+            if (i > 1 && (data.keyInInterpolationType(i) === KeyframeInterpolationType.BEZIER)) {
+                var easeIn = data.keyInTemporalEase(i)[0];
+                obj.easeIn = [];
+                obj.easeIn[0] = 1 - easeIn.influence / 100;
+                obj.easeIn[1] = 1 - Math.round(easeIn.speed * 10000) / 10000;
+            }
+
+            if (i < numKeys && (data.keyOutInterpolationType(i) === KeyframeInterpolationType.BEZIER)) {
+                var easeOut = data.keyOutTemporalEase(i)[0];
+                obj.easeOut = [];
+                obj.easeOut[0] = easeOut.influence / 100;
+                obj.easeOut[1] = Math.round(easeOut.speed * 10000) / 10000;
+            }
+
             path.frames.push(obj);
         }
+        path.frames = normalizePathKeyframes(path.frames);
     }
     else {
         var obj = {};
@@ -84,4 +75,18 @@ function getPoint(pointData) {
         vertices.push(vertex);
     }
     return vertices;
+}
+
+function normalizePathKeyframes(frames) {
+    for (var i = 1; i < frames.length; i++) {
+        var key = frames[i],
+            lastKey = frames[i - 1];
+
+        if (lastKey.easeOut && !key.easeIn) {
+            key.easeIn = [0.16667, 1];
+        } else if (key.easeIn && !lastKey.easeOut) {
+            lastKey.easeOut = [0.16667, 0];
+        }
+    }
+    return frames;
 }
