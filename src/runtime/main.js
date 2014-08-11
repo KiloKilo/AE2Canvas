@@ -51,10 +51,10 @@
 var Runtime = require('./Runtime');
 
 var stats, ctx, runtime;
-var file = 'animation';
+var file = 'loader';
+var baseScale = 0.473;
 
 if (location.hash) {
-    console.log(location.hash);
     file = location.hash.substring(1);
 }
 
@@ -77,42 +77,32 @@ function loop(time) {
     render(time);
 }
 
-function start() {
+function start(data) {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0';
     stats.domElement.style.left = '0';
     document.getElementsByTagName('body')[0].appendChild(stats.domElement);
 
-    document.getElementById('start').addEventListener('click', function () {
-        runtime.start();
-    }, false);
-    document.getElementById('stop').addEventListener('click', function () {
-        runtime.stop();
-    }, false);
-    document.getElementById('pause').addEventListener('click', function () {
-        runtime.pause();
-    }, false);
+//    document.getElementById('start').addEventListener('click', function () {
+//        runtime.start();
+//    }, false);
+//    document.getElementById('stop').addEventListener('click', function () {
+//        runtime.stop();
+//    }, false);
+//    document.getElementById('pause').addEventListener('click', function () {
+//        runtime.pause();
+//    }, false);
 
     var canvas = document.getElementById('canvas');
     if (canvas.getContext) {
-        ctx = canvas.getContext('2d');
-        runtime.canvas = canvas;
-        runtime.ctx = ctx;
+        runtime = new Runtime(data, canvas);
+        runtime.loop = true;
+        runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
         loop();
+        runtime.start();
     }
-
-    runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-
-    var width = window.innerWidth * 0.8;
-    canvas.style.width = width + 'px';
-    runtime.setWidth(width);
-
-    window.addEventListener('resize', function () {
-        width = window.innerWidth * 0.8;
-        canvas.style.width = width + 'px';
-        runtime.setWidth(width);
-    }, false);
 }
 
 function render(time) {
@@ -122,6 +112,5 @@ function render(time) {
 }
 
 fetchJSONFile('json/' + file + '.json', function (data) {
-    runtime = new Runtime(data);
-    start();
+    start(data);
 });

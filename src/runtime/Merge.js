@@ -1,13 +1,14 @@
 'use strict';
 
 function Merge(data) {
-
-    if (!data) return;
     this.type = data.type;
 }
 
 Merge.prototype.setCompositeOperation = function (ctx) {
     switch (this.type) {
+        case 2:
+            ctx.globalCompositeOperation = 'source-over';
+            break;
         case 3:
             ctx.globalCompositeOperation = 'source-out';
             break;
@@ -20,7 +21,6 @@ Merge.prototype.setCompositeOperation = function (ctx) {
         default:
             ctx.globalCompositeOperation = 'source-over';
     }
-    console.log('set composite',ctx.globalCompositeOperation );
 };
 
 module.exports = Merge;

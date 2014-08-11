@@ -10,12 +10,14 @@ var Stroke = require('./Stroke'),
     Transform = require('./Transform'),
     Merge = require('./Merge');
 
-function Group(data) {
+function Group(data, bufferCtx) {
 
     if (!data) return;
 
     this.name = data.name;
     this.index = data.index;
+
+    this.bufferCtx = bufferCtx;
 
     if (data.in) this.in = data.in;
     else this.in = 0;
@@ -25,14 +27,14 @@ function Group(data) {
 
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
-
     if (data.merge) this.merge = new Merge(data.merge);
 
     this.transform = new Transform(data.transform);
+
     if (data.groups) {
         this.groups = [];
         for (var i = 0; i < data.groups.length; i++) {
-            this.groups.push(new Group(data.groups[i]));
+            this.groups.push(new Group(data.groups[i], this.bufferCtx));
         }
     }
 
@@ -57,10 +59,11 @@ function Group(data) {
 
 Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
 
+    var i;
+
     ctx.save();
 
     //TODO check if color/stroke is changing over time
-
     var fill = this.fill || parentFill;
     var stroke = this.stroke || parentStroke;
 
@@ -69,31 +72,32 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
 
     this.transform.transform(ctx, time);
 
+    if (this.merge) {
+        this.bufferCtx.save();
+        this.bufferCtx.clearRect(0, 0, this.bufferCtx.canvas.width, this.bufferCtx.canvas.height);
+        this.transform.transform(this.bufferCtx, time);
+
+        if (fill) fill.setColor(this.bufferCtx, time);
+        if (stroke) stroke.setStroke(this.bufferCtx, time);
+    }
+
     ctx.beginPath();
     if (this.shapes) {
-        var i;
-
-        //draw on off screen canvas if merge
         if (this.merge) {
-            var buffer = document.createElement('canvas');
-            buffer.width = ctx.canvas.width;
-            buffer.height = ctx.canvas.height;
-            var bufferCtx = buffer.getContext('2d');
-
-            this.transform.transform(bufferCtx, time);
-            if (fill) fill.setColor(bufferCtx, time);
 
             for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(bufferCtx, time);
-                if (fill) bufferCtx.fill();
-                bufferCtx.beginPath();
-                this.merge.setCompositeOperation(bufferCtx);
+                this.shapes[i].draw(this.bufferCtx, time);
+                this.bufferCtx.closePath();
+                if (fill) this.bufferCtx.fill();
+                if (stroke) this.bufferCtx.stroke();
+                this.bufferCtx.beginPath();
+                this.merge.setCompositeOperation(this.bufferCtx);
             }
-            if (this.shapes[this.shapes.length - 1].closed) {
-                bufferCtx.closePath();
-            }
+
             ctx.restore();
-            ctx.drawImage(buffer, 0, 0);
+            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
+            this.bufferCtx.restore();
+
         } else {
             for (i = 0; i < this.shapes.length; i++) {
                 this.shapes[i].draw(ctx, time);
@@ -109,14 +113,25 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
     if (stroke) ctx.stroke();
 
     if (this.groups) {
-        for (var j = 0; j < this.groups.length; j++) {
-            if (time >= this.groups[j].in && time < this.groups[j].out) {
-                this.groups[j].draw(ctx, time, fill, stroke);
+        if (this.merge) {
+            for (i = 0; i < this.groups.length; i++) {
+                if (time >= this.groups[i].in && time < this.groups[i].out) {
+                    this.groups[i].draw(this.bufferCtx, time, fill, stroke);
+                    this.merge.setCompositeOperation(this.bufferCtx);
+                }
+            }
+            ctx.restore();
+            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
+            this.bufferCtx.restore();
+        }
+        else {
+            for (i = 0; i < this.groups.length; i++) {
+                if (time >= this.groups[i].in && time < this.groups[i].out) {
+                    this.groups[i].draw(ctx, time, fill, stroke);
+                }
             }
         }
     }
-
-    //    reset
 
     ctx.restore();
 };

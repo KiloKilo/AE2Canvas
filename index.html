@@ -11,26 +11,35 @@
             height: 100%;
         }
 
-
         body {
             width: 100%;
             height: 100%;
-            background: #333333;
+            background: #000;
             margin: 0;
             text-align: center;
+            overflow: hidden;
         }
+
         #canvas {
-            /*background: url(img/grid.png) no-repeat white;*/
-            /*background-size: contain;*/
+            position: absolute;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 700px;
+            height: 500px;
         }
 
-        button {
-
+        .btn-group {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
         }
     </style>
 </head>
 <body>
-<canvas id="canvas" width="1280" height="720"></canvas>
 <div class="btn-group">
     <button id="start" type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-play"></span></button>
@@ -39,6 +48,7 @@
     <button id="pause" type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-pause"></span></button>
 </div>
+<canvas id="canvas" width="700" height="500"></canvas>
 <script src="src/lib/stats.min.js"></script>
 <script src="build/runtime.js"></script>
 </body>

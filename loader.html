@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #wrapper {
+            width: 100%;
+            height: 100%;
+            min-width: 1440px;
+            background: url(img/easypush_bg.jpg) no-repeat center #000;
+            background-size: 100% auto;
+        }
+
+        @media (max-width: 1440px) {
+            #wrapper {
+                position: absolute;
+                left: 50%;
+                margin-left: -720px;
+            }
+        }
+
+        #canvas {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 47.3%;
+        }
+
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <canvas id="canvas"></canvas>
+</div>
+<script src="src/lib/stats.min.js"></script>
+<script src="build/runtime.js"></script>
+</body>
+</html>

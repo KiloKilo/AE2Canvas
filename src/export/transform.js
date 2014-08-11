@@ -4,89 +4,105 @@ function getVectorTransform(data) {
     if (!(data instanceof PropertyGroup)) return null;
 
     var transform = {},
-        prop;
+        anchorProp,
+        positionProp,
+        scaleProp,
+        skewProp,
+        skewAxisProp,
+        rotationProp,
+        opacityProp;
 
     if (data.property('ADBE Anchor Point') instanceof Property) {
-        prop = data.property('ADBE Anchor Point');
+        anchorProp = data.property('ADBE Anchor Point');
     } else if (data.property('ADBE Vector Anchor') instanceof Property) {
-        prop = data.property('ADBE Vector Anchor');
+        anchorProp = data.property('ADBE Vector Anchor');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value[0] !== 0 ||
-        prop.value[1] !== 0) {
-        transform.anchorX = roundAnchor(getProperty(prop, 0));
-        transform.anchorY = roundAnchor(getProperty(prop, 1));
+    if (anchorProp) {
+        if (anchorProp.isTimeVarying ||
+            anchorProp.value[0] !== 0 ||
+            anchorProp.value[1] !== 0) {
+            transform.anchorX = roundAnchor(getProperty(anchorProp, 0));
+            transform.anchorY = roundAnchor(getProperty(anchorProp, 1));
+        }
     }
-
-//    //Position
-//    //TODO check for dimensionsSeparated
-//    var position;
 
     if (data.property('ADBE Position')instanceof Property) {
-        prop = data.property('ADBE Position');
+        positionProp = data.property('ADBE Position');
     } else if (data.property('ADBE Vector Position')instanceof Property) {
-        prop = data.property('ADBE Vector Position');
+        positionProp = data.property('ADBE Vector Position');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value[0] !== 0 ||
-        prop.value[1] !== 0) {
-        transform.positionX = normalizePosition(getProperty(prop, 0));
-        transform.positionY = normalizePosition(getProperty(prop, 1));
+    if (positionProp) {
+        if (positionProp.isTimeVarying ||
+            positionProp.value[0] !== 0 ||
+            positionProp.value[1] !== 0) {
+            transform.positionX = normalizePosition(getProperty(positionProp, 0));
+            transform.positionY = normalizePosition(getProperty(positionProp, 1));
+        }
     }
 
     if (data.property('ADBE Scale')instanceof Property) {
-        prop = data.property('ADBE Scale');
+        scaleProp = data.property('ADBE Scale');
     } else if (data.property('ADBE Vector Scale')instanceof Property) {
-        prop = data.property('ADBE Vector Scale');
+        scaleProp = data.property('ADBE Vector Scale');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value[0] !== 100 ||
-        prop.value[1] !== 100) {
-        transform.scaleX = normalizeScale(getProperty(prop, 0));
-        transform.scaleY = normalizeScale(getProperty(prop, 1));
+    if (scaleProp) {
+        if (scaleProp.isTimeVarying ||
+            scaleProp.value[0] !== 100 ||
+            scaleProp.value[1] !== 100) {
+            transform.scaleX = normalizeScale(getProperty(scaleProp, 0));
+            transform.scaleY = normalizeScale(getProperty(scaleProp, 1));
+        }
     }
 
     if (data.property('ADBE Vector Skew')instanceof Property) {
-        prop = data.property('ADBE Vector Skew');
+        skewProp = data.property('ADBE Vector Skew');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value !== 0) {
-        transform.skew = getProperty(prop);
+    if (skewProp) {
+        if (skewProp.isTimeVarying ||
+            skewProp.value !== 0) {
+            transform.skew = getProperty(skewProp);
+        }
     }
 
     if (data.property('ADBE Vector Skew Axis')instanceof Property) {
-        prop = data.property('ADBE Vector Skew Axis');
+        skewAxisProp = data.property('ADBE Vector Skew Axis');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value !== 0) {
-        transform.skewAxis = getProperty(prop);
+    if (skewAxisProp) {
+        if (skewAxisProp.isTimeVarying ||
+            skewAxisProp.value !== 0) {
+            transform.skewAxis = getProperty(skewAxisProp);
+        }
     }
 
     if (data.property('ADBE Rotate Z')instanceof Property) {
-        prop = data.property('ADBE Rotate Z');
+        rotationProp = data.property('ADBE Rotate Z');
     } else if (data.property('ADBE Vector Rotation')instanceof Property) {
-        prop = data.property('ADBE Vector Rotation');
+        rotationProp = data.property('ADBE Vector Rotation');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value !== 0) {
-        transform.rotation = roundRotation(getProperty(prop));
+    if (rotationProp) {
+        if (rotationProp.isTimeVarying ||
+            rotationProp.value !== 0) {
+            transform.rotation = roundRotation(getProperty(rotationProp));
+        }
     }
 
     if (data.property('ADBE Opacity')instanceof Property) {
-        prop = data.property('ADBE Opacity');
+        opacityProp = data.property('ADBE Opacity');
     } else if (data.property('ADBE Vector Group Opacity')instanceof Property) {
-        prop = data.property('ADBE Vector Group Opacity');
+        opacityProp = data.property('ADBE Vector Group Opacity');
     }
 
-    if (prop.isTimeVarying ||
-        prop.value !== 100) {
-        transform.opacity = normalizeOpacity(getProperty(prop));
+    if (opacityProp) {
+        if (opacityProp.isTimeVarying ||
+            opacityProp.value !== 100) {
+            transform.opacity = normalizeOpacity(getProperty(opacityProp));
+        }
     }
 
     return transform;

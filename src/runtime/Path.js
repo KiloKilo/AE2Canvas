@@ -1,8 +1,6 @@
 'use strict';
 
 function Path(data) {
-    if (!data) return null;
-
     this.name = data.name;
     this.closed = data.closed;
     this.frames = data.frames;
@@ -10,17 +8,14 @@ function Path(data) {
 }
 
 Path.prototype.draw = function (ctx, time) {
-//        ctx.save();
-
     var vertices = this.getValue(time);
-
-//        ctx.beginPath();
     ctx.moveTo(vertices[0][4], vertices[0][5]);
 
     for (var j = 1; j < vertices.length; j++) {
 
         var nextVertex = vertices[j];
         var lastVertex = vertices[j - 1];
+
         ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
 
 //            ctx.save();
@@ -44,10 +39,6 @@ Path.prototype.draw = function (ctx, time) {
 //            ctx.fillRect(vertices[0][2], vertices[0][3], 5, 5);
 //            ctx.restore();
     }
-
-//        ctx.closePath();
-
-//        ctx.restore();
 };
 
 Path.prototype.getValue = function () {

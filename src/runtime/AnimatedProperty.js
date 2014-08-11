@@ -4,12 +4,8 @@ var Property = require('./Property'),
     BezierEasing = require('../lib/BezierEasing');
 
 function AnimatedProperty(data) {
-    if (!data) return;
-
     Property.call(this, data);
-
     this.frameCount = this.frames.length;
-//    this.reset();
 }
 
 AnimatedProperty.prototype = Object.create(Property.prototype);

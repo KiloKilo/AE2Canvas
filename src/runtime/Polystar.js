@@ -30,9 +30,12 @@ function Polystar(data) {
     if (data.outerRoundness.length > 1) this.outerRoundness = new AnimatedProperty(data.outerRoundness);
     else this.outerRoundness = new Property(data.outerRoundness);
 
+//    console.log(this.position);
 }
 
 Polystar.prototype.draw = function (ctx, time) {
+
+//    console.log(this.position);
 
     var points = this.points.getValue(time),
         position = this.position.getValue(time),
@@ -109,11 +112,11 @@ Polystar.prototype.rotatePoint = function (cx, cy, x, y, radians) {
 
 Polystar.prototype.reset = function () {
     this.points.reset();
-    this.position = this.position.reset();
-    this.innerRadius = this.innerRadius.reset();
-    this.outerRadius = this.outerRadius.reset();
-    this.innerRoundness = this.innerRoundness.reset();
-    this.outerRoundness = this.outerRoundness.reset();
+    this.position.reset();
+    this.innerRadius.reset();
+    this.outerRadius.reset();
+    this.innerRoundness.reset();
+    this.outerRoundness.reset();
 };
 
 module.exports = Polystar;
