@@ -5,7 +5,7 @@ function Property(data) {
     this.frames = data;
 }
 
-Property.prototype.getValue = function (time) {
+Property.prototype.getValue = function () {
     return this.frames[0].v;
 };
 

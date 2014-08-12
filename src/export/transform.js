@@ -37,8 +37,12 @@ function getVectorTransform(data) {
         if (positionProp.isTimeVarying ||
             positionProp.value[0] !== 0 ||
             positionProp.value[1] !== 0) {
-            transform.positionX = normalizePosition(getProperty(positionProp, 0));
-            transform.positionY = normalizePosition(getProperty(positionProp, 1));
+            if (positionProp.dimensionsSeparated) {
+                transform.positionX = normalizePosition(getProperty(positionProp, 0));
+                transform.positionY = normalizePosition(getProperty(positionProp, 1));
+            } else {
+                transform.position = normalizePosition(getProperty(positionProp));
+            }
         }
     }
 
@@ -128,7 +132,13 @@ function normalizeOpacity(frames) {
 
 function normalizePosition(frames) {
     for (var i = 0; i < frames.length; i++) {
-        frames[i].v = Math.round(frames[i].v);
+        if (frames[i].v instanceof Array) {
+            for (var j = 0; j < frames[i].v.length; j++) {
+                frames[i].v[j] = Math.round(frames[i].v[j]);
+            }
+        } else {
+            frames[i].v = Math.round(frames[i].v);
+        }
     }
 
     return frames;

@@ -1,7 +1,6 @@
 'use strict';
 
 var Property = require('./Property'),
-    MotionPath = require('./MotionPath'),
     BezierEasing = require('../lib/BezierEasing');
 
 function AnimatedProperty(data) {

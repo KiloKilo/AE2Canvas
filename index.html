@@ -161,7 +161,7 @@
     function render(time) {
         if (!time) time = performance.now();
         runtime.update(time);
-        stats.update();
+        stats.update();;
     }
 
     fetchJSONFile('json/' + file + '.json', function (data) {
