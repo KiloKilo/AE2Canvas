@@ -26,6 +26,7 @@ function Stroke(data) {
 
 Stroke.prototype.getValue = function (time) {
     var color = this.color.getValue(time);
+//    console.log(color);
     var opacity = this.opacity.getValue(time);
     return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
 };

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #wrapper {
+            position: absolute;
+            left: 50%;
+            margin-left: -720px;
+            width: 1440px;
+            height: 100%;
+            background: url(bg.jpg) no-repeat center #000;
+            background-size: 100% auto;
+        }
+
+
+        #canvas {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 700px;
+            height: 500px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <canvas id="canvas"></canvas>
+</div>
+<script src="ae2canvas.min.js"></script>
+<script>
+    var stats, ctx, runtime;
+
+    fetchJSONFile('animation.json', function (data) {
+        var canvas = document.getElementById('canvas');
+        if (canvas.getContext) {
+            runtime = new ae2canvas(data, canvas);
+            runtime.loop = true;
+
+            loop();
+            runtime.start();
+        }
+    });
+
+    function loop(time) {
+        requestAnimationFrame(loop);
+        runtime.update(time);
+    }
+
+    function fetchJSONFile(path, callback) {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    var data = JSON.parse(httpRequest.responseText);
+                    if (callback) callback(data);
+                }
+            }
+        };
+        httpRequest.open('GET', path);
+        httpRequest.send();
+    }
+
+</script>
+</body>
+</html>

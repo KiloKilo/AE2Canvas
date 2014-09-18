@@ -2,6 +2,7 @@
 
 var Property = require('./Property'),
     BezierEasing = require('../lib/BezierEasing');
+    BezierEasing = require('../lib/BezierEasing');
 
 function AnimatedProperty(data) {
     Property.call(this, data);

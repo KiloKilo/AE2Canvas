@@ -1,14 +1,14 @@
-﻿function getProperty(data, split) {
+﻿﻿function getProperty(data, split, isColor) {
     if (!data instanceof Property) return null;
 
     if (data.numKeys < 1) {
-        return getStaticProperty(data, split);
+        return getStaticProperty(data, split, isColor);
     } else {
-        return getAnimatedProperty(data, split);
+        return getAnimatedProperty(data, split, isColor);
     }
 }
 
-function getStaticProperty(data, split) {
+function getStaticProperty(data, split, isColor) {
 
     var arr = [];
 
@@ -27,11 +27,11 @@ function getStaticProperty(data, split) {
     return arr;
 }
 
-function getAnimatedProperty(data, split) {
-    return normalizeKeyframes(getKeyframes(data, split));
+function getAnimatedProperty(data, split, isColor) {
+    return normalizeKeyframes(getKeyframes(data, split, isColor), split, isColor);
 }
 
-function getKeyframes(data, split) {
+function getKeyframes(data, split, isColor) {
 
     var arr = [],
         numKeys = data.numKeys;
@@ -76,18 +76,20 @@ function getKeyframes(data, split) {
             obj.easeOut[1] = easeOut.speed;
         }
 
-        //position with motionpath
-        if (data.matchName === 'ADBE Position' && !data.dimensionsSeparated &&
+        //FIXME buggy if no easing set
+//        position
+        if (typeof split === 'number' &&
             (data.propertyValueType === PropertyValueType.TwoD_SPATIAL || data.propertyValueType === PropertyValueType.ThreeD_SPATIAL)) {
+
             if (i > 1) {
-                obj.inTangent = data.keyInSpatialTangent(i);
+                obj.inTangent = data.keyInSpatialTangent(i)[split];
                 obj.easeIn = [];
                 obj.easeIn[0] = easeIn.influence;
                 obj.easeIn[1] = easeIn.speed;
             }
 
             if (i < numKeys) {
-                obj.outTangent = data.keyOutSpatialTangent(i);
+                obj.outTangent = data.keyOutSpatialTangent(i)[split];
                 obj.easeOut = [];
                 obj.easeOut[0] = easeOut.influence;
                 obj.easeOut[1] = easeOut.speed;
@@ -100,7 +102,7 @@ function getKeyframes(data, split) {
     return arr;
 }
 
-function normalizeKeyframes(frames) {
+function normalizeKeyframes(frames, split, isColor) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -118,8 +120,9 @@ function normalizeKeyframes(frames) {
         if (key.v instanceof Array && key.v.length > 2) {
             x = key.v[0] - lastKey.v[0];
             y = key.v[1] - lastKey.v[1];
-            z = key.v[1] - lastKey.v[2];
+            z = key.v[2] - lastKey.v[2];
             diff = Math.pow(x * x + y * y + z * z, 1 / 3);
+            $.writeln(diff);
         } else if (key.v instanceof Array && key.v.length === 2) {
             x = key.v[0] - lastKey.v[0];
             y = key.v[1] - lastKey.v[1];
@@ -141,25 +144,17 @@ function normalizeKeyframes(frames) {
                 key.v = lastKey.v + 0.01;
             }
         }
-
-        var averageTempo = diff / duration * 1000;
+        
+        var colorOffset = 1;
+        if (isColor) colorOffset = 255;
+        var averageTempo = diff * colorOffset / duration * 1000;
 
         if (key.easeIn) {
             normInfluenceIn = key.easeIn[0] / 100;
             normSpeedIn = key.easeIn[1] / averageTempo * normInfluenceIn;
             easeIn = [];
-            //position
-//            if (key.inTangent) {
-//                ratio = key.inTangent / diff;
-//                easeIn[0] = 0.05;
-//                easeIn[1] = 1 + ratio;
-////                delete  key.inTangent;
-////                delete  key.outTangent;
-//            } else {
-//            }
             easeIn[0] = Math.round((1 - normInfluenceIn) * 1000) / 1000;
             easeIn[1] = Math.round((1 - normSpeedIn) * 1000) / 1000;
-//            key.oldEaseIn = [key.easeIn[0], key.easeIn[1]];
             key.easeIn = easeIn;
         }
 
@@ -167,19 +162,8 @@ function normalizeKeyframes(frames) {
             normInfluenceOut = lastKey.easeOut[0] / 100;
             normSpeedOut = lastKey.easeOut[1] / averageTempo * normInfluenceOut;
             easeOut = [];
-
-            //position
-//            if (lastKey.outTangent) {
-//                ratio = lastKey.outTangent / diff;
-//                easeOut[0] = 0.05;
-//                easeOut[1] = ratio;
-////                delete lastKey.inTangent;
-////                delete lastKey.outTangent;
-//            } else {
-//            }
             easeOut[0] = Math.round(normInfluenceOut * 1000) / 1000;
             easeOut[1] = Math.round(normSpeedOut * 1000) / 1000;
-//            lastKey.oldEaseOut = [lastKey.easeOut[0], lastKey.easeOut[1]];
             lastKey.easeOut = easeOut;
         }
 
