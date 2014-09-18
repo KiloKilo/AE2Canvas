@@ -27,30 +27,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /*width: 1280px;*/
-            /*height: 720px;*/
-            width: 670px;
-            height: 195px;
-            /*background: url(img/grid.png) white;*/
-        }
-
-        .btn-group {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
+            width: 100%;
+            height: auto;
+            background: #555;
         }
     </style>
 </head>
 <body>
-<div class="btn-group">
-    <button id="start" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-play"></span></button>
-    <button id="stop" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-stop"></span></button>
-    <button id="pause" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-pause"></span></button>
-</div>
-<canvas id="canvas" width="670" height="195"></canvas>
+<canvas id="canvas" width="1280" height="720"></canvas>
 <script>
     (function () {
         var lastTime = 0;
@@ -102,16 +86,9 @@
 
     })();
 </script>
-<script src="src/lib/stats.min.js"></script>
-<script src="build/ae2canvas.js"></script>
+<script src="ae2canvas.min.js"></script>
 <script>
     var stats, ctx, runtime;
-    var file = 'animation';
-    var baseScale = 0.473;
-
-    if (location.hash) {
-        file = location.hash.substring(1);
-    }
 
     function fetchJSONFile(path, callback) {
         var httpRequest = new XMLHttpRequest();
@@ -127,48 +104,28 @@
         httpRequest.send();
     }
 
+    fetchJSONFile('drops.json', function (data) {
+        var canvas = document.getElementById('canvas');
+        if (canvas.getContext) {
+            runtime = new ae2canvas(data, canvas);
+            runtime.loop = true;
+            runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
+            loop();
+            runtime.start();
+        }
+    });
+
     function loop(time) {
         requestAnimationFrame(loop);
         render(time);
     }
 
-    function start(data) {
-        stats = new Stats();
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.top = '0';
-        stats.domElement.style.left = '0';
-        document.getElementsByTagName('body')[0].appendChild(stats.domElement);
-
-        document.getElementById('start').addEventListener('click', function () {
-            runtime.start();
-        }, false);
-        document.getElementById('stop').addEventListener('click', function () {
-            runtime.stop();
-        }, false);
-        document.getElementById('pause').addEventListener('click', function () {
-            runtime.pause();
-        }, false);
-
-        var canvas = document.getElementById('canvas');
-        if (canvas.getContext) {
-            runtime = new ae2canvas(data, canvas);
-//            runtime.loop = true;
-            runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-//            runtime.fluid = true;
-            loop();
-            runtime.start();
-        }
-    }
-
     function render(time) {
         if (!time) time = performance.now();
         runtime.update(time);
-        stats.update();
     }
 
-    fetchJSONFile('json/' + file + '.json', function (data) {
-        start(data);
-    });
 </script>
 </body>
 </html>

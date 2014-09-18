@@ -5,23 +5,23 @@
     var fill = {};
     fill.index = data.propertyIndex;
 //    fill.composite = data.property('ADBE Vector Composite Order');
-    fill.color = getProperty(data.property('ADBE Vector Fill Color'));
-    fill.color = normalizeColor(fill.color);
+    fill.color = getProperty(data.property('ADBE Vector Fill Color'), null, true);
+    fill.color = normalizeFillColor(fill.color);
     fill.opacity = getProperty(data.property('ADBE Vector Fill Opacity'));
-    fill.opacity = normalizeOpacity(fill.opacity);
+    fill.opacity = normalizeFillOpacity(fill.opacity);
 
     return fill;
 }
 
-function normalizeOpacity(frames) {
+function normalizeFillOpacity(frames) {
     for (var i = 0; i < frames.length; i++) {
         frames[i].v = frames[i].v / 100;
     }
 
     return frames;
-};
+}
 
-function normalizeColor(frames) {
+function normalizeFillColor(frames) {
     for (var i = 0; i < frames.length; i++) {
         var color = frames[i].v;
         frames[i].v = [
@@ -32,4 +32,4 @@ function normalizeColor(frames) {
     }
 
     return frames;
-};
+}

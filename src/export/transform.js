@@ -128,7 +128,13 @@ function normalizeOpacity(frames) {
 
 function normalizePosition(frames) {
     for (var i = 0; i < frames.length; i++) {
-        frames[i].v = Math.round(frames[i].v);
+        if (frames[i].v instanceof Array) {
+            for (var j = 0; j < frames[i].v.length; j++) {
+                frames[i].v[j] = Math.round(frames[i].v[j]);
+            }
+        } else {
+            frames[i].v = Math.round(frames[i].v);
+        }
     }
 
     return frames;
