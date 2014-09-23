@@ -27,11 +27,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /*width: 1280px;*/
-            /*height: 720px;*/
-            width: 670px;
-            height: 195px;
-            /*background: url(img/grid.png) white;*/
+            width: 1280px;
+            height: 720px;
+            background: url(img/grid.png) white;
         }
 
         .btn-group {
@@ -107,7 +105,6 @@
 <script>
     var stats, ctx, runtime;
     var file = 'animation';
-    var baseScale = 0.473;
 
     if (location.hash) {
         file = location.hash.substring(1);
@@ -152,9 +149,9 @@
         var canvas = document.getElementById('canvas');
         if (canvas.getContext) {
             runtime = new ae2canvas(data, canvas);
-//            runtime.loop = true;
+            runtime.loop = true;
             runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-//            runtime.fluid = true;
+            runtime.fluid = true;
             loop();
             runtime.start();
         }

@@ -1,17 +1,31 @@
-﻿#include '../lib/json2.js'
-#include 'comp.js'
-#include 'group.js'
-#include 'path.js'
-#include 'rect.js'
-#include 'ellipse.js'
-#include 'polystar.js'
-#include 'transform.js'
-#include 'fill.js'
-#include 'gradient.js'
-#include 'stroke.js'
-#include 'property.js'
-#include 'merge.js'
-#include 'vectorTrim.js'
+﻿#include 'utils/json2.js'
+#include 'utils/utils.js'
+#include 'utils/keyframes.js'
+#include 'utils/color.js'
+
+#include 'transform/transform.js'
+#include 'transform/anchor.js'
+#include 'transform/position.js'
+#include 'transform/scale.js'
+
+#include 'element/comp.js'
+#include 'element/group.js'
+#include 'element/path.js'
+#include 'element/rect.js'
+#include 'element/ellipse.js'
+#include 'element/polystar.js'
+
+#include 'element/fill.js'
+#include 'element/gradient.js'
+#include 'element/stroke.js'
+
+#include 'element/merge.js'
+#include 'element/vectorTrim.js'
+
+#include 'property/property.js'
+#include 'property/staticProperty.js'
+#include 'property/animatedProperty.js'
+
 #include 'optimize/optimize.js'
 #include 'optimize/groupOptimize.js'
 #include 'optimize/vectorTrimOptimize.js'
@@ -21,8 +35,6 @@ function start() {
 
     var data = getComp(app.project.activeItem);
     var json = JSON.stringify(data);
-
-    //return;
 
     var theFile = File.saveDialog('Save the json file');
     if (theFile != null) {

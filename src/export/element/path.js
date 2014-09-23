@@ -39,7 +39,7 @@
 
             path.frames.push(obj);
         }
-        path.frames = normalizePathKeyframes(path.frames);
+        path.frames = normalizeKeyframes(path.frames);
     }
     else {
         var obj = {};
@@ -52,11 +52,9 @@
 
     return path;
 
-}
-
-function getPoint(pointData) {
-    var vertices = [];
-    for (var i = 0; i < pointData.vertices.length; i++) {
+    function getPoint(pointData) {
+        var vertices = [];
+        for (var i = 0; i < pointData.vertices.length; i++) {
 //        var x = Math.round(pointData.vertices[i][0]);
 //        var y = Math.round(pointData.vertices[i][1]);
 //        var cp1x = x + Math.round(pointData.outTangents[i][0]);
@@ -64,29 +62,32 @@ function getPoint(pointData) {
 //        var cp2x = x + Math.round(pointData.inTangents[i][0]);
 //        var cp2y = y + Math.round(pointData.inTangents[i][1]);
 
-        var x = pointData.vertices[i][0];
-        var y = pointData.vertices[i][1];
-        var cp1x = x + pointData.outTangents[i][0];
-        var cp1y = y + pointData.outTangents[i][1];
-        var cp2x = x + pointData.inTangents[i][0];
-        var cp2y = y + pointData.inTangents[i][1];
+            var x = pointData.vertices[i][0];
+            var y = pointData.vertices[i][1];
+            var cp1x = x + pointData.outTangents[i][0];
+            var cp1y = y + pointData.outTangents[i][1];
+            var cp2x = x + pointData.inTangents[i][0];
+            var cp2y = y + pointData.inTangents[i][1];
 
-        var vertex = [cp1x, cp1y, cp2x, cp2y, x, y];
-        vertices.push(vertex);
-    }
-    return vertices;
-}
-
-function normalizePathKeyframes(frames) {
-    for (var i = 1; i < frames.length; i++) {
-        var key = frames[i],
-            lastKey = frames[i - 1];
-
-        if (lastKey.easeOut && !key.easeIn) {
-            key.easeIn = [0.16667, 1];
-        } else if (key.easeIn && !lastKey.easeOut) {
-            lastKey.easeOut = [0.16667, 0];
+            var vertex = [cp1x, cp1y, cp2x, cp2y, x, y];
+            vertices.push(vertex);
         }
+        return vertices;
     }
-    return frames;
+
+    function normalizeKeyframes(frames) {
+        for (var i = 1; i < frames.length; i++) {
+            var key = frames[i],
+                lastKey = frames[i - 1];
+
+            if (lastKey.easeOut && !key.easeIn) {
+                key.easeIn = [0.16667, 1];
+            } else if (key.easeIn && !lastKey.easeOut) {
+                lastKey.easeOut = [0.16667, 0];
+            }
+        }
+        return frames;
+    }
+
 }
+

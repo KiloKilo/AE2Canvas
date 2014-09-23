@@ -13,6 +13,9 @@ function Runtime(data, canvas) {
     this.baseHeight = data.height;
     this.ratio = data.width / data.height;
 
+    this.canvas.width = this.baseWidth;
+    this.canvas.height = this.baseHeight;
+
     this.buffer = document.createElement('canvas');
     this.buffer.width = this.baseWidth;
     this.buffer.height = this.baseHeight;
@@ -25,7 +28,12 @@ function Runtime(data, canvas) {
     this.reset();
     this.started = false;
     window.addEventListener('resize', this.setWidth.bind(this), false);
-    this.setWidth();
+
+    //TODO check if fluid -> resize
+
+//    this.setWidth();
+
+    console.log(this);
 }
 
 Runtime.prototype = {

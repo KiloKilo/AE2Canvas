@@ -1,3 +1,133 @@
-{"groups":[{"out":2700,"name":"textfield Outlines","groups":[{"name":"bg","index":8,"shapes":[{"name":"Rectangle Path 1","index":1,"type":"rect","size":[{"t":0,"v":[640,160]}],"position":[{"t":0,"v":[0,0]}],"roundness":[{"t":0,"v":0}]}],"fill":{"index":2,"color":[{"t":0,"v":[0,0,0]}],"opacity":[{"t":0,"v":0.05}]},"transform":{"anchorX":[{"t":0,"v":-325}],"anchorY":[{"t":0,"v":-85}],"scaleX":[{"t":2166.66666666667,"v":1,"easeOut":[0.167,0]},{"t":2500,"v":1.0001,"easeIn":[0.833,1]}],"scaleY":[{"t":2166.66666666667,"v":0,"easeOut":[0,0]},{"t":2500,"v":1,"easeIn":[0,1]}]}},{"name":"dots","index":7,"groups":[{"name":"dot","index":24,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1400,"v":0,"easeOut":[0.167,0.167]},{"t":1433.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1466.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1500,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1533.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 2","index":23,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":85}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1433.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1466.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1500,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1533.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1566.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 3","index":22,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":165}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1466.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":1500,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1533.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1566.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1600,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 4","index":21,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":245}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1500,"v":0,"easeOut":[0.167,0.167]},{"t":1533.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1566.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1600,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1633.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 5","index":20,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":325}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1533.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1566.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1600,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1633.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1666.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 6","index":19,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":405}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1566.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":1600,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1633.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1666.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1700,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 7","index":18,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":485}],"positionY":[{"t":0,"v":5}],"opacity":[{"t":1600,"v":0,"easeOut":[0.167,0.167]},{"t":1633.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1666.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1700,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1733.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 8","index":17,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1633.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1666.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1700,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1733.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1766.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 9","index":16,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":85}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1666.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":1700,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1733.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1766.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1800,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 10","index":15,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":165}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1700,"v":0,"easeOut":[0.167,0.167]},{"t":1733.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1766.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1800,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1833.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 11","index":14,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":245}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1733.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1766.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1800,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1833.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1866.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 12","index":13,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":325}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1766.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":1800,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1833.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1866.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1900,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 13","index":12,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":405}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1800,"v":0,"easeOut":[0.167,0.167]},{"t":1833.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1866.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1900,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1933.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 14","index":11,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":485}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1833.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1866.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1900,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1933.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1966.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 15","index":10,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":565}],"positionY":[{"t":0,"v":85}],"opacity":[{"t":1866.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":1900,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1933.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1966.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2000,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 16","index":9,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":1900,"v":0,"easeOut":[0.167,0.167]},{"t":1933.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1966.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2000,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2033.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 17","index":8,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":85}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":1933.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":1966.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2000,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2033.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2066.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 18","index":7,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":165}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":1966.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":2000,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2033.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2066.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2100,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 19","index":6,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":245}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2000,"v":0,"easeOut":[0.167,0.167]},{"t":2033.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2066.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2100,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2133.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 20","index":5,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":325}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2033.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":2066.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2100,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2133.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2166.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 21","index":4,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":405}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2066.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":2100,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2133.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2166.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2200,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 22","index":3,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":485}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2100,"v":0,"easeOut":[0.167,0.167]},{"t":2133.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2166.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2200,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2233.33333333333,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 23","index":2,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":565}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2133.33333333333,"v":0,"easeOut":[0.167,0.167]},{"t":2166.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2200,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2233.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2266.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"dot 24","index":1,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[2,2]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":645}],"positionY":[{"t":0,"v":165}],"opacity":[{"t":2166.66666666667,"v":0,"easeOut":[0.167,0.167]},{"t":2200,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2233.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2266.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2300,"v":1.0001,"easeIn":[0.833,1]}]}}],"transform":{
-
-}},{"name":"red","index":6,"shapes":[{"name":"Rectangle Path 1","index":1,"type":"rect","size":[{"t":0,"v":[320,10]}],"position":[{"t":0,"v":[0,0]}],"roundness":[{"t":0,"v":0}]}],"fill":{"index":2,"color":[{"t":0,"v":[192,0,7]}],"opacity":[{"t":0,"v":1}]},"transform":{"anchorX":[{"t":0,"v":-165}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":0}],"positionY":[{"t":0,"v":90}],"scaleX":[{"t":933.333333333333,"v":0,"easeOut":[0,0]},{"t":1600,"v":1,"easeIn":[0,1]}],"scaleY":[{"t":933.333333333333,"v":1,"easeOut":[0.167,0]},{"t":1600,"v":1.0001,"easeIn":[0.833,1]}],"opacity":[{"t":1200,"v":1,"easeOut":[0.167,0.167]},{"t":1233.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1266.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1300,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1333.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1366.66666666667,"v":1.0001,"easeIn":[0.833,1],"easeOut":[0.167,0.167]},{"t":1400,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1433.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1466.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1500,"v":1,"easeIn":[0.833,0.833]}]}},{"name":"line1","index":5,"shapes":[{"name":"Rectangle Path 1","index":1,"type":"rect","size":[{"t":0,"v":[400,1]}],"position":[{"t":0,"v":[0,0]}],"roundness":[{"t":0,"v":0}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"anchorX":[{"t":0,"v":-200}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":5}],"scaleX":[{"t":833.333333333333,"v":0,"easeOut":[0,0]},{"t":2166.66666666667,"v":1,"easeIn":[0,1]}],"scaleY":[{"t":833.333333333333,"v":1,"easeOut":[0.167,0]},{"t":2166.66666666667,"v":1.0001,"easeIn":[0.833,1]}]}},{"name":"line2","index":4,"shapes":[{"name":"Rectangle Path 1","index":1,"type":"rect","size":[{"t":0,"v":[240,1]}],"position":[{"t":0,"v":[0,0]}],"roundness":[{"t":0,"v":0}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"anchorX":[{"t":0,"v":-125}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":0}],"positionY":[{"t":0,"v":165}],"scaleX":[{"t":1200,"v":0,"easeOut":[0,0]},{"t":2533.33333333333,"v":1,"easeIn":[0,1]}],"scaleY":[{"t":1200,"v":1,"easeOut":[0.167,0]},{"t":2533.33333333333,"v":1.0001,"easeIn":[0.833,1]}],"opacity":[{"t":2300,"v":1,"easeOut":[0.167,0.167]},{"t":2333.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2366.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2400,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2433.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":2466.66666666667,"v":1.0001,"easeIn":[0.833,1],"easeOut":[0.167,0.167]},{"t":2500,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2533.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2566.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":2600,"v":1,"easeIn":[0.833,0.833]}]}},{"name":"line3","index":3,"shapes":[{"name":"Rectangle Path 1","index":1,"type":"rect","size":[{"t":0,"v":[113,1]}],"position":[{"t":0,"v":[0,0]}],"roundness":[{"t":0,"v":0}]}],"fill":{"index":2,"color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}]},"transform":{"anchorX":[{"t":0,"v":-57}],"anchorY":[{"t":0,"v":0}],"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":5}],"scaleX":[{"t":666.666666666667,"v":0,"easeOut":[0,0]},{"t":1333.33333333333,"v":1,"easeIn":[0,1]}],"scaleY":[{"t":666.666666666667,"v":1,"easeOut":[0.167,0]},{"t":1333.33333333333,"v":1.0001,"easeIn":[0.833,1]}],"rotation":[{"t":0,"v":45}],"opacity":[{"t":1000,"v":1,"easeOut":[0.167,0.167]},{"t":1033.33333333333,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1066.66666666667,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1100,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1133.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0]},{"t":1166.66666666667,"v":1.0001,"easeIn":[0.833,1],"easeOut":[0.167,0.167]},{"t":1200,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1233.33333333333,"v":1,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1266.66666666667,"v":0,"easeIn":[0.833,0.833],"easeOut":[0.167,0.167]},{"t":1300,"v":1,"easeIn":[0.833,0.833]}]}},{"name":"reddot 2","index":2,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[10,10]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[189,9,38]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":5}],"scaleX":[{"t":0,"v":1.4,"easeOut":[0.167,0]},{"t":666.666666666667,"v":1.4001,"easeIn":[0.687,22662.674]}],"scaleY":[{"t":0,"v":1.4,"easeOut":[0.167,0]},{"t":666.666666666667,"v":1.4001,"easeIn":[0.687,22662.674]}],"opacity":[{"t":0,"v":0.5,"easeOut":[0.835,0]},{"t":666.666666666667,"v":0,"easeIn":[0.985,1]}]}},{"name":"reddot","index":1,"shapes":[{"name":"Ellipse Path 1","index":1,"type":"ellipse","size":[{"t":0,"v":[10,10]}],"position":[{"t":0,"v":[0,0]}]}],"fill":{"index":2,"color":[{"t":0,"v":[189,9,38]}],"opacity":[{"t":0,"v":1}]},"transform":{"positionX":[{"t":0,"v":5}],"positionY":[{"t":0,"v":5}],"scaleX":[{"t":0,"v":0,"easeOut":[0.167,0.167]},{"t":666.666666666667,"v":1,"easeIn":[0.594,2.032]}],"scaleY":[{"t":0,"v":0,"easeOut":[0.167,0.167]},{"t":666.666666666667,"v":1,"easeIn":[0.594,2.032]}]}}],"transform":{"positionX":[{"t":0,"v":10}],"positionY":[{"t":0,"v":10}]}}],"duration":2700,"width":670,"height":195}
+{"groups"    : [
+    {
+        "out"      : 3350,
+        "name"     : "Shape Layer 1",
+        "groups"   : [
+            {
+                "name"     : "Rectangle 1",
+                "index"    : 1,
+                "shapes"   : [
+                    {
+                        "name"     : "Rectangle Path 1",
+                        "index"    : 1,
+                        "type"     : "rect",
+                        "size"     : [
+                            {
+                                "t": 0,
+                                "v": [296, 300]
+                            }
+                        ],
+                        "position" : [
+                            {
+                                "t": 0,
+                                "v": [0, 0]
+                            }
+                        ],
+                        "roundness": [
+                            {
+                                "t": 0,
+                                "v": 0
+                            }
+                        ]
+                    }
+                ],
+                "stroke"   : {
+                    "index"     : 2,
+                    "join"      : "miter",
+                    "miterLimit": [
+                        {
+                            "t": 0,
+                            "v": 4
+                        }
+                    ],
+                    "cap"       : "butt",
+                    "color"     : [
+                        {
+                            "t": 0,
+                            "v": [255, 255, 255]
+                        }
+                    ],
+                    "opacity"   : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ],
+                    "width"     : [
+                        {
+                            "t": 0,
+                            "v": 2
+                        }
+                    ]
+                },
+                "fill"     : {
+                    "index"  : 3,
+                    "color"  : [
+                        {
+                            "t": 0,
+                            "v": [255, 0, 0]
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ]
+                },
+                "transform": {
+                    "anchor"  : [
+                        {
+                            "t": 0,
+                            "v": [0, 17]
+                        }
+                    ],
+                    "position": [
+                        {
+                            "t": 0,
+                            "v": [-42, -24]
+                        }
+                    ],
+                    "scale"   : [
+                        {
+                            "t": 0,
+                            "v": [119, 119]
+                        }
+                    ],
+                    "rotation": [
+                        {
+                            "t": 0,
+                            "v": 11
+                        }
+                    ],
+                    "opacity" : [
+                        {
+                            "t": 0,
+                            "v": 0.86
+                        }
+                    ]
+                }
+            }
+        ],
+        "transform": {
+            "anchor"  : [
+                {
+                    "t": 0,
+                    "v": [-48, 74]
+                }
+            ],
+            "position": [
+                {
+                    "t": 0,
+                    "v": [693, 382]
+                }
+            ],
+            "scale"   : [
+                {
+                    "t": 0,
+                    "v": [114, 77]
+                }
+            ]
+        }
+    }
+], "duration": 3350, "width": 1280, "height": 720}
