@@ -52,12 +52,16 @@ Runtime.prototype = {
 
     update: function (time) {
         this.time = time;
+        if (!this.startTime) {
+            this.startTime = this.time;
+        }
         if (this.started) {
             this.compTime = this.time - this.startTime + this.pausedTime;
             if (this.compTime <= this.duration) {
                 this.draw();
             } else {
                 this.stop();
+                if (typeof this.onComplete === 'function') this.onComplete();
                 if (this.loop) this.start();
             }
         }
