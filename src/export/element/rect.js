@@ -8,26 +8,25 @@
     rect.type = 'rect';
 
     rect.size = getProperty(data.property('ADBE Vector Rect Size'));
-    rect.size = normalizeSize(rect.size);
+    rect.size = roundValue(rect.size);
     rect.size = normalizeKeyframes(rect.size);
 
-    rect.position = getProperty(data.property('ADBE Vector Rect Position'));
-    rect.position = normalizeKeyframes(rect.position);
+    //optional
+    var position = data.property('ADBE Vector Rect Position');
+    if (position.isTimeVarying || position.value[0] !== 0 || position.value[1] !== 0) {
+        position = getProperty(position);
+        position = normalizeKeyframes(position);
+        rect.position = position;
+    }
 
-    rect.roundness = getProperty(data.property('ADBE Vector Rect Roundness'));
-    rect.roundness = normalizeKeyframes(rect.roundness);
+    var roundness = data.property('ADBE Vector Rect Roundness');
+    if (roundness.isTimeVarying || roundness.value !== 0) {
+        roundness = getProperty(roundness);
+        roundness = normalizeKeyframes(roundness);
+        rect.roundness = roundness;
+    }
 
     return rect;
-
-    function normalizeSize(frames) {
-        for (var i = 0; i < frames.length; i++) {
-            for (var j = 0; j < frames[i].length; j++) {
-                frames[i].v[j] = Math.round(frames[i].v[j]);
-            }
-        }
-
-        return frames;
-    }
 }
 
 

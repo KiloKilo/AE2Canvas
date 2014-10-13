@@ -5,8 +5,12 @@
 
 #include 'transform/transform.js'
 #include 'transform/anchor.js'
-#include 'transform/position.js'
 #include 'transform/scale.js'
+#include 'transform/position.js'
+#include 'transform/rotation.js'
+#include 'transform/opacity.js'
+#include 'transform/skew.js'
+#include 'transform/skewAxis.js'
 
 #include 'element/comp.js'
 #include 'element/group.js'

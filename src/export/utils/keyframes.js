@@ -11,7 +11,16 @@ function normalizeKeyframes(frames) {
             normInfluenceOut, normSpeedOut,
             x, y, z;
 
-        // multidimensional properties, fill array has 4 fields. dont need last one
+        // break if lastkey and this key easing is both linear
+        if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
+            delete lastKey.outType;
+            delete lastKey.easeOut;
+            delete key.inType;
+            delete key.easeIn;
+            continue;
+        }
+
+        // multidimensional properties, e.g. fill array has 4 fields. don't need last one
         if (key.v instanceof Array && key.v.length > 2) {
             x = key.v[0] - lastKey.v[0];
             y = key.v[1] - lastKey.v[1];
@@ -59,12 +68,18 @@ function normalizeKeyframes(frames) {
             lastKey.easeOut = easeOut;
         }
 
-        //set default values
+        //set default values if not set
         if (lastKey.easeOut && !key.easeIn) {
             key.easeIn = [0.16667, 1];
         } else if (key.easeIn && !lastKey.easeOut) {
             lastKey.easeOut = [0.16667, 0];
         }
+
+        //remove in- & outType
+
+        //for debug
+//        if (key.inType) delete key.inType;
+//        if (key.outType) delete key.outType;
     }
 
     return frames;

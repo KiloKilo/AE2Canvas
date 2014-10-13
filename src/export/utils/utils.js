@@ -27,3 +27,26 @@ function roundValue(frames, prcsn) {
 
     return frames;
 }
+
+function divideValue(frames, divider) {
+    for (var i = 0; i < frames.length; i++) {
+        if (frames[i].v instanceof Array) {
+            for (var j = 0; j < frames[i].v.length; j++) {
+                frames[i].v[j] = frames[i].v[j] / divider;
+            }
+        } else {
+            frames[i].v = frames[i].v / divider;
+        }
+    }
+
+    return frames;
+}
+
+function isEmpty(obj) {
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}

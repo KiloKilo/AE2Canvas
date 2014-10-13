@@ -1,6 +1,6 @@
 {"groups"    : [
     {
-        "out"      : 3350,
+        "out"      : 40000,
         "name"     : "Shape Layer 1",
         "groups"   : [
             {
@@ -8,25 +8,13 @@
                 "index"    : 1,
                 "shapes"   : [
                     {
-                        "name"     : "Rectangle Path 1",
-                        "index"    : 1,
-                        "type"     : "rect",
-                        "size"     : [
+                        "name" : "Rectangle Path 1",
+                        "index": 1,
+                        "type" : "rect",
+                        "size" : [
                             {
                                 "t": 0,
-                                "v": [296, 300]
-                            }
-                        ],
-                        "position" : [
-                            {
-                                "t": 0,
-                                "v": [0, 0]
-                            }
-                        ],
-                        "roundness": [
-                            {
-                                "t": 0,
-                                "v": 0
+                                "v": [150, 115]
                             }
                         ]
                     }
@@ -61,49 +49,25 @@
                     ]
                 },
                 "fill"     : {
-                    "index"  : 3,
-                    "color"  : [
+                    "index": 3,
+                    "color": [
                         {
                             "t": 0,
                             "v": [255, 0, 0]
                         }
-                    ],
-                    "opacity": [
-                        {
-                            "t": 0,
-                            "v": 1
-                        }
                     ]
                 },
                 "transform": {
-                    "anchor"  : [
-                        {
-                            "t": 0,
-                            "v": [0, 17]
-                        }
-                    ],
                     "position": [
                         {
                             "t": 0,
-                            "v": [-42, -24]
+                            "v": [-291, -268]
                         }
                     ],
-                    "scale"   : [
+                    "scaleX"  : [
                         {
                             "t": 0,
-                            "v": [119, 119]
-                        }
-                    ],
-                    "rotation": [
-                        {
-                            "t": 0,
-                            "v": 11
-                        }
-                    ],
-                    "opacity" : [
-                        {
-                            "t": 0,
-                            "v": 0.86
+                            "v": 1.2
                         }
                     ]
                 }
@@ -113,21 +77,108 @@
             "anchor"  : [
                 {
                     "t": 0,
-                    "v": [-48, 74]
+                    "v": [44, 85]
                 }
             ],
             "position": [
                 {
                     "t": 0,
-                    "v": [693, 382]
+                    "v": [640, 360]
+                },
+                {
+                    "t": 16360,
+                    "v": [875, 360]
                 }
             ],
-            "scale"   : [
+            "scaleX"  : [
                 {
                     "t": 0,
-                    "v": [114, 77]
+                    "v": 0.9982
+                }
+            ],
+            "opacity" : [
+                {
+                    "t": 0,
+                    "v": 0.81
+                }
+            ]
+        }
+    },
+    {
+        "out"      : 40000,
+        "name"     : "Shape Layer 2",
+        "groups"   : [
+            {
+                "name"     : "Rectangle 1",
+                "index"    : 1,
+                "shapes"   : [
+                    {
+                        "name" : "Rectangle Path 1",
+                        "index": 1,
+                        "type" : "rect",
+                        "size" : [
+                            {
+                                "t": 0,
+                                "v": [400, 336]
+                            }
+                        ]
+                    }
+                ],
+                "stroke"   : {
+                    "index"     : 2,
+                    "join"      : "miter",
+                    "miterLimit": [
+                        {
+                            "t": 0,
+                            "v": 4
+                        }
+                    ],
+                    "cap"       : "butt",
+                    "color"     : [
+                        {
+                            "t": 0,
+                            "v": [255, 255, 255]
+                        }
+                    ],
+                    "opacity"   : [
+                        {
+                            "t": 0,
+                            "v": 1
+                        }
+                    ],
+                    "width"     : [
+                        {
+                            "t": 0,
+                            "v": 2
+                        }
+                    ]
+                },
+                "fill"     : {
+                    "index": 3,
+                    "color": [
+                        {
+                            "t": 0,
+                            "v": [255, 0, 0]
+                        }
+                    ]
+                },
+                "transform": {
+                    "position": [
+                        {
+                            "t": 0,
+                            "v": [-12, 100]
+                        }
+                    ]
+                }
+            }
+        ],
+        "transform": {
+            "position": [
+                {
+                    "t": 0,
+                    "v": [640, 360]
                 }
             ]
         }
     }
-], "duration": 3350, "width": 1280, "height": 720}
+], "duration": 40000, "width": 1280, "height": 720}

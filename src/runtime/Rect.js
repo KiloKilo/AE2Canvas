@@ -10,19 +10,22 @@ function Rect(data) {
     if (data.size.length > 1) this.size = new AnimatedProperty(data.size);
     else this.size = new Property(data.size);
 
-    if (data.position.length > 1) this.position = new AnimatedProperty(data.position);
-    else this.position = new Property(data.position);
+    if (data.position) {
+        if (data.position.length > 1) this.position = new AnimatedProperty(data.position);
+        else this.position = new Property(data.position);
+    }
 
-    if (data.roundness.length > 1) this.roundness = new AnimatedProperty(data.roundness);
-    else this.roundness = new Property(data.roundness);
-
+    if (data.roundness) {
+        if (data.roundness.length > 1) this.roundness = new AnimatedProperty(data.roundness);
+        else this.roundness = new Property(data.roundness);
+    }
 }
 
 Rect.prototype.draw = function (ctx, time) {
 
     var size = this.size.getValue(time),
-        position = this.position.getValue(time),
-        roundness = this.roundness.getValue(time);
+        position = this.position ? this.position.getValue(time) : [0, 0],
+        roundness = this.roundness ? this.roundness.getValue(time) : 0;
 
     if (size[0] < 2 * roundness) roundness = size[0] / 2;
     if (size[1] < 2 * roundness) roundness = size[1] / 2;
@@ -40,8 +43,8 @@ Rect.prototype.draw = function (ctx, time) {
 
 Rect.prototype.reset = function () {
     this.size.reset();
-    this.position.reset();
-    this.roundness.reset();
+    if (this.position) this.position.reset();
+    if (this.roundness) this.roundness.reset();
 };
 
 module.exports = Rect;

@@ -16,15 +16,17 @@ function getPosition(data) {
         obj.value[1] !== 0) {
 
         if (obj.dimensionsSeparated) {
-//            obj.positionX = normalizePosition(getProperty(positionProp, 0));
-//            obj.positionY = normalizePosition(getProperty(positionProp, 1));
-//            obj.positionX = normalizeKeyframes(transform.positionX);
-//            obj.positionY = normalizeKeyframes(transform.positionY);
+            obj.x = getProperty(obj, 0);
+            obj.y = getProperty(obj, 1);
+            obj.x = roundValue(obj.x);
+            obj.y = roundValue(obj.y);
+            if (obj.x.length > 1) obj.x = normalizeKeyframes(obj.x);
+            if (obj.y.length > 1) obj.y = normalizeKeyframes(obj.y);
         } else {
             obj = getProperty(obj);
             obj = removeZValue(obj);
             obj = roundValue(obj);
-            obj = normalizeKeyframes(obj);
+            if (obj.length > 1) obj = normalizeKeyframes(obj);
         }
 
         return obj;

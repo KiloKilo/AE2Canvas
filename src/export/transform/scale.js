@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 
-function getScale(data) {
+function getScale(data, split) {
 
     var obj;
 
@@ -12,14 +12,12 @@ function getScale(data) {
         return false;
     }
 
-    if (obj.isTimeVarying ||
-        obj.value[0] !== 100 ||
-        obj.value[1] !== 100) {
+    if (obj.isTimeVarying || obj.value[split] !== 100) {
 
-        obj = getProperty(obj);
-        obj = removeZValue(obj);
-        obj = roundValue(obj, 10000);
+        obj = getProperty(obj, split);
         obj = normalizeKeyframes(obj);
+        obj = divideValue(obj, 100);
+        obj = roundValue(obj, 10000);
 
         return obj;
     }
