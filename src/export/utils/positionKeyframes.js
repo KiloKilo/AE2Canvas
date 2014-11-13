@@ -1,4 +1,4 @@
-function normalizeKeyframes(frames, dimension) {
+function normalizePositionKeyframes(frames) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -11,43 +11,19 @@ function normalizeKeyframes(frames, dimension) {
             normInfluenceOut, normSpeedOut,
             ratio;
 
-        //break if lastkey and this key easing is both linear
-        if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
-            delete lastKey.outType;
-            delete lastKey.easeOut;
-            delete lastKey.outTangent;
-            delete key.inType;
-            delete key.easeIn;
-            delete key.inTangent;
-            continue;
-        }
-
-        diff = getDifference(lastKey, key);
-
-        //FIXME hackiest shit ever :)
-        // fix problem if lastKey.v === key.v, but has easing
-        //TODO use modulo
-        if (diff < 0.01 && diff > -0.01) {
-            diff = 0.01;
-            if (key.v instanceof Array) {
-                for (var j = 0; j < key.v.length; j++) {
-                    key.v[j] = lastKey.v[j] + 0.01;
-                }
-            } else {
-                key.v = lastKey.v + 0.01;
-            }
-        }
-
-        var averageTempo = diff / duration * 1000;
-
         if (key.easeIn) {
+            var xDiff = key.v[0] - key.v[0],
+                yDiff = key.v[1] - key.v[1];
+
+            var xRatio =
+
             normInfluenceIn = key.easeIn[0] / 100;
             normSpeedIn = key.easeIn[1] / averageTempo * normInfluenceIn;
             easeIn = [];
 
-            //dimension separated position
-            if (key.inTangent && !key.motionpath && typeof dimension === 'number') {
-                ratio = key.inTangent[dimension] / diff;
+            //dimensionsepareted position
+            if (key.inTangent && !key.motionpath) {
+                ratio = key.inTangent[1] / diff;
                 easeIn[0] = 0.000001;
                 easeIn[1] = 1 + ratio;
             } else {
@@ -64,9 +40,9 @@ function normalizeKeyframes(frames, dimension) {
             normSpeedOut = lastKey.easeOut[1] / averageTempo * normInfluenceOut;
             easeOut = [];
 
-            //dimension separated position
-            if (lastKey.outTangent && !lastKey.motionpath && typeof dimension === 'number') {
-                ratio = lastKey.outTangent[dimension] / diff;
+            //position
+            if (lastKey.outTangent && !lastKey.motionpath) {
+                ratio = lastKey.outTangent[0] / diff;
                 easeOut[0] = 0.000001;
                 easeOut[1] = ratio;
 //                    delete lastKey.inTangent;

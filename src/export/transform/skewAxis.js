@@ -1,4 +1,4 @@
-function getSkewAxis(data) {
+function getSkewAxis(data, transform) {
     if (!data instanceof PropertyGroup) return null;
 
     var obj;
@@ -10,9 +10,8 @@ function getSkewAxis(data) {
     }
 
     if (obj && obj.isTimeVarying || obj && obj.value !== 0) {
-        obj = getProperty(obj);
-        obj = normalizeKeyframes(obj);
+        var skewAxis = getProperty(obj);
+        skewAxis = normalizeKeyframes(skewAxis);
+        transform.skewAxis = skewAxis;
     }
-
-    return obj;
 }

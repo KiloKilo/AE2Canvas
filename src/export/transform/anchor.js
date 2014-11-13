@@ -1,4 +1,4 @@
-function getAnchor(data) {
+function getAnchor(data, transform) {
     if (!data instanceof PropertyGroup) return null;
 
     var obj;
@@ -11,16 +11,14 @@ function getAnchor(data) {
         return null;
     }
 
-    //only process if not default values
+    //set if not default values
     if (obj.isTimeVarying || obj.value[0] !== 0 || obj.value[1] !== 0) {
 
-        obj = getProperty(obj);
-        obj = removeZValue(obj);
-        obj = roundValue(obj);
-        obj = normalizeKeyframes(obj);
+        var anchor = getProperty(obj);
+        anchor = removeZValue(anchor);
+        anchor = roundValue(anchor);
+        anchor = normalizeKeyframes(anchor);
 
-        return obj
-    } else {
-        return null;
+        transform.anchor = anchor;
     }
 }

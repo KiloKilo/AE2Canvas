@@ -1,4 +1,4 @@
-function getOpacity(data) {
+function getOpacity(data, transform) {
     if (!data instanceof PropertyGroup) return null;
 
     var obj;
@@ -12,22 +12,10 @@ function getOpacity(data) {
     }
 
     if (obj.isTimeVarying || obj.value !== 100) {
-        obj = getProperty(obj);
-//        obj = roundValue(obj);
-        obj = normalizeOpacity(obj);
-        if (obj.length > 1) obj = normalizeKeyframes(obj);
+        var opacity = getProperty(obj);
+        opacity = normalizeOpacity(opacity);
+        if (opacity.length > 1) opacity = normalizeKeyframes(opacity);
 
-        return obj
-    } else {
-        return null;
-    }
-
-    function normalizeOpacity(frames) {
-        for (var i = 0; i < frames.length; i++) {
-            frames[i].v = frames[i].v / 100;
-            frames[i].v = Math.round(frames[i].v * 10000) / 10000;
-        }
-
-        return frames;
+        transform.opacity = opacity;
     }
 }

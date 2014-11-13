@@ -1,11 +1,11 @@
-function getPosition(data) {
+﻿function getPosition(data, transform) {
     if (!data instanceof PropertyGroup) return null;
 
-    var obj = {};
+    var obj;
 
-    if (data.property('ADBE Position')instanceof Property) {
+    if (data.property('ADBE Position') instanceof Property) {
         obj = data.property('ADBE Position');
-    } else if (data.property('ADBE Vector Position')instanceof Property) {
+    } else if (data.property('ADBE Vector Position') instanceof Property) {
         obj = data.property('ADBE Vector Position');
     } else {
         return null;
@@ -16,22 +16,32 @@ function getPosition(data) {
         obj.value[1] !== 0) {
 
         if (obj.dimensionsSeparated) {
-            obj.x = getProperty(obj, 0);
-            obj.y = getProperty(obj, 1);
-            obj.x = roundValue(obj.x);
-            obj.y = roundValue(obj.y);
-            if (obj.x.length > 1) obj.x = normalizeKeyframes(obj.x);
-            if (obj.y.length > 1) obj.y = normalizeKeyframes(obj.y);
+            var positionX = getProperty(obj, 0),
+                positionY = getProperty(obj, 1);
+            positionX = roundValue(positionX);
+            positionY = roundValue(positionY);
+            if (positionX.length > 1) {
+                positionX = normalizeKeyframes(positionX, 0);
+            }
+
+            if (positionY.length > 1) {
+                positionY = normalizeKeyframes(positionY, 1);
+            }
+
+            transform.positionX = positionX;
+            transform.positionY = positionY;
+
         } else {
-            obj = getProperty(obj);
-            obj = removeZValue(obj);
-            obj = roundValue(obj);
-            if (obj.length > 1) obj = normalizeKeyframes(obj);
+            var position = getProperty(obj);
+            position = removeZValue(position);
+            position = roundValue(position);
+
+            if (position.length > 1) {
+                position = getMotionpath(position);
+                position = normalizeKeyframes(position);
+            }
+
+            transform.position = position;
         }
-
-        return obj;
-
-    } else {
-        return null;
     }
 }

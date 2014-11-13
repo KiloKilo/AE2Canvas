@@ -19,7 +19,7 @@ function Transform(data) {
         }
     } else if (data.position) {
         if (data.position.length > 1) {
-            this.position = new AnimatedProperty(data.position);
+            this.position = new Position(data.position);
         } else {
             this.position = new Property(data.position);
         }
@@ -56,8 +56,9 @@ function Transform(data) {
 }
 
 Transform.prototype.transform = function (ctx, time) {
+
     var positionX, positionY,
-        anchor = this.anchor ? this.anchor.getValue(time) : 0,
+        anchor = this.anchor ? this.anchor.getValue(time) : [0, 0],
         rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0,
         skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0,
         skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0,
@@ -65,13 +66,13 @@ Transform.prototype.transform = function (ctx, time) {
         scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
         opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha; // FIXME wrong transparency if nested
 
-    if (this.position) {
+    if (this.positionX && this.positionY) {
+        positionX = this.positionX.getValue(time);
+        positionY = this.positionY.getValue(time);
+    } else if (this.position) {
         var position = this.position.getValue(time);
         positionX = position[0];
         positionY = position[1];
-    } else if (this.positionX && this.positionY) {
-        positionX = this.positionX.getValue(time);
-        positionY = this.positionY.getValue(time);
     } else {
         positionX = 0;
         positionY = 0;

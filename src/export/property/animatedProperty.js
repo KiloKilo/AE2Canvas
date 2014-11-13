@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 function getAnimatedProperty(data, split) {
 
@@ -47,25 +47,23 @@ function getAnimatedProperty(data, split) {
             obj.easeOut[1] = easeOut.speed;
         }
 
-        //FIXME buggy if no easing set
-////        position
-//        if (typeof split === 'number' &&
-//            (data.propertyValueType === PropertyValueType.TwoD_SPATIAL || data.propertyValueType === PropertyValueType.ThreeD_SPATIAL)) {
-//
-//            if (i > 1) {
-//                obj.inTangent = data.keyInSpatialTangent(i)[split];
-//                obj.easeIn = [];
-//                obj.easeIn[0] = easeIn.influence;
-//                obj.easeIn[1] = easeIn.speed;
-//            }
-//
-//            if (i < numKeys) {
-//                obj.outTangent = data.keyOutSpatialTangent(i)[split];
-//                obj.easeOut = [];
-//                obj.easeOut[0] = easeOut.influence;
-//                obj.easeOut[1] = easeOut.speed;
-//            }
-//        }
+//        position
+        if (data.propertyValueType === PropertyValueType.TwoD_SPATIAL || data.propertyValueType === PropertyValueType.ThreeD_SPATIAL) {
+
+            if (i > 1) {
+                obj.inTangent = data.keyInSpatialTangent(i);
+                obj.easeIn = [];
+                obj.easeIn[0] = easeIn.influence;
+                obj.easeIn[1] = easeIn.speed;
+            }
+
+            if (i < numKeys) {
+                obj.outTangent = data.keyOutSpatialTangent(i);
+                obj.easeOut = [];
+                obj.easeOut[0] = easeOut.influence;
+                obj.easeOut[1] = easeOut.speed;
+            }
+        }
 
         arr.push(obj);
     }

@@ -1,4 +1,4 @@
-function getRotation(data) {
+function getRotation(data, transform) {
     if (!data instanceof PropertyGroup) return null;
 
     var obj;
@@ -12,12 +12,10 @@ function getRotation(data) {
     }
 
     if (obj.isTimeVarying || obj.value !== 0) {
-        obj = getProperty(obj);
-        obj = roundValue(obj, 10000);
-        if (obj.length > 1) obj = normalizeKeyframes(obj);
+        var rotation = getProperty(obj);
+        rotation = roundValue(rotation, 10000);
+        if (rotation.length > 1) rotation = normalizeKeyframes(rotation);
 
-        return obj
-    } else {
-        return null;
+        transform.rotation = rotation;
     }
 }
