@@ -5,9 +5,7 @@ var Property = require('./Property'),
 
 function Fill(data) {
     this.color = data.color.length ? new AnimatedProperty(data.color) : new Property(data.color);
-    if (data.opacity) {
-        this.opacity = data.opacity.length ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
-    }
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
 }
 
 Fill.prototype.getValue = function (time) {

@@ -4,9 +4,6 @@ var Path = require('./Path'),
     BezierEasing = require('../lib/BezierEasing');
 
 function AnimatedPath(data) {
-
-    if (!data) return null;
-
     Path.call(this, data);
     this.frameCount = this.frames.length;
 }
@@ -15,7 +12,7 @@ AnimatedPath.prototype = Object.create(Path.prototype);
 
 AnimatedPath.prototype.getValue = function (time) {
     if ((time <= this.nextFrame.t && !this.started) || this.finished) {
-        return this.nextFrame.v;
+        return this.nextFrame;
     } else {
         this.started = true;
         if (time > this.nextFrame.t) {
@@ -50,16 +47,10 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
     var elapsed = delta / duration;
     if (elapsed > 1) elapsed = 1;
     else if (this.easing) elapsed = this.easing(elapsed);
-    var actualVertices = [];
+    var actualVertices = [],
+        actualLength = [];
 
     for (var i = 0; i < this.verticesCount; i++) {
-//        var cp1x = Math.round(this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed)),
-//            cp1y = Math.round(this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed)),
-//            cp2x = Math.round(this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed)),
-//            cp2y = Math.round(this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed)),
-//            x = Math.round(this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed)),
-//            y = Math.round(this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed));
-
         var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed),
             cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed),
             cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed),
@@ -69,7 +60,15 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
 
         actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
     }
-    return actualVertices;
+
+    for (var j = 0; j < this.verticesCount - 1; j++) {
+        actualLength.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed));
+    }
+
+    return {
+        v  : actualVertices,
+        len: actualLength
+    }
 };
 
 AnimatedPath.prototype.reset = function () {

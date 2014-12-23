@@ -15,9 +15,8 @@ function normalizePositionKeyframes(frames) {
             var xDiff = key.v[0] - key.v[0],
                 yDiff = key.v[1] - key.v[1];
 
-            var xRatio =
+            var xRatio = normInfluenceIn = key.easeIn[0] / 100;
 
-            normInfluenceIn = key.easeIn[0] / 100;
             normSpeedIn = key.easeIn[1] / averageTempo * normInfluenceIn;
             easeIn = [];
 
@@ -45,8 +44,8 @@ function normalizePositionKeyframes(frames) {
                 ratio = lastKey.outTangent[0] / diff;
                 easeOut[0] = 0.000001;
                 easeOut[1] = ratio;
-//                    delete lastKey.inTangent;
-//                    delete lastKey.outTangent;
+                delete lastKey.inTangent;
+                delete lastKey.outTangent;
             } else {
                 easeOut[0] = Math.round(normInfluenceOut * 1000) / 1000;
                 easeOut[1] = Math.round(normSpeedOut * 1000) / 1000;
@@ -61,9 +60,8 @@ function normalizePositionKeyframes(frames) {
             lastKey.easeOut = [0.16667, 0];
         }
 
-        //TODO remove in- & outType
-//        if (key.inType) delete key.inType;
-//        if (key.outType) delete key.outType;
+        if (key.inType) delete key.inType;
+        if (key.outType) delete key.outType;
     }
 
     return frames;

@@ -1,46 +1,92 @@
 'use strict';
 
-var Property = require('./Property'),
+var Path = require('./Path'),
+    Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Ellipse(data) {
     this.name = data.name;
     this.closed = true;
 
-    if (data.size.length > 1) this.size = new AnimatedProperty(data.size);
-    else this.size = new Property(data.size);
-
-    if (data.position.length > 1) this.position = new AnimatedProperty(data.position);
-    else this.position = new Property(data.position);
+    this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);
+    //optional
+    if (data.position) this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position);
 }
 
-Ellipse.prototype.draw = function (ctx, time) {
+Ellipse.prototype = Object.create(Path.prototype);
+
+Ellipse.prototype.draw = function (ctx, time, trim) {
 
     var size = this.size.getValue(time);
-    var position = this.position.getValue(time);
+    var position = this.position ? this.position.getValue(time) : [0, 0];
 
-    var x = position[0] - size[0] / 2,
-        y = position[1] - size[1] / 2,
-        w = size[0],
-        h = size[1];
+    var i, j;
 
-    var ox = (w / 2) * .5522848,
-        oy = (h / 2) * .5522848,
-        xe = x + w,
-        ye = y + h,
-        xm = x + w / 2,
-        ym = y + h / 2;
+    var w = size[0] / 2,
+        h = size[1] / 2,
+        x = position[0] - w,
+        y = position[1] - h,
+        ow = w * .5522848,
+        oh = h * .5522848;
 
-    ctx.moveTo(x, ym);
-    ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-    ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-    ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-    ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+    var vertices = [
+        [x + w + ow, y, x + w - ow, y, x + w, y],
+        [x + w + w, y + h + oh, x + w + w, y + h - oh, x + w + w, y + h],
+        [x + w - ow, y + h + h, x + w + ow, y + h + h, x + w, y + h + h],
+        [x, y + h - oh, x, y + h + oh, x, y + h]
+    ];
+
+    if (trim) {
+        var tv;
+        trim = this.getTrimValues(trim);
+
+        console.log(trim);
+
+        for (i = 0; i < 4; i++) {
+            j = i + 1;
+            if (j > 3) j = 0;
+            if (i > trim.startIndex && i < trim.endIndex) {
+                ctx.bezierCurveTo(vertices[i][0], vertices[i][1], vertices[j][2], vertices[j][3], vertices[j][4], vertices[j][5]);
+            } else if (i === trim.startIndex && i === trim.endIndex) {
+                tv = this.trim(vertices[i], vertices[j], trim.start, trim.end);
+                ctx.moveTo(tv.start[4], tv.start[5]);
+                ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+            } else if (i === trim.startIndex) {
+                tv = this.trim(vertices[i], vertices[j], trim.start, 1);
+                ctx.moveTo(tv.start[4], tv.start[5]);
+                ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+            } else if (i === trim.endIndex) {
+                tv = this.trim(vertices[i], vertices[j], 0, trim.end);
+                ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+            }
+        }
+    } else {
+        ctx.moveTo(vertices[0][4], vertices[0][5]);
+        for (i = 0; i < 4; i++) {
+            j = i + 1;
+            if (j > 3) j = 0;
+            ctx.bezierCurveTo(vertices[i][0], vertices[i][1], vertices[j][2], vertices[j][3], vertices[j][4], vertices[j][5]);
+        }
+    }
+};
+
+Ellipse.prototype.getTrimValues = function (trim) {
+    var startIndex = Math.floor(trim.start * 4),
+        endIndex = Math.floor(trim.end * 4),
+        start = (trim.start - startIndex * 0.25) * 4,
+        end = (trim.end - endIndex * 0.25) * 4;
+
+    return {
+        startIndex: startIndex,
+        endIndex  : endIndex,
+        start     : start,
+        end       : end
+    };
 };
 
 Ellipse.prototype.reset = function () {
     this.size.reset();
-    this.position.reset();
+    if (this.position) this.position.reset();
 };
 
 module.exports = Ellipse;

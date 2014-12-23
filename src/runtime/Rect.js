@@ -7,18 +7,11 @@ function Rect(data) {
     this.name = data.name;
     this.closed = true;
 
-    if (data.size.length > 1) this.size = new AnimatedProperty(data.size);
-    else this.size = new Property(data.size);
+    this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);
 
-    if (data.position) {
-        if (data.position.length > 1) this.position = new AnimatedProperty(data.position);
-        else this.position = new Property(data.position);
-    }
-
-    if (data.roundness) {
-        if (data.roundness.length > 1) this.roundness = new AnimatedProperty(data.roundness);
-        else this.roundness = new Property(data.roundness);
-    }
+    //optionals
+    if (data.position) this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position);
+    if (data.roundness) this.roundness = data.roundness.length > 1 ? new AnimatedProperty(data.roundness) : new Property(data.roundness);
 }
 
 Rect.prototype.draw = function (ctx, time) {

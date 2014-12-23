@@ -42,6 +42,22 @@ function divideValue(frames, divider) {
     return frames;
 }
 
+function clampValue(frames, from, to) {
+    for (var i = 0; i < frames.length; i++) {
+        if (frames[i].v instanceof Array) {
+            for (var j = 0; j < frames[i].v.length; j++) {
+                if (frames[i].v[j] > to) frames[i].v[j] = to;
+                else if (frames[i].v[j] < from) frames[i].v[j] = from;
+            }
+        } else {
+            if (frames[i].v > to) frames[i].v = to;
+            else if (frames[i].v < from) frames[i].v = from;
+        }
+    }
+
+    return frames;
+}
+
 function isEmpty(obj) {
     for (var prop in obj) {
         if (obj.hasOwnProperty(prop))

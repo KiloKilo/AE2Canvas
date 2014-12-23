@@ -9,9 +9,8 @@ function Position(data) {
 Position.prototype = Object.create(AnimatedProperty.prototype);
 
 Position.prototype.getValueAtTime = function (time) {
-//    console.log(this.getElapsed(time));
     if (this.lastFrame.motionpath) {
-        console.log(this.lastFrame.motionpath);
+        //TODO cache elapsed
         var x = this.cubicN(this.getElapsed(time), this.lastFrame.motionpath[0], this.lastFrame.motionpath[2], this.lastFrame.motionpath[4], this.lastFrame.motionpath[6]),
             y = this.cubicN(this.getElapsed(time), this.lastFrame.motionpath[1], this.lastFrame.motionpath[3], this.lastFrame.motionpath[5], this.lastFrame.motionpath[7]);
 

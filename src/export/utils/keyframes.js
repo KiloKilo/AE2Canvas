@@ -12,15 +12,15 @@ function normalizeKeyframes(frames, dimension) {
             ratio;
 
         //break if lastkey and this key easing is both linear
-        if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
-            delete lastKey.outType;
-            delete lastKey.easeOut;
-            delete lastKey.outTangent;
-            delete key.inType;
-            delete key.easeIn;
-            delete key.inTangent;
-            continue;
-        }
+        //if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
+        //    delete lastKey.outType;
+        //    delete lastKey.easeOut;
+        //    delete lastKey.outTangent;
+        //    delete key.inType;
+        //    delete key.easeIn;
+        //    delete key.inTangent;
+        //    continue;
+        //}
 
         diff = getDifference(lastKey, key);
 
@@ -45,14 +45,19 @@ function normalizeKeyframes(frames, dimension) {
             normSpeedIn = key.easeIn[1] / averageTempo * normInfluenceIn;
             easeIn = [];
 
+            easeIn[0] = Math.round((1 - normInfluenceIn) * 1000) / 1000;
+            easeIn[1] = Math.round((1 - normSpeedIn) * 1000) / 1000;
+
             //dimension separated position
             if (key.inTangent && !key.motionpath && typeof dimension === 'number') {
+                //testing
+                key.oldEaseIn = [];
+                key.oldEaseIn[0] = easeIn[0];
+                key.oldEaseIn[1] = easeIn[1];
+
                 ratio = key.inTangent[dimension] / diff;
                 easeIn[0] = 0.000001;
                 easeIn[1] = 1 + ratio;
-            } else {
-                easeIn[0] = Math.round((1 - normInfluenceIn) * 1000) / 1000;
-                easeIn[1] = Math.round((1 - normSpeedIn) * 1000) / 1000;
             }
 
             key.easeIn = easeIn;
@@ -64,17 +69,24 @@ function normalizeKeyframes(frames, dimension) {
             normSpeedOut = lastKey.easeOut[1] / averageTempo * normInfluenceOut;
             easeOut = [];
 
+            easeOut[0] = Math.round(normInfluenceOut * 1000) / 1000;
+            easeOut[1] = Math.round(normSpeedOut * 1000) / 1000;
+
             //dimension separated position
             if (lastKey.outTangent && !lastKey.motionpath && typeof dimension === 'number') {
+
+                //testing
+                lastKey.oldEaseOut = [];
+                lastKey.oldEaseOut[0] = easeOut[0];
+                lastKey.oldEaseOut[1] = easeOut[1];
+
                 ratio = lastKey.outTangent[dimension] / diff;
                 easeOut[0] = 0.000001;
                 easeOut[1] = ratio;
 //                    delete lastKey.inTangent;
 //                    delete lastKey.outTangent;
-            } else {
-                easeOut[0] = Math.round(normInfluenceOut * 1000) / 1000;
-                easeOut[1] = Math.round(normSpeedOut * 1000) / 1000;
             }
+
             lastKey.easeOut = easeOut;
         }
 

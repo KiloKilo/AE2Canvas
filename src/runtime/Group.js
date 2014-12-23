@@ -8,28 +8,23 @@ var Stroke = require('./Stroke'),
     AnimatedPath = require('./AnimatedPath'),
     Fill = require('./Fill'),
     Transform = require('./Transform'),
-    Merge = require('./Merge');
+    Merge = require('./Merge'),
+    Trim = require('./Trim');
 
 function Group(data, bufferCtx) {
 
-    if (!data) return;
-
     this.name = data.name;
     this.index = data.index;
-
-    this.bufferCtx = bufferCtx;
-
-    if (data.in) this.in = data.in;
-    else this.in = 0;
-
-    if (data.out) this.out = data.out;
-    else this.out = 500000; // FIXME get comp total duration
+    this.in = data.in ? data.in : 0;
+    this.out = data.out ? data.out : 500000; // FIXME get comp total duration
 
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
+    if (data.trim) this.trim = new Trim(data.trim);
     if (data.merge) this.merge = new Merge(data.merge);
 
     this.transform = new Transform(data.transform);
+    this.bufferCtx = bufferCtx;
 
     if (data.groups) {
         this.groups = [];
@@ -52,12 +47,11 @@ function Group(data, bufferCtx) {
             } else if (shape.type === 'polystar') {
                 this.shapes.push(new Polystar(shape));
             }
-
         }
     }
 }
 
-Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
+Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim) {
 
     var i;
 
@@ -66,6 +60,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
     //TODO check if color/stroke is changing over time
     var fill = this.fill || parentFill;
     var stroke = this.stroke || parentStroke;
+    var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
 
     if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
@@ -86,7 +81,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         if (this.merge) {
 
             for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(this.bufferCtx, time);
+                this.shapes[i].draw(this.bufferCtx, time, trimValues);
                 this.bufferCtx.closePath();
                 if (fill) this.bufferCtx.fill();
                 if (stroke) this.bufferCtx.stroke();
@@ -100,10 +95,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
 
         } else {
             for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(ctx, time);
+                this.shapes[i].draw(ctx, time, trimValues);
             }
             if (this.shapes[this.shapes.length - 1].closed) {
-                ctx.closePath();
+                //ctx.closePath();
             }
         }
     }
@@ -116,7 +111,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         if (this.merge) {
             for (i = 0; i < this.groups.length; i++) {
                 if (time >= this.groups[i].in && time < this.groups[i].out) {
-                    this.groups[i].draw(this.bufferCtx, time, fill, stroke);
+                    this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues);
                     this.merge.setCompositeOperation(this.bufferCtx);
                 }
             }
@@ -127,7 +122,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke) {
         else {
             for (i = 0; i < this.groups.length; i++) {
                 if (time >= this.groups[i].in && time < this.groups[i].out) {
-                    this.groups[i].draw(ctx, time, fill, stroke);
+                    this.groups[i].draw(ctx, time, fill, stroke, trimValues);
                 }
             }
         }
@@ -149,12 +144,9 @@ Group.prototype.reset = function () {
             this.groups[j].reset();
         }
     }
-    if (this.fill) {
-        this.fill.reset();
-    }
-    if (this.stroke) {
-        this.stroke.reset();
-    }
+    if (this.fill) this.fill.reset();
+    if (this.stroke) this.stroke.reset();
+    if (this.trim) this.trim.reset();
 };
 
 module.exports = Group;

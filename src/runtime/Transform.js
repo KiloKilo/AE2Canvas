@@ -25,34 +25,13 @@ function Transform(data) {
         }
     }
 
-    if (data.anchor) {
-        this.anchor = data.anchor.length ? new AnimatedProperty(data.anchor) : new Property(data.anchor);
-    }
-
-    if (data.scaleX) {
-        this.scaleX = data.scaleX.length ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX);
-    }
-
-    if (data.scaleY) {
-        this.scaleY = data.scaleY.length ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY);
-    }
-
-    if (data.skew) {
-        this.skew = data.skew.length ? new AnimatedProperty(data.skew) : new Property(data.skew);
-    }
-
-    if (data.skewAxis) {
-        this.skewAxis = data.skewAxis.length ? new AnimatedProperty(data.skewAxis) : new Property(data.skewAxis);
-    }
-
-    if (data.rotation) {
-        this.rotation = data.rotation.length ? new AnimatedProperty(data.rotation) : new Property(data.rotation);
-    }
-
-    if (data.opacity) {
-        this.opacity = data.opacity.length ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
-    }
-
+    if (data.anchor) this.anchor = data.anchor.length > 1 ? new AnimatedProperty(data.anchor) : new Property(data.anchor);
+    if (data.scaleX) this.scaleX = data.scaleX.length > 1 ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX);
+    if (data.scaleY) this.scaleY = data.scaleY.length > 1 ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY);
+    if (data.skew) this.skew = data.skew.length > 1 ? new AnimatedProperty(data.skew) : new Property(data.skew);
+    if (data.skewAxis) this.skewAxis = data.skewAxis.length > 1 ? new AnimatedProperty(data.skewAxis) : new Property(data.skewAxis);
+    if (data.rotation) this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation);
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
 }
 
 Transform.prototype.transform = function (ctx, time) {
