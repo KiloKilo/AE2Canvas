@@ -13,8 +13,8 @@ function getOpacity(data, transform) {
 
     if (obj.isTimeVarying || obj.value !== 100) {
         var opacity = getProperty(obj);
-        opacity = normalizeOpacity(opacity);
-        if (opacity.length > 1) opacity = normalizeKeyframes(opacity);
+        opacity = normalizeKeyframes(opacity);
+        opacity = divideValue(opacity, 100);
 
         transform.opacity = opacity;
     }

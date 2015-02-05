@@ -1,6 +1,7 @@
 ﻿#include 'utils/json2.js'
 #include 'utils/utils.js'
 #include 'utils/keyframes.js'
+#include 'utils/spatialKeyframes.js'
 #include 'utils/motionpath.js'
 #include 'utils/color.js'
 

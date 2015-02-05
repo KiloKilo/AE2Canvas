@@ -16,6 +16,7 @@
 
     if (opacity.isTimeVarying || opacity.value !== 100) {
         opacity = getProperty(opacity);
+        opacity = normalizeKeyframes(opacity);
         opacity = divideValue(opacity, 100);
         fill.opacity = opacity;
     }

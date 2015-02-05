@@ -1,5 +1,7 @@
 'use strict';
 
+var Bezier = require('./Bezier');
+
 function Path(data) {
     this.name = data.name;
     this.closed = data.closed;
@@ -13,8 +15,6 @@ Path.prototype.draw = function (ctx, time, trim) {
 
     if (trim) trim = this.getTrimValues(trim, frame);
 
-    //console.log(trim);
-
     for (var j = 1; j < vertices.length; j++) {
 
         var nextVertex = vertices[j],
@@ -27,15 +27,15 @@ Path.prototype.draw = function (ctx, time, trim) {
                 ctx.moveTo(lastVertex[4], lastVertex[5]);
             }
             else if (j === trim.startIndex + 1 && j === trim.endIndex + 1) {
-                tv = this.trim(lastVertex, nextVertex, trim.start, trim.end);
+                tv = this.trim(lastVertex, nextVertex, trim.start, trim.end, frame.len[j - 1]);
                 ctx.moveTo(tv.start[4], tv.start[5]);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             } else if (j === trim.startIndex + 1) {
-                tv = this.trim(lastVertex, nextVertex, trim.start, 1);
+                tv = this.trim(lastVertex, nextVertex, trim.start, 1, frame.len[j - 1]);
                 ctx.moveTo(tv.start[4], tv.start[5]);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             } else if (j === trim.endIndex + 1) {
-                tv = this.trim(lastVertex, nextVertex, 0, trim.end);
+                tv = this.trim(lastVertex, nextVertex, 0, trim.end, frame.len[j - 1]);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             } else if (j > trim.startIndex + 1 && j < trim.endIndex + 1) {
                 ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
@@ -45,11 +45,11 @@ Path.prototype.draw = function (ctx, time, trim) {
                 ctx.moveTo(lastVertex[4], lastVertex[5]);
             }
 
-            ctx.fillStyle = "rgba(0,255,0,0.5)";
-            //ctx.fillRect(ox, oy, 5, 5);
-            //ctx.fillRect(xe, ye, 5, 5);
-            ctx.fillRect(lastVertex[0], lastVertex[1], 5, 5);
-            ctx.fillRect(nextVertex[2], nextVertex[3], 5, 5);
+            //ctx.fillStyle = "rgba(0,255,0,0.5)";
+            ////ctx.fillRect(ox, oy, 5, 5);
+            ////ctx.fillRect(xe, ye, 5, 5);
+            //ctx.fillRect(lastVertex[0], lastVertex[1], 5, 5);
+            //ctx.fillRect(nextVertex[2], nextVertex[3], 5, 5);
 
             ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
         }
@@ -99,7 +99,12 @@ Path.prototype.getTrimValues = function (trim, frame) {
     return actualTrim;
 };
 
-Path.prototype.trim = function (lastVertex, nextVertex, from, to) {
+Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
+
+    this.bezier = new Bezier([lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]]);
+    this.bezier.getLength(len);
+    from = this.bezier.map(from);
+    to = this.bezier.map(to);
 
     var e1, f1, g1, h1, j1, k1,
         e2, f2, g2, h2, j2, k2,

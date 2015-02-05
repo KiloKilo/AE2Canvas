@@ -49,7 +49,7 @@ Transform.prototype.transform = function (ctx, time) {
         positionX = this.positionX.getValue(time);
         positionY = this.positionY.getValue(time);
     } else if (this.position) {
-        var position = this.position.getValue(time);
+        var position = this.position.getValue(time, ctx);
         positionX = position[0];
         positionY = position[1];
     } else {

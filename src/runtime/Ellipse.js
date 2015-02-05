@@ -37,10 +37,10 @@ Ellipse.prototype.draw = function (ctx, time, trim) {
     ];
 
     if (trim) {
-        var tv;
-        trim = this.getTrimValues(trim);
+        var tv,
+            len = w + h;
 
-        console.log(trim);
+        trim = this.getTrimValues(trim);
 
         for (i = 0; i < 4; i++) {
             j = i + 1;
@@ -48,15 +48,15 @@ Ellipse.prototype.draw = function (ctx, time, trim) {
             if (i > trim.startIndex && i < trim.endIndex) {
                 ctx.bezierCurveTo(vertices[i][0], vertices[i][1], vertices[j][2], vertices[j][3], vertices[j][4], vertices[j][5]);
             } else if (i === trim.startIndex && i === trim.endIndex) {
-                tv = this.trim(vertices[i], vertices[j], trim.start, trim.end);
+                tv = this.trim(vertices[i], vertices[j], trim.start, trim.end, len);
                 ctx.moveTo(tv.start[4], tv.start[5]);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             } else if (i === trim.startIndex) {
-                tv = this.trim(vertices[i], vertices[j], trim.start, 1);
+                tv = this.trim(vertices[i], vertices[j], trim.start, 1, len);
                 ctx.moveTo(tv.start[4], tv.start[5]);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             } else if (i === trim.endIndex) {
-                tv = this.trim(vertices[i], vertices[j], 0, trim.end);
+                tv = this.trim(vertices[i], vertices[j], 0, trim.end, len);
                 ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
             }
         }

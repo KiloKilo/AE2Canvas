@@ -14,7 +14,7 @@ function Rect(data) {
     if (data.roundness) this.roundness = data.roundness.length > 1 ? new AnimatedProperty(data.roundness) : new Property(data.roundness);
 }
 
-Rect.prototype.draw = function (ctx, time) {
+Rect.prototype.draw = function (ctx, time, trim) {
 
     var size = this.size.getValue(time),
         position = this.position ? this.position.getValue(time) : [0, 0],
@@ -26,11 +26,16 @@ Rect.prototype.draw = function (ctx, time) {
     var x = position[0] - size[0] / 2,
         y = position[1] - size[1] / 2;
 
-    ctx.moveTo(x + roundness, y);
-    ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
-    ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
-    ctx.arcTo(x, y + size[1], x, y, roundness);
-    ctx.arcTo(x, y, x + size[0], y, roundness);
+    if (trim) {
+        var tv;
+        trim = this.getTrimValues(trim);
+    } else {
+        ctx.moveTo(x + roundness, y);
+        ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
+        ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
+        ctx.arcTo(x, y + size[1], x, y, roundness);
+        ctx.arcTo(x, y, x + size[0], y, roundness);
+    }
 
 };
 

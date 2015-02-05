@@ -2,7 +2,7 @@
 <html>
 <head>
     <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
     <style>
@@ -18,6 +18,7 @@
             background: #555;
             text-align: center;
             overflow: hidden;
+            background: #000000;
         }
 
         #canvas {
@@ -27,9 +28,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            width: 1280px;
-            height: 720px;
-            background: url(img/grid.png) white;
+            width: 200px;
+            height: 200px;
+            /*background: url(img/grid.png) white;*/
             /*background: #000000;*/
         }
 
@@ -147,6 +148,7 @@
             runtime.pause();
         }, false);
 
+
         var canvas = document.getElementById('canvas');
         if (canvas.getContext) {
             runtime = new ae2canvas(data, canvas);
@@ -161,7 +163,7 @@
     function render(time) {
         if (!time) time = performance.now();
         runtime.update(time);
-        stats.update();;
+        stats.update();
     }
 
     fetchJSONFile('json/' + file + '.json', function (data) {

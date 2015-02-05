@@ -1,4 +1,6 @@
-﻿function getPath(data) {
+﻿'use strict';
+
+function getPath(data) {
     if (!(data instanceof PropertyGroup)) return null;
 
     data = data.property('ADBE Vector Shape');
@@ -17,20 +19,20 @@
         for (var i = 1; i <= numKeys; i++) {
             var obj = {};
 
-            $.writeln(data.keyInInterpolationType(i));
-            $.writeln(data.keyOutInterpolationType(i));
+            var inType = data.keyInInterpolationType(i),
+                outType = data.keyOutInterpolationType(i);
 
             obj.v = getPoint(data.keyValue(i));
             obj.t = Math.round(data.keyTime(i) * 1000);
 
-            if (i > 1 && (data.keyInInterpolationType(i) === KeyframeInterpolationType.BEZIER)) {
+            if (i > 1 && (inType === KeyframeInterpolationType.BEZIER)) {
                 var easeIn = data.keyInTemporalEase(i)[0];
                 obj.easeIn = [];
                 obj.easeIn[0] = 1 - easeIn.influence / 100;
                 obj.easeIn[1] = 1 - Math.round(easeIn.speed * 10000) / 10000;
             }
 
-            if (i < numKeys && (data.keyOutInterpolationType(i) === KeyframeInterpolationType.BEZIER)) {
+            if (i < numKeys && (outType === KeyframeInterpolationType.BEZIER)) {
                 var easeOut = data.keyOutTemporalEase(i)[0];
                 obj.easeOut = [];
                 obj.easeOut[0] = easeOut.influence / 100;
@@ -39,7 +41,7 @@
 
             path.frames.push(obj);
         }
-        path.frames = normalizeKeyframes(path.frames);
+        path.frames = normalizePathKeyframes(path.frames);
     }
     else {
         var obj = {};
@@ -102,7 +104,7 @@
                         endY
                     ];
 
-                    frames[i].len.push(getLength(path));
+                    frames[i].len.push(getArcLength(path));
                 }
             }
         }
@@ -110,45 +112,7 @@
         return frames;
     }
 
-    function getLength(path) {
-
-        var steps = 2000,
-            t = 1 / steps,
-            aX = 0,
-            aY = 0,
-            bX = path[0],
-            bY = path[1],
-            dX = 0,
-            dY = 0,
-            dS = 0,
-            sumArc = 0,
-            j = 0;
-
-        for (var i = 0; i < steps; j = j + t) {
-            aX = cubicN(j, path[0], path[2], path[4], path[6]);
-            aY = cubicN(j, path[1], path[3], path[5], path[7]);
-            dX = aX - bX;
-            dY = aY - bY;
-            dS = Math.sqrt((dX * dX) + (dY * dY));
-            sumArc = sumArc + dS;
-            bX = aX;
-            bY = aY;
-            i++;
-        }
-
-        return sumArc;
-    }
-
-    function cubicN(pct, a, b, c, d) {
-        var t2 = pct * pct;
-        var t3 = t2 * pct;
-        return a + (-a * 3 + pct * (3 * a - a * pct)) * pct
-            + (3 * b + pct * (-6 * b + b * 3 * pct)) * pct
-            + (c * 3 - c * 3 * pct) * t2
-            + d * t3;
-    }
-
-    function normalizeKeyframes(frames) {
+    function normalizePathKeyframes(frames) {
         for (var i = 1; i < frames.length; i++) {
             var key = frames[i],
                 lastKey = frames[i - 1];
@@ -161,6 +125,5 @@
         }
         return frames;
     }
-
 }
 

@@ -32,8 +32,6 @@ function Runtime(data, canvas) {
     //TODO check if fluid -> resize
 
 //    this.setWidth();
-
-    console.log(this);
 }
 
 Runtime.prototype = {

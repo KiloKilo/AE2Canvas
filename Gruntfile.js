@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 //                    'build/export.js' : ['js/export/main.js']
                 },
                 options: {
-                    bundleOptions: {
+                    browserifyOptions: {
                         standalone: 'ae2canvas',
                         debug     : true
                     }

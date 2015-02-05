@@ -1,10 +1,10 @@
-function normalizeOpacity(frames) {
-    for (var i = 0; i < frames.length; i++) {
-        frames[i].v = frames[i].v / 100;
-    }
-
-    return frames;
-}
+//function normalizeOpacity(frames) {
+//    for (var i = 0; i < frames.length; i++) {
+//        frames[i].v = frames[i].v / 100;
+//    }
+//
+//    return frames;
+//}
 
 function normalizeColor(frames) {
     for (var i = 0; i < frames.length; i++) {

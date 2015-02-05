@@ -38,7 +38,7 @@
 
             if (position.length > 1) {
                 position = getMotionpath(position);
-                position = normalizeKeyframes(position);
+                position = normalizeSpatialKeyframes(position);
             }
 
             transform.position = position;

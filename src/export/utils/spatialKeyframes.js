@@ -1,6 +1,6 @@
 'use strict';
 
-function normalizeKeyframes(frames, dimension) {
+function normalizeSpatialKeyframes(frames, dimension) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -24,7 +24,7 @@ function normalizeKeyframes(frames, dimension) {
         //    continue;
         //}
 
-        diff = getValueDifference(lastKey, key);
+        diff = lastKey.len || getValueDifference(lastKey, key);
 
         //FIXME hackiest shit ever :)
         // fix problem if lastKey.v === key.v, but has easing
@@ -52,6 +52,11 @@ function normalizeKeyframes(frames, dimension) {
 
             //dimension separated position
             if (key.inTangent && !key.motionpath && typeof dimension === 'number') {
+                //testing
+                key.oldEaseIn = [];
+                key.oldEaseIn[0] = easeIn[0];
+                key.oldEaseIn[1] = easeIn[1];
+
                 ratio = key.inTangent[dimension] / diff;
                 easeIn[0] = 0.000001;
                 easeIn[1] = 1 + ratio;
@@ -71,6 +76,11 @@ function normalizeKeyframes(frames, dimension) {
 
             //dimension separated position
             if (lastKey.outTangent && !lastKey.motionpath && typeof dimension === 'number') {
+
+                //testing
+                lastKey.oldEaseOut = [];
+                lastKey.oldEaseOut[0] = easeOut[0];
+                lastKey.oldEaseOut[1] = easeOut[1];
 
                 ratio = lastKey.outTangent[dimension] / diff;
                 easeOut[0] = 0.000001;

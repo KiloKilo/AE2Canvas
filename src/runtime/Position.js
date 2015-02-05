@@ -1,6 +1,7 @@
 'use strict';
 
-var AnimatedProperty = require('./AnimatedProperty');
+var Bezier = require('./Bezier'),
+    AnimatedProperty = require('./AnimatedProperty');
 
 function Position(data) {
     AnimatedProperty.call(this, data);
@@ -8,25 +9,41 @@ function Position(data) {
 
 Position.prototype = Object.create(AnimatedProperty.prototype);
 
-Position.prototype.getValueAtTime = function (time) {
+Position.prototype.setMotionPath = function () {
     if (this.lastFrame.motionpath) {
-        //TODO cache elapsed
-        var x = this.cubicN(this.getElapsed(time), this.lastFrame.motionpath[0], this.lastFrame.motionpath[2], this.lastFrame.motionpath[4], this.lastFrame.motionpath[6]),
-            y = this.cubicN(this.getElapsed(time), this.lastFrame.motionpath[1], this.lastFrame.motionpath[3], this.lastFrame.motionpath[5], this.lastFrame.motionpath[7]);
-
-        return [x, y];
+        this.motionpath = new Bezier(this.lastFrame.motionpath);
+        this.motionpath.getLength(this.lastFrame.len);
     } else {
-        return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
+        this.motionpath = null;
     }
 };
 
-Position.prototype.cubicN = function (pct, a, b, c, d) {
-    var t2 = pct * pct;
-    var t3 = t2 * pct;
-    return a + (-a * 3 + pct * (3 * a - a * pct)) * pct
-        + (3 * b + pct * (-6 * b + b * 3 * pct)) * pct
-        + (c * 3 - c * 3 * pct) * t2
-        + d * t3;
+Position.prototype.getValue = function (time) {
+    if (this.finished || (time <= this.nextFrame.t && !this.started)) {
+        return this.nextFrame.v;
+    } else {
+        this.started = true;
+        if (time > this.nextFrame.t) {
+            if (this.pointer + 1 === this.frameCount) {
+                this.finished = true;
+            } else {
+                this.lastFrame = this.nextFrame;
+                this.pointer++;
+                this.nextFrame = this.frames[this.pointer];
+                this.setEasing();
+                this.setMotionPath();
+            }
+        }
+        return this.getValueAtTime(time);
+    }
+};
+
+Position.prototype.getValueAtTime = function (time) {
+    if (this.motionpath) {
+        return this.motionpath.getValues(this.getElapsed(time));
+    } else {
+        return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
+    }
 };
 
 module.exports = Position;
