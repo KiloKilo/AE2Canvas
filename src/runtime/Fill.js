@@ -11,7 +11,6 @@ function Fill(data) {
 Fill.prototype.getValue = function (time) {
     var color = this.color.getValue(time);
     var opacity = this.opacity ? this.opacity.getValue(time) : 1;
-    console.log(opacity);
     return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
 };
 

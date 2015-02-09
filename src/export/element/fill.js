@@ -8,7 +8,7 @@
 //    fill.composite = data.property('ADBE Vector Composite Order');
 
     fill.color = getProperty(data.property('ADBE Vector Fill Color'));
-    fill.color = normalizeColor(fill.color);
+    fill.color = multiplyValue(fill.color, 255);
     fill.color = normalizeKeyframes(fill.color);
 
     //optional

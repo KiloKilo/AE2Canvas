@@ -41,6 +41,20 @@ function divideValue(frames, divider) {
     return frames;
 }
 
+function multiplyValue(frames, multiplier) {
+    for (var i = 0; i < frames.length; i++) {
+        if (frames[i].v instanceof Array) {
+            for (var j = 0; j < frames[i].v.length; j++) {
+                frames[i].v[j] = frames[i].v[j] * multiplier;
+            }
+        } else {
+            frames[i].v = frames[i].v * multiplier;
+        }
+    }
+
+    return frames;
+}
+
 function clampValue(frames, from, to) {
     for (var i = 0; i < frames.length; i++) {
         if (frames[i].v instanceof Array) {
@@ -121,10 +135,23 @@ function dist2d(x1, y1, x2, y2) {
 }
 
 function printObj(obj) {
+    $.writeln('-----------------------');
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
-            $.writeln(obj[key]);
+            if (typeof obj[key] === 'function') {
+                $.writeln(key + ': function');
+            } else {
+                $.writeln(key + ': ' + obj[key]);
+            }
         }
+    }
+    $.writeln('-----------------------');
+}
+
+function reflectObj(obj) {
+    var props = obj.reflect.properties;
+    for (var i = 0; i < props.length; i++) {
+        $.writeln(props[i].name + ': ' + f[props[i].name]);
     }
 }
 
@@ -135,4 +162,13 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+
+function clearConsole() {
+    var bt = new BridgeTalk();
+    bt.target = 'estoolkit-4.0';
+    bt.body = function () {
+        app.clc();
+    }.toSource() + "()";
+    bt.send(5);
 }

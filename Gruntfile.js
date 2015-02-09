@@ -8,12 +8,12 @@ module.exports = function (grunt) {
         browserify: {
             dist: {
                 files  : {
-                    'build/ae2canvas.js': ['src/runtime/Runtime.js']
+                    'build/ae2canvas.js': ['src/runtime/AE2Canvas.js']
 //                    'build/export.js' : ['js/export/main.js']
                 },
                 options: {
                     browserifyOptions: {
-                        standalone: 'ae2canvas',
+                        standalone: 'AE2Canvas',
                         debug     : true
                     }
                 }

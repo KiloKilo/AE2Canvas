@@ -2,9 +2,7 @@
 
 var Group = require('./Group');
 
-function Runtime(data, canvas) {
-    if (!data) return;
-
+function Animation(data, canvas) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
@@ -12,6 +10,8 @@ function Runtime(data, canvas) {
     this.baseWidth = data.width;
     this.baseHeight = data.height;
     this.ratio = data.width / data.height;
+
+    this.markers = data.markers;
 
     this.canvas.width = this.baseWidth;
     this.canvas.height = this.baseHeight;
@@ -25,16 +25,15 @@ function Runtime(data, canvas) {
     for (var i = 0; i < data.groups.length; i++) {
         this.groups.push(new Group(data.groups[i], this.bufferCtx));
     }
+
+    this.fluid = true;
+
     this.reset();
+    this.resize();
     this.started = false;
-    window.addEventListener('resize', this.setWidth.bind(this), false);
-
-    //TODO check if fluid -> resize
-
-//    this.setWidth();
 }
 
-Runtime.prototype = {
+Animation.prototype = {
 
     start: function () {
         if (!this.started) {
@@ -45,7 +44,7 @@ Runtime.prototype = {
 
     stop: function () {
         this.reset();
-//        this.draw();
+        this.draw();
         this.started = false;
     },
 
@@ -56,18 +55,43 @@ Runtime.prototype = {
         }
     },
 
+    gotoAndPlay: function (id) {
+        var marker = this.getMarker(id);
+    },
+
+    gotoAndStop: function (id) {
+        var marker = this.getMarker(id);
+        if (marker) {
+            //console.log(this.compTime);
+            this.compTime = marker.time;
+            //this.pause();
+            //this.update();
+            //this.draw();
+        }
+    },
+
+    getMarker: function (id) {
+        if (typeof id === 'number') {
+            return this.markers[id];
+        } else if (typeof id === 'string') {
+            for (var i = 0; i < this.markers.length; i++) {
+                if (this.markers[i].comment === id) {
+                    return this.markers[i];
+                }
+            }
+        }
+
+        console.warn('Marker not found');
+    },
+
     update: function (time) {
         this.time = time;
-        if (!this.startTime) {
-            this.startTime = this.time;
-        }
         if (this.started) {
             this.compTime = this.time - this.startTime + this.pausedTime;
             if (this.compTime <= this.duration) {
                 this.draw();
             } else {
                 this.stop();
-                if (typeof this.onComplete === 'function') this.onComplete();
                 if (this.loop) this.start();
             }
         }
@@ -94,10 +118,9 @@ Runtime.prototype = {
         }
     },
 
-    setWidth: function () {
+    resize: function () {
         if (this.fluid) {
-            var factor = 1;
-            if (this.isHD) factor = 2;
+            var factor = this.isHD ? 2 : 1;
             var width = this.canvas.getBoundingClientRect().width;
             this.canvas.width = width * factor;
             this.canvas.height = width / this.ratio * factor;
@@ -107,4 +130,4 @@ Runtime.prototype = {
     }
 };
 
-module.exports = Runtime;
+module.exports = Animation;
