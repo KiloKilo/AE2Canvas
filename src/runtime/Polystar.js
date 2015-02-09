@@ -5,100 +5,88 @@ var Property = require('./Property'),
 
 function Polystar(data) {
     this.name = data.name;
-    this.closed = true;
+    this.closed = true; // TODO ??
 
     this.starType = data.starType;
+    this.points = data.points.length > 1 ? new AnimatedProperty(data.points) : new Property(data.points);
+    this.innerRadius = data.innerRadius.length > 1 ? new AnimatedProperty(data.innerRadius) : new Property(data.innerRadius);
+    this.outerRadius = data.outerRadius.length > 1 ? new AnimatedProperty(data.outerRadius) : new Property(data.outerRadius);
 
-    if (data.points.length > 1) this.points = new AnimatedProperty(data.points);
-    else this.points = new Property(data.points);
-
-    if (data.position.length > 1) this.position = new AnimatedProperty(data.position);
-    else this.position = new Property(data.position);
-
-    if (data.rotation.length > 1) this.rotation = new AnimatedProperty(data.rotation);
-    else this.rotation = new Property(data.rotation);
-
-    if (data.innerRadius.length > 1) this.innerRadius = new AnimatedProperty(data.innerRadius);
-    else this.innerRadius = new Property(data.innerRadius);
-
-    if (data.outerRadius.length > 1) this.outerRadius = new AnimatedProperty(data.outerRadius);
-    else this.outerRadius = new Property(data.outerRadius);
-
-    if (data.innerRoundness.length > 1) this.innerRoundness = new AnimatedProperty(data.innerRoundness);
-    else this.innerRoundness = new Property(data.innerRoundness);
-
-    if (data.outerRoundness.length > 1) this.outerRoundness = new AnimatedProperty(data.outerRoundness);
-    else this.outerRoundness = new Property(data.outerRoundness);
-
-//    console.log(this.position);
+    //optinals
+    if (data.position) this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position);
+    if (data.rotation) this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation);
+    if (data.innerRoundness) this.innerRoundness = data.innerRoundness.length > 1 ? new AnimatedProperty(data.innerRoundness) : new Property(data.innerRoundness);
+    if (data.outerRoundness) this.outerRoundness = data.outerRoundness.length > 1 ? new AnimatedProperty(data.outerRoundness) : new Property(data.outerRoundness);
 }
 
 Polystar.prototype.draw = function (ctx, time) {
 
-//    console.log(this.position);
-
     var points = this.points.getValue(time),
-        position = this.position.getValue(time),
         innerRadius = this.innerRadius.getValue(time),
         outerRadius = this.outerRadius.getValue(time),
-        innerRoundness = this.innerRoundness.getValue(time),
-        outerRoundness = this.outerRoundness.getValue(time);
+        position = this.position ? this.position.getValue(time) : [0, 0],
+        rotation = this.rotation ? this.rotation.getValue(time) : 0,
+        innerRoundness = this.innerRoundness ? this.innerRoundness.getValue(time) : 0,
+        outerRoundness = this.outerRoundness ? this.outerRoundness.getValue(time) : 0;
 
-    var x = position[0],
-        y = position[1],
-        bezierOffset = outerRadius / 2;
+    rotation = this.deg2rad(rotation);
+    var start = this.rotatePoint(0, 0, 0, 0 - outerRadius, rotation);
 
     ctx.save();
     ctx.beginPath();
-    ctx.translate(x, y);
-    ctx.moveTo(0, 0 - outerRadius);
-
-    ctx.save();
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0 - outerRadius, 5, 5);
-    ctx.restore();
+    ctx.translate(position[0], position[1]);
+    ctx.moveTo(start[0], start[1]);
 
     for (var i = 0; i < points; i++) {
-        ctx.rotate(Math.PI / points);
 
-        var b1x = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[0],
-            b1y = this.rotatePoint(0, 0, bezierOffset, 0 - outerRadius, -1 * Math.PI / points)[1],
-            b2x = 0,
-            b2y = 0 - innerRadius;
+        var pInner,
+            pOuter,
+            pOuter1Tangent,
+            pOuter2Tangent,
+            pInner1Tangent,
+            pInner2Tangent,
+            outerOffset,
+            innerOffset,
+            rot;
 
-        ctx.bezierCurveTo(b1x, b1y, b2x, b2y, 0, 0 - innerRadius);
+        rot = Math.PI / points * 2;
 
-        ctx.save();
-        ctx.fillStyle = "blue";
-        ctx.fillRect(b1x, b1y, 5, 5);
-        ctx.fillRect(b2x, b2y, 5, 5);
-        ctx.restore();
+        pInner = this.rotatePoint(0, 0, 0, 0 - innerRadius, (rot * (i + 1) - rot / 2) + rotation);
+        pOuter = this.rotatePoint(0, 0, 0, 0 - outerRadius, (rot * (i + 1)) + rotation);
 
-//            break;
+        //FIxME
+        if (!outerOffset) outerOffset = (start[0] + pInner[0]) * outerRoundness / 100 * .5522848;
+        if (!innerOffset) innerOffset = (start[0] + pInner[0]) * innerRoundness / 100 * .5522848;
 
-        ctx.rotate(Math.PI / points);
+        pOuter1Tangent = this.rotatePoint(0, 0, outerOffset, 0 - outerRadius, (rot * i) + rotation);
+        pInner1Tangent = this.rotatePoint(0, 0, innerOffset * -1, 0 - innerRadius, (rot * (i + 1) - rot / 2) + rotation);
+        pInner2Tangent = this.rotatePoint(0, 0, innerOffset, 0 - innerRadius, (rot * (i + 1) - rot / 2) + rotation);
+        pOuter2Tangent = this.rotatePoint(0, 0, outerOffset * -1, 0 - outerRadius, (rot * (i + 1)) + rotation);
 
-        var b3x = 0,
-            b3y = 0 - innerRadius,
-            b4x = -bezierOffset,
-            b4y = 0 - outerRadius;
+        if (this.starType === 1) {
+            //star
+            ctx.bezierCurveTo(pOuter1Tangent[0], pOuter1Tangent[1], pInner1Tangent[0], pInner1Tangent[1], pInner[0], pInner[1]);
+            ctx.bezierCurveTo(pInner2Tangent[0], pInner2Tangent[1], pOuter2Tangent[0], pOuter2Tangent[1], pOuter[0], pOuter[1]);
+        } else {
+            //polygon
+            ctx.bezierCurveTo(pOuter1Tangent[0], pOuter1Tangent[1], pOuter2Tangent[0], pOuter2Tangent[1], pOuter[0], pOuter[1]);
+        }
 
-        ctx.bezierCurveTo(b3x, b3y, b4x, b4y, 0, 0 - outerRadius);
-
-        ctx.save();
-        ctx.fillStyle = "green";
-        ctx.fillRect(b3x, b3y, 5, 5);
-        ctx.fillRect(b4x, b4y, 5, 5);
-        ctx.restore();
-
-        ctx.save();
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0 - outerRadius, 5, 5);
-        ctx.restore();
-
-//            break;
+        //debug
+        //ctx.fillStyle = "black";
+        //ctx.fillRect(pInner[0], pInner[1], 5, 5);
+        //ctx.fillRect(pOuter[0], pOuter[1], 5, 5);
+        //ctx.fillStyle = "blue";
+        //ctx.fillRect(pOuter1Tangent[0], pOuter1Tangent[1], 5, 5);
+        //ctx.fillStyle = "red";
+        //ctx.fillRect(pInner1Tangent[0], pInner1Tangent[1], 5, 5);
+        //ctx.fillStyle = "green";
+        //ctx.fillRect(pInner2Tangent[0], pInner2Tangent[1], 5, 5);
+        //ctx.fillStyle = "brown";
+        //ctx.fillRect(pOuter2Tangent[0], pOuter2Tangent[1], 5, 5);
 
     }
+
     ctx.restore();
 };
 
@@ -110,13 +98,18 @@ Polystar.prototype.rotatePoint = function (cx, cy, x, y, radians) {
     return [nx, ny];
 };
 
+Polystar.prototype.deg2rad = function (deg) {
+    return deg * (Math.PI / 180);
+};
+
 Polystar.prototype.reset = function () {
     this.points.reset();
-    this.position.reset();
     this.innerRadius.reset();
     this.outerRadius.reset();
-    this.innerRoundness.reset();
-    this.outerRoundness.reset();
+    if (this.position) this.position.reset();
+    if (this.rotation) this.rotation.reset();
+    if (this.innerRoundness) this.innerRoundness.reset();
+    if (this.outerRoundness) this.outerRoundness.reset();
 };
 
 module.exports = Polystar;

@@ -2,7 +2,6 @@
 
 var Property = require('./Property'),
     BezierEasing = require('../lib/BezierEasing');
-    BezierEasing = require('../lib/BezierEasing');
 
 function AnimatedProperty(data) {
     Property.call(this, data);
@@ -50,13 +49,17 @@ AnimatedProperty.prototype.getValue = function (time) {
     }
 };
 
-AnimatedProperty.prototype.getValueAtTime = function (time) {
+AnimatedProperty.prototype.getElapsed = function (time) {
     var delta = ( time - this.lastFrame.t );
     var duration = this.nextFrame.t - this.lastFrame.t;
     var elapsed = delta / duration;
     if (elapsed > 1) elapsed = 1;
     else if (this.easing) elapsed = this.easing(elapsed);
-    return this.lerp(this.lastFrame.v, this.nextFrame.v, elapsed);
+    return elapsed;
+};
+
+AnimatedProperty.prototype.getValueAtTime = function (time) {
+    return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
 };
 
 AnimatedProperty.prototype.reset = function () {

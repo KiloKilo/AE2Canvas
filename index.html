@@ -2,7 +2,7 @@
 <html>
 <head>
     <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
     <style>
@@ -18,6 +18,7 @@
             background: #555;
             text-align: center;
             overflow: hidden;
+            background: #000000;
         }
 
         #canvas {
@@ -27,11 +28,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /*width: 1280px;*/
-            /*height: 720px;*/
-            width: 670px;
-            height: 195px;
+            width: 200px;
+            height: 200px;
             /*background: url(img/grid.png) white;*/
+            /*background: #000000;*/
         }
 
         .btn-group {
@@ -50,7 +50,7 @@
     <button id="pause" type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-pause"></span></button>
 </div>
-<canvas id="canvas" width="670" height="195"></canvas>
+<canvas id="canvas"></canvas>
 <script>
     (function () {
         var lastTime = 0;
@@ -107,7 +107,6 @@
 <script>
     var stats, ctx, runtime;
     var file = 'animation';
-    var baseScale = 0.473;
 
     if (location.hash) {
         file = location.hash.substring(1);
@@ -149,12 +148,13 @@
             runtime.pause();
         }, false);
 
+
         var canvas = document.getElementById('canvas');
         if (canvas.getContext) {
             runtime = new ae2canvas(data, canvas);
-//            runtime.loop = true;
+            runtime.loop = true;
             runtime.isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-//            runtime.fluid = true;
+            runtime.fluid = true;
             loop();
             runtime.start();
         }
