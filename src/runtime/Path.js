@@ -150,7 +150,7 @@ Path.prototype.sumArray = function (arr) {
     return arr.reduce(add);
 };
 
-Path.prototype.reset = function () {
+Path.prototype.reset = function (reversed) {
 };
 
 module.exports = Path;

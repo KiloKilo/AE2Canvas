@@ -29,6 +29,7 @@ Rect.prototype.draw = function (ctx, time, trim) {
     if (trim) {
         var tv;
         trim = this.getTrimValues(trim);
+        //TODO add trim
     } else {
         ctx.moveTo(x + roundness, y);
         ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
@@ -39,10 +40,10 @@ Rect.prototype.draw = function (ctx, time, trim) {
 
 };
 
-Rect.prototype.reset = function () {
-    this.size.reset();
-    if (this.position) this.position.reset();
-    if (this.roundness) this.roundness.reset();
+Rect.prototype.reset = function (reversed) {
+    this.size.reset(reversed);
+    if (this.position) this.position.reset(reversed);
+    if (this.roundness) this.roundness.reset(reversed);
 };
 
 module.exports = Rect;

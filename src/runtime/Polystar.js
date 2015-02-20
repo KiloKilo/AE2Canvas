@@ -102,14 +102,14 @@ Polystar.prototype.deg2rad = function (deg) {
     return deg * (Math.PI / 180);
 };
 
-Polystar.prototype.reset = function () {
-    this.points.reset();
-    this.innerRadius.reset();
-    this.outerRadius.reset();
-    if (this.position) this.position.reset();
-    if (this.rotation) this.rotation.reset();
-    if (this.innerRoundness) this.innerRoundness.reset();
-    if (this.outerRoundness) this.outerRoundness.reset();
+Polystar.prototype.reset = function (reversed) {
+    this.points.reset(reversed);
+    this.innerRadius.reset(reversed);
+    this.outerRadius.reset(reversed);
+    if (this.position) this.position.reset(reversed);
+    if (this.rotation) this.rotation.reset(reversed);
+    if (this.innerRoundness) this.innerRoundness.reset(reversed);
+    if (this.outerRoundness) this.outerRoundness.reset(reversed);
 };
 
 module.exports = Polystar;

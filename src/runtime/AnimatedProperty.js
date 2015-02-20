@@ -31,29 +31,47 @@ AnimatedProperty.prototype.setEasing = function () {
 };
 
 AnimatedProperty.prototype.getValue = function (time) {
-    if (this.finished || (time <= this.nextFrame.t && !this.started)) {
+    if (this.finished && time >= this.nextFrame.t) {
         return this.nextFrame.v;
+    } else if (!this.started && time <= this.lastFrame.t) {
+        return this.lastFrame.v;
     } else {
         this.started = true;
+        this.finished = false;
         if (time > this.nextFrame.t) {
             if (this.pointer + 1 === this.frameCount) {
                 this.finished = true;
             } else {
-                this.lastFrame = this.nextFrame;
                 this.pointer++;
+                this.lastFrame = this.frames[this.pointer - 1];
                 this.nextFrame = this.frames[this.pointer];
-                this.setEasing();
+                this.onKeyframeChange();
+            }
+        } else if (time < this.lastFrame.t) {
+            if (this.pointer < 2) {
+                this.started = false;
+            } else {
+                this.pointer--;
+                this.lastFrame = this.frames[this.pointer - 1];
+                this.nextFrame = this.frames[this.pointer];
+                this.onKeyframeChange();
             }
         }
         return this.getValueAtTime(time);
     }
 };
 
+AnimatedProperty.prototype.onKeyframeChange = function () {
+    this.setEasing();
+};
+
 AnimatedProperty.prototype.getElapsed = function (time) {
-    var delta = ( time - this.lastFrame.t );
-    var duration = this.nextFrame.t - this.lastFrame.t;
-    var elapsed = delta / duration;
+    var delta = ( time - this.lastFrame.t ),
+        duration = this.nextFrame.t - this.lastFrame.t,
+        elapsed = delta / duration;
+
     if (elapsed > 1) elapsed = 1;
+    else if (elapsed < 0) elapsed = 0;
     else if (this.easing) elapsed = this.easing(elapsed);
     return elapsed;
 };
@@ -62,13 +80,13 @@ AnimatedProperty.prototype.getValueAtTime = function (time) {
     return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
 };
 
-AnimatedProperty.prototype.reset = function () {
+AnimatedProperty.prototype.reset = function (reversed) {
     this.finished = false;
     this.started = false;
-    this.pointer = 0;
+    this.pointer = reversed ? this.frameCount - 1 : 1;
     this.nextFrame = this.frames[this.pointer];
-    this.lastFrame = this.nextFrame;
-    this.easing = null;
+    this.lastFrame = this.frames[this.pointer - 1];
+    this.onKeyframeChange();
 };
 
 module.exports = AnimatedProperty;

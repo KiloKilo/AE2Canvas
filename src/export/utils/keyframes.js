@@ -14,15 +14,15 @@ function normalizeKeyframes(frames, dimension) {
             ratio;
 
         //break if lastkey and this key easing is both linear
-        //if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
-        //    delete lastKey.outType;
-        //    delete lastKey.easeOut;
-        //    delete lastKey.outTangent;
-        //    delete key.inType;
-        //    delete key.easeIn;
-        //    delete key.inTangent;
-        //    continue;
-        //}
+        if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
+            delete lastKey.outType;
+            delete lastKey.easeOut;
+            delete lastKey.outTangent;
+            delete key.inType;
+            delete key.easeIn;
+            delete key.inTangent;
+            continue;
+        }
 
         diff = getValueDifference(lastKey, key);
 

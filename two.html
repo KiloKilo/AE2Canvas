@@ -22,6 +22,7 @@
         }
 
         #canvas1 {
+            cursor: pointer;
             position: absolute;
             margin: auto;
             top: 100px;
@@ -137,13 +138,13 @@
     }
 
     fetchJSONFile('json/animation.json', function (data) {
-        loader = new AE2Canvas.Animation(data, document.getElementById('canvas1'));
+        loader = new AE2Canvas.Animation({data: data, canvas: document.getElementById('canvas1')});
         loader.loop = true;
         loader.isHD = isHD;
     });
 
     fetchJSONFile('json/morph.json', function (data) {
-        morph = new AE2Canvas.Animation(data, document.getElementById('canvas2'));
+        morph = new AE2Canvas.Animation({data: data, canvas: document.getElementById('canvas2')});
         morph.loop = true;
         morph.isHD = isHD;
 

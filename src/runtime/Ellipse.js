@@ -84,9 +84,9 @@ Ellipse.prototype.getTrimValues = function (trim) {
     };
 };
 
-Ellipse.prototype.reset = function () {
-    this.size.reset();
-    if (this.position) this.position.reset();
+Ellipse.prototype.reset = function (reversed) {
+    this.size.reset(reversed);
+    if (this.position) this.position.reset(reversed);
 };
 
 module.exports = Ellipse;

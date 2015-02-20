@@ -11,22 +11,38 @@ function AnimatedPath(data) {
 AnimatedPath.prototype = Object.create(Path.prototype);
 
 AnimatedPath.prototype.getValue = function (time) {
-    if ((time <= this.nextFrame.t && !this.started) || this.finished) {
+    if (this.finished && time >= this.nextFrame.t) {
         return this.nextFrame;
+    } else if (!this.started && time <= this.lastFrame.t) {
+        return this.lastFrame;
     } else {
         this.started = true;
+        this.finished = false;
         if (time > this.nextFrame.t) {
             if (this.pointer + 1 === this.frameCount) {
                 this.finished = true;
             } else {
-                this.lastFrame = this.nextFrame;
                 this.pointer++;
+                this.lastFrame = this.frames[this.pointer - 1];
                 this.nextFrame = this.frames[this.pointer];
-                this.setEasing();
+                this.onKeyframeChange();
+            }
+        } else if (time < this.lastFrame.t) {
+            if (this.pointer < 2) {
+                this.started = false;
+            } else {
+                this.pointer--;
+                this.lastFrame = this.frames[this.pointer - 1];
+                this.nextFrame = this.frames[this.pointer];
+                this.onKeyframeChange();
             }
         }
         return this.getValueAtTime(time);
     }
+};
+
+AnimatedPath.prototype.onKeyframeChange = function () {
+    this.setEasing();
 };
 
 AnimatedPath.prototype.lerp = function (a, b, t) {
@@ -34,6 +50,7 @@ AnimatedPath.prototype.lerp = function (a, b, t) {
 };
 
 AnimatedPath.prototype.setEasing = function () {
+    console.log('set easing', this.lastFrame.easeOut, this.nextFrame.easeIn);
     if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
         this.easing = new BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
     } else {
@@ -46,6 +63,7 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
     var duration = this.nextFrame.t - this.lastFrame.t;
     var elapsed = delta / duration;
     if (elapsed > 1) elapsed = 1;
+    else if (elapsed < 0) elapsed = 0;
     else if (this.easing) elapsed = this.easing(elapsed);
     var actualVertices = [],
         actualLength = [];
@@ -71,13 +89,13 @@ AnimatedPath.prototype.getValueAtTime = function (time) {
     }
 };
 
-AnimatedPath.prototype.reset = function () {
+AnimatedPath.prototype.reset = function (reversed) {
     this.finished = false;
     this.started = false;
-    this.pointer = 0;
+    this.pointer = reversed ? this.frameCount - 1 : 1;
     this.nextFrame = this.frames[this.pointer];
-    this.lastFrame = this.nextFrame;
-    this.easing = null;
+    this.lastFrame = this.frames[this.pointer - 1];
+    this.onKeyframeChange();
 };
 
 module.exports = AnimatedPath;

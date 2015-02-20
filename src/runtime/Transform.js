@@ -88,17 +88,17 @@ Transform.prototype.deg2rad = function (deg) {
     return deg * (Math.PI / 180);
 };
 
-Transform.prototype.reset = function () {
-    if (this.anchor) this.anchor.reset();
-    if (this.rotation) this.rotation.reset();
-    if (this.skew) this.skew.reset();
-    if (this.skewAxis) this.skewAxis.reset();
-    if (this.position) this.position.reset();
-    if (this.positionX) this.positionX.reset();
-    if (this.positionY) this.positionY.reset();
-    if (this.scaleX) this.scaleX.reset();
-    if (this.scaleY) this.scaleY.reset();
-    if (this.opacity) this.opacity.reset();
+Transform.prototype.reset = function (reversed) {
+    if (this.anchor) this.anchor.reset(reversed);
+    if (this.rotation) this.rotation.reset(reversed);
+    if (this.skew) this.skew.reset(reversed);
+    if (this.skewAxis) this.skewAxis.reset(reversed);
+    if (this.position) this.position.reset(reversed);
+    if (this.positionX) this.positionX.reset(reversed);
+    if (this.positionY) this.positionY.reset(reversed);
+    if (this.scaleX) this.scaleX.reset(reversed);
+    if (this.scaleY) this.scaleY.reset(reversed);
+    if (this.opacity) this.opacity.reset(reversed);
 };
 
 module.exports = Transform;

@@ -4,7 +4,7 @@ var Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Fill(data) {
-    this.color = data.color.length ? new AnimatedProperty(data.color) : new Property(data.color);
+    this.color = data.color.length > 1 ? new AnimatedProperty(data.color) : new Property(data.color);
     if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
 }
 
@@ -19,9 +19,9 @@ Fill.prototype.setColor = function (ctx, time) {
     ctx.fillStyle = color;
 };
 
-Fill.prototype.reset = function () {
-    this.color.reset();
-    if (this.opacity) this.opacity.reset();
+Fill.prototype.reset = function (reversed) {
+    this.color.reset(reversed);
+    if (this.opacity) this.opacity.reset(reversed);
 };
 
 module.exports = Fill;

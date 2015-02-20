@@ -30,9 +30,9 @@ Trim.prototype.getTrim = function (time) {
     }
 };
 
-Trim.prototype.reset = function () {
-    if (this.start) this.start.reset();
-    if (this.end) this.end.reset();
+Trim.prototype.reset = function (reversed) {
+    if (this.start) this.start.reset(reversed);
+    if (this.end) this.end.reset(reversed);
     //if (this.offset) this.offset.reset();
 };
 

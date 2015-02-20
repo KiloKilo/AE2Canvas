@@ -9,7 +9,7 @@ Property.prototype.getValue = function () {
     return this.frames[0].v;
 };
 
-Property.prototype.reset = function () {
+Property.prototype.reset = function (reversed) {
 };
 
 module.exports = Property;

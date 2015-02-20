@@ -11,12 +11,12 @@ var Stroke = require('./Stroke'),
     Merge = require('./Merge'),
     Trim = require('./Trim');
 
-function Group(data, bufferCtx) {
+function Group(data, bufferCtx, parentIn, parentOut) {
 
     this.name = data.name;
     this.index = data.index;
-    this.in = data.in ? data.in : 0;
-    this.out = data.out ? data.out : 500000; // FIXME get comp total duration
+    this.in = data.in ? data.in : parentIn;
+    this.out = data.out ? data.out : parentOut;
 
     if (data.fill) this.fill = new Fill(data.fill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
@@ -29,10 +29,12 @@ function Group(data, bufferCtx) {
     if (data.groups) {
         this.groups = [];
         for (var i = 0; i < data.groups.length; i++) {
-            this.groups.push(new Group(data.groups[i], this.bufferCtx));
+            this.groups.push(new Group(data.groups[i], this.bufferCtx, this.in, this.out));
         }
     }
 
+
+    //
     if (data.shapes) {
         this.shapes = [];
         for (var j = 0; j < data.shapes.length; j++) {
@@ -109,6 +111,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
 
     if (this.groups) {
         if (this.merge) {
+
             for (i = 0; i < this.groups.length; i++) {
                 if (time >= this.groups[i].in && time < this.groups[i].out) {
                     this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues);
@@ -127,26 +130,25 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
             }
         }
     }
-
     ctx.restore();
 };
 
-Group.prototype.reset = function () {
-    this.transform.reset();
+Group.prototype.reset = function (reversed) {
+    this.transform.reset(reversed);
 
     if (this.shapes) {
         for (var i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].reset();
+            this.shapes[i].reset(reversed);
         }
     }
     if (this.groups) {
         for (var j = 0; j < this.groups.length; j++) {
-            this.groups[j].reset();
+            this.groups[j].reset(reversed);
         }
     }
-    if (this.fill) this.fill.reset();
-    if (this.stroke) this.stroke.reset();
-    if (this.trim) this.trim.reset();
+    if (this.fill) this.fill.reset(reversed);
+    if (this.stroke) this.stroke.reset(reversed);
+    if (this.trim) this.trim.reset(reversed);
 };
 
 module.exports = Group;

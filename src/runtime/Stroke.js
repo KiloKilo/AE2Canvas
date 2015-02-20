@@ -44,11 +44,11 @@ Stroke.prototype.setStroke = function (ctx, time) {
     ctx.strokeStyle = strokeColor;
 };
 
-Stroke.prototype.reset = function () {
-    this.color.reset();
-    this.opacity.reset();
-    this.width.reset();
-    if (this.miterLimit) this.miterLimit.reset();
+Stroke.prototype.reset = function (reversed) {
+    this.color.reset(reversed);
+    this.opacity.reset(reversed);
+    this.width.reset(reversed);
+    if (this.miterLimit) this.miterLimit.reset(reversed);
 };
 
 module.exports = Stroke;
