@@ -13,7 +13,12 @@ Path.prototype.draw = function (ctx, time, trim) {
     var frame = this.getValue(time),
         vertices = frame.v;
 
-    if (trim) trim = this.getTrimValues(trim, frame);
+    if (trim) {
+        trim = this.getTrimValues(trim, frame);
+        if (trim.start === 0 && trim.end === 0) {
+            return;
+        }
+    }
 
     for (var j = 1; j < vertices.length; j++) {
 
@@ -44,17 +49,11 @@ Path.prototype.draw = function (ctx, time, trim) {
             if (j === 1) {
                 ctx.moveTo(lastVertex[4], lastVertex[5]);
             }
-
-            //ctx.fillStyle = "rgba(0,255,0,0.5)";
-            ////ctx.fillRect(ox, oy, 5, 5);
-            ////ctx.fillRect(xe, ye, 5, 5);
-            //ctx.fillRect(lastVertex[0], lastVertex[1], 5, 5);
-            //ctx.fillRect(nextVertex[2], nextVertex[3], 5, 5);
-
             ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
         }
     }
-    if (this.closed) {
+
+    if (!trim && this.closed) {
         ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
     }
 };
@@ -70,8 +69,17 @@ Path.prototype.getTrimValues = function (trim, frame) {
         startIndex: 0,
         endIndex  : 0,
         start     : 0,
-        end       : 1
+        end       : 0
     };
+
+    if (trim.start === 0) {
+        if (trim.end === 0) {
+            return actualTrim;
+        } else if (trim.end === 1) {
+            actualTrim.endIndex = frame.len.length;
+            return actualTrim;
+        }
+    }
 
     var totalLen = this.sumArray(frame.len),
         trimAtLen;
@@ -100,6 +108,13 @@ Path.prototype.getTrimValues = function (trim, frame) {
 };
 
 Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
+
+    if (from === 0 && to === 1) {
+        return {
+            start: lastVertex,
+            end  : nextVertex
+        };
+    }
 
     this.bezier = new Bezier([lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]]);
     this.bezier.getLength(len);

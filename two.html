@@ -148,7 +148,7 @@
         morph.loop = true;
         morph.isHD = isHD;
 
-        morph.start();
+        morph.play();
     });
 
     stats = new Stats();
@@ -164,7 +164,7 @@
     document.getElementsByTagName('body')[0].appendChild(stats.domElement);
 
     document.getElementById('canvas1').addEventListener('mouseenter', function () {
-        loader.start();
+        loader.play();
     });
 
     document.getElementById('canvas1').addEventListener('mouseleave', function () {
@@ -172,8 +172,8 @@
     });
 
     document.getElementById('start').addEventListener('click', function () {
-        loader.start();
-        morph.start();
+        loader.play();
+        morph.play();
     });
     document.getElementById('stop').addEventListener('click', function () {
         loader.stop();

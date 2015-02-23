@@ -162,16 +162,13 @@
             loop      : true,
             reversed  : location.hash.indexOf('reversed') > -1,
             onComplete: function () {
-//                console.log('complete', this, input);
             }
         });
         document.getElementById('canvas1').appendChild(ani1.canvas);
-//        ani1.play();
-//        setTimeout(createAni, 500);
     }
 
     window.addEventListener('resize', function () {
-        ani1.resize();
+        if(ani1) ani1.resize();
     });
 
     document.getElementsByTagName('body')[0].appendChild(stats.domElement);
@@ -185,7 +182,6 @@
     });
 
     document.getElementById('start').addEventListener('click', function () {
-        ani1.usePercentage = false;
         ani1.play();
     });
     document.getElementById('stop').addEventListener('click', function () {
@@ -208,7 +204,7 @@
     });
 
     window.addEventListener('wheel', function (event) {
-        step -= event.wheelDelta / 60;
+        step -= event.wheelDelta / 120;
         step = Math.max(0, Math.min(100, step));
         ani1.setStep(step);
     });

@@ -17,7 +17,7 @@
             margin: 0;
             text-align: center;
             overflow: hidden;
-            background: #000000;
+            background: #bbbbbb;
         }
 
         canvas {
@@ -121,7 +121,7 @@
                 loop      : false,
                 hd        : isHD,
                 onComplete: function () {
-                    this.destroy();
+//                    this.destroy();
                 }
             });
             anis.push(ani);
@@ -129,7 +129,7 @@
 
             canvasArr.push(ani.canvas);
 
-            ani.canvas.addEventListener('mouseenter', function () {
+            ani.canvas.addEventListener('mouseenter', function (event) {
                 for (var i = 0; i < canvasArr.length; i++) {
                     if (event.target === canvasArr[i]) {
                         anis[i].play();
@@ -138,7 +138,7 @@
                 }
             });
 
-            ani.canvas.addEventListener('touchstart', function () {
+            ani.canvas.addEventListener('touchstart', function (event) {
                 for (var i = 0; i < canvasArr.length; i++) {
                     if (event.target === canvasArr[i]) {
                         anis[i].play();

@@ -50,7 +50,6 @@ AnimatedPath.prototype.lerp = function (a, b, t) {
 };
 
 AnimatedPath.prototype.setEasing = function () {
-    console.log('set easing', this.lastFrame.easeOut, this.nextFrame.easeIn);
     if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
         this.easing = new BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
     } else {
