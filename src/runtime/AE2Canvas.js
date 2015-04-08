@@ -60,6 +60,7 @@ Animation.prototype = {
             this.startTime = this.time;
             //console.log(this.startTime, this.pausedTime);
             this.started = true;
+            console.log('test');
         }
     },
 

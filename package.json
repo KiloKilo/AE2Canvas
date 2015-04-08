@@ -2,6 +2,7 @@
   "name": "ae2canvas",
   "version": "1.0.0",
   "main": "ae2canvas.js",
+  "author": "Lukas Zgraggen <lukas.zgraggen@gmail.com>",
   "devDependencies": {
     "browserify-derequire": "*",
     "grunt-contrib-watch": "*",

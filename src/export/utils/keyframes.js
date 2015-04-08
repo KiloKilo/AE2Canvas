@@ -22,7 +22,7 @@ function normalizeKeyframes(frames) {
             continue;
         }
 
-        diff = getValueDifference(lastKey, key);
+        diff = lastKey.len ? lastKey.len : getValueDifference(lastKey, key);
 
         var sign = 1;
         if (diff < 0.01 && diff > -0.01) {

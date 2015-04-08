@@ -27,7 +27,11 @@
             left: 0;
             width: 1100px;
             max-width: 100%;
-            background: #000000;
+            background: url(img/grid.png) #ffffff;
+        }
+
+        canvas {
+            width: 100%;
         }
 
         .btn-group {
@@ -165,10 +169,11 @@
             }
         });
         document.getElementById('canvas1').appendChild(ani1.canvas);
+        ani1.resize();
     }
 
     window.addEventListener('resize', function () {
-        if(ani1) ani1.resize();
+        if (ani1) ani1.resize();
     });
 
     document.getElementsByTagName('body')[0].appendChild(stats.domElement);

@@ -15,7 +15,9 @@ function getPath(data) {
     var numKeys = data.numKeys;
 
     if (numKeys > 1) {
+
         path.isAnimated = true;
+
         for (var i = 1; i <= numKeys; i++) {
             var obj = {};
 
@@ -41,7 +43,9 @@ function getPath(data) {
 
             path.frames.push(obj);
         }
+
         path.frames = normalizePathKeyframes(path.frames);
+
     }
     else {
         var obj = {};
