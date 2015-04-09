@@ -44,12 +44,11 @@ fetchJSONFile('animation.json', function (result) {
 });
 ```
 You can pass the following options to the constructor, or set it later on the instance:
-
-*`canvas {DOM Node}` if this is empty, AE2Canvas will create a canvas for you
-*`loop {Boolean}` set this to `true` to loop the animation
-*`loop {Boolean}` set this to `true` to render for high dpi devices
-*`reversed {Boolean}` set this to `true` to run the animation backwards
-*`onComplete {Function}` Function which will be called when the animation finishes
+* canvas {DOM Node} if this is empty, AE2Canvas will create a canvas for you
+* loop {Boolean} set this to `true` to loop the animation
+* hd {Boolean} set this to `true` to render for high dpi devices
+* reversed {Boolean} set this to `true` to run the animation backwards
+* onComplete {Function} Function which will be called when the animation finishes
 
 If you didn't pass a canvas to the constructor, you have to add the canvas manually to the DOM.
 If your canvas has a different size than your animation, you can call resize on the instance to scale the animation accordingly.
