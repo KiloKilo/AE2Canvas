@@ -24,10 +24,10 @@ AE2Canvas contains an ExtendScript File to save the animation data to JSON and a
 
 ## Download
 ### Export Script
-[ae2canvas-export.jsx]()
+[ae2canvas-export.jsx](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas-export.jsx)
 ### Runtime
-[ae2canvas.js]()
-[ae2canvas.min.js]()
+[ae2canvas.js](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas.js)
+[ae2canvas.min.js](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas.min.js)
 ## Usage
 Open in After Effects the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
 
@@ -76,4 +76,7 @@ An animation instance has the following control functions:
 ###Markers
 Markers can be set in After Effects as composition marker. You can add a text to the comments field to access this marker later via `gotoAndPlay()` or `gotoAndStop()`.
 If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this index will be used.
+
+##Example
+[example](http://ascii-husky.github.io/ae2canvas/index.html)
 
