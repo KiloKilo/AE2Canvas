@@ -1,7 +1,7 @@
 'use strict';
 
 var Path = require('./Path'),
-    BezierEasing = require('../lib/BezierEasing');
+    BezierEasing = require('./BezierEasing');
 
 function AnimatedPath(data) {
     Path.call(this, data);
