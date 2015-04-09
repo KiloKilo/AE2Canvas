@@ -1,9 +1,7 @@
 ae2canvas
 =========
 
-AE2Canvas is HTML Canvas 2d renderer for After Effects Shape Layers.
-
-The engine contains a script for saving the animation data to JSON and a runtime to play these animations in the browser.
+AE2Canvas is a HTML Canvas 2d renderer for After Effects Shape Layers.
 
 AE2Canvas is an alpha state and supports atm only a subset of the functionality of shape layers.
 
@@ -72,7 +70,7 @@ An animation instance has the following control functions:
 * `stop()` stop the animation set the time back to start and render the first frame
 * `setStep(Number)` pass a number between 0 and 100 to render the frame at this position
 * `gotoAndPlay(String or Number)` pass a in an identifier to jump to the marker and play the animation from there
-* `gotoAndStop(String or Number)` pass a in an identifier to jump to the marker render this frame and stop the animation
+* `gotoAndStop(String or Number)` pass a in an identifier to jump to the marker, render this frame and stop the animation
 
 ###Markers
 Markers can be set in After Effects as composition marker. You can add a text to the comments field to access this marker later via `gotoAndPlay()` or `gotoAndStop()`.
