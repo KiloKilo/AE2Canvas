@@ -79,8 +79,16 @@ If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this in
 ##Example
 [example 1](http://ascii-husky.github.io/ae2canvas/example1.html)
 
+[After Effects Project]
+
+
 [example 2](http://ascii-husky.github.io/ae2canvas/example2.html)
 
+[After Effects Project]
+
+
 [example 3](http://ascii-husky.github.io/ae2canvas/example3.html)
+
+[After Effects Project]
 
 
