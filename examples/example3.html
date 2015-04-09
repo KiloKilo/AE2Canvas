@@ -148,14 +148,13 @@
 
 
     //load the animation
-    fetchJSONFile('animation.json', function (result) {
+    fetchJSONFile('animation3.json', function (result) {
 
         // create the animation
         animation = new AE2Canvas.Animation({
             data      : result,
             hd        : isHD,
             loop      : true,
-            reversed  : location.hash.indexOf('reversed') > -1,
             onComplete: function () {
             }
         });
@@ -168,7 +167,7 @@
 
         //bind the resize function to the window resize event
         window.addEventListener('resize', function () {
-            if (animation) animation.resize();
+            animation.resize();
         });
 
         //buttons
