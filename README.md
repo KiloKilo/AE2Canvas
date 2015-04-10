@@ -1,4 +1,4 @@
 ae2canvas
 =========
 
-ae2canvas is a tool for After Effects to export complex shape animations into html canvas animations.
+AE2Canvas is HTML Canvas 2d renderer for After Effects Shape Layers.

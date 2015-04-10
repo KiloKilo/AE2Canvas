@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+            font-family: "helvetica neue", helvetica, arial, verdana;
+            font-size: 16px;
+        }
+
+        body {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        #canvasWrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto 30px auto;
+        }
+
+        button, label {
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        canvas {
+            width: 100%;
+        }
+
+        #slider {
+            display: block;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 600px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="canvasWrapper"></div>
+<button id="play" type="button">Play</button>
+<button id="stop" type="button">Stop</button>
+<button id="pause" type="button">Pause</button>
+<button id="gotoAndPlay" type="button">gotoAndPlay</button>
+<button id="gotoAndStop" type="button">gotoAndStop</button>
+<input id="slider" type="range" min="0" max="100" step="1" value="0">
+<input id="reversed" type="checkbox"><label for="reversed">Reversed</label>
+
+
+<script>
+    (function () {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame =
+                    window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function (callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function () {
+                            callback(currTime + timeToCall);
+                        },
+                        timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function (id) {
+                clearTimeout(id);
+            };
+    }());
+
+    (function () {
+
+        // prepare base perf object
+        if (typeof window.performance === 'undefined') {
+            window.performance = {};
+        }
+
+        if (!window.performance.now) {
+
+            var nowOffset = Date.now();
+
+            if (performance.timing && performance.timing.navigationStart) {
+                nowOffset = performance.timing.navigationStart
+            }
+
+            window.performance.now = function now() {
+                return Date.now() - nowOffset;
+            }
+        }
+
+    })();
+</script>
+<script src="ae2canvas.min.js"></script>
+<script>
+    var animation;
+
+    var slider = document.getElementById('slider');
+    var canvasWrapper = document.getElementById('canvasWrapper');
+    var playButton = document.getElementById('play');
+    var stopButton = document.getElementById('stop');
+    var pauseButton = document.getElementById('pause');
+    var gotoAndPlayButton = document.getElementById('gotoAndPlay');
+    var gotoAndStopButton = document.getElementById('gotoAndStop');
+    var checkbox = document.getElementById('reversed');
+
+    var step = 0;
+    var isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches
+    || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches))
+    || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
+    function fetchJSONFile(path, callback) {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    var data = JSON.parse(httpRequest.responseText);
+                    if (callback) callback(data);
+                }
+            }
+        };
+        httpRequest.open('GET', path);
+        httpRequest.send();
+    }
+
+    function loop(time) {
+        requestAnimationFrame(loop);
+        if (!time) time = performance.now();
+        AE2Canvas.update(time);
+        if (animation) slider.value = animation.getStep();
+    }
+
+    //kick of the render loop
+    loop();
+
+
+    //load the animation
+    fetchJSONFile('animation2.json', function (result) {
+
+        // create the animation
+        animation = new AE2Canvas.Animation({
+            data      : result,
+            hd        : isHD,
+            loop      : true,
+            onComplete: function () {
+            }
+        });
+
+        // add the canvas to the dom
+        canvasWrapper.appendChild(animation.canvas);
+
+        //trigger a resize for correct scaling
+        animation.resize();
+
+        //bind the resize function to the window resize event
+        window.addEventListener('resize', function () {
+            animation.resize();
+        });
+
+        //buttons
+        playButton.addEventListener('click', function () {
+            animation.play();
+        });
+
+        stopButton.addEventListener('click', function () {
+            animation.stop();
+        });
+
+        pauseButton.addEventListener('click', function () {
+            animation.pause();
+        });
+
+        //set animationsteps manually
+        slider.addEventListener('input', function () {
+            animation.setStep(this.value);
+        });
+
+        checkbox.addEventListener('change', function () {
+            animation.reversed = checkbox.checked;
+        });
+
+        gotoAndPlayButton.addEventListener('click', function () {
+            animation.gotoAndPlay('example marker name');
+        });
+
+        gotoAndStopButton.addEventListener('click', function () {
+            animation.gotoAndStop('example marker name');
+        });
+
+    });
+
+</script>
+</body>
+</html>
