@@ -28,7 +28,7 @@ AE2Canvas contains an ExtendScript file to save the animation data to JSON and a
 
 [ae2canvas.min.js](https://raw.githubusercontent.com/futurecom/ae2canvas/master/build/ae2canvas.min.js)
 ## Usage
-In After Effects open and select the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
+In After Effects, open and select the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
 
 Save the the file as JSON.
 
@@ -81,14 +81,14 @@ If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this in
 #####Example 1
 [Html](http://futurecom.github.io/ae2canvas/example1.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example1.aep)
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example1.aep)
 
 #####Example 2
 [Html](http://futurecom.github.io/ae2canvas/example2.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example2.aep)
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example2.aep)
 
 #####Example 3
 [Html](http://futurecom.github.io/ae2canvas/example3.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example3.aep)
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example3.aep)
