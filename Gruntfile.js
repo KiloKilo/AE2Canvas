@@ -50,10 +50,10 @@ module.exports = function (grunt) {
             }
         },
         concat          : {
-            options: {
-                separator: ';'
-            },
-            dist   : {
+            //options: {
+            //    separator: ''
+            //},
+            dist: {
                 src : [
                     'src/export/utils/json2.js',
                     'src/export/utils/utils.js',
@@ -77,7 +77,6 @@ module.exports = function (grunt) {
                     'src/export/element/polystar.js',
 
                     'src/export/element/fill.js',
-                    'src/export/element/gradient.js',
                     'src/export/element/stroke.js',
 
                     'src/export/element/merge.js',
@@ -86,10 +85,6 @@ module.exports = function (grunt) {
                     'src/export/property/property.js',
                     'src/export/property/staticProperty.js',
                     'src/export/property/animatedProperty.js',
-
-                    'src/export/optimize/optimize.js',
-                    'src/export/optimize/groupOptimize.js',
-                    'src/export/optimize/vectorTrimOptimize.js',
 
                     'src/export/main.jsx'
                 ],

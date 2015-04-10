@@ -1,6 +1,4 @@
 ﻿function getPosition(data, transform) {
-    if (!data instanceof PropertyGroup) return null;
-
     var obj;
 
     if (data.property('ADBE Position') instanceof Property) {

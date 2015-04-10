@@ -14,7 +14,6 @@ function Trim(data) {
 }
 
 Trim.prototype.getTrim = function (time) {
-
     var start = this.start ? this.start.getValue(time) : 0,
         end = this.end ? this.end.getValue(time) : 1;
 

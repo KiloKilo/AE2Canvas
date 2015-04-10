@@ -1,6 +1,4 @@
-﻿'use strict';
-
-function getMotionpath(frames) {
+﻿function getMotionpath(frames) {
 
     for (var i = 1; i < frames.length; i++) {
 

@@ -1,10 +1,7 @@
 ﻿function getPolystar(data) {
-
-    if (!(data instanceof PropertyGroup)) return null;
-
     var polystar = {};
     polystar.name = data.name;
-    polystar.index = data.propertyIndex;
+    //polystar.index = data.propertyIndex;
     polystar.type = 'polystar';
     polystar.starType = data.property('ADBE Vector Star Type').value;
 
@@ -30,7 +27,7 @@
         polystar.rotation = normalizeKeyframes(polystar.rotation);
     }
 
-    var innerRoundness = data.property('ADBE Vector Star Inner Roundess');// is in AE called Roundess not Roundness...
+    var innerRoundness = data.property('ADBE Vector Star Inner Roundess'); // is in AE called Roundess not Roundness...
     if (innerRoundness.isTimeVarying || innerRoundness.value !== 0) {
         polystar.innerRoundness = getProperty(innerRoundness);
         polystar.innerRoundness = normalizeKeyframes(polystar.innerRoundness);

@@ -1,8 +1,4 @@
-﻿'use strict';
-
-function getTransform(data) {
-    if (!(data instanceof PropertyGroup)) return null;
-
+﻿function getTransform(data) {
     var transform = {};
 
     getAnchor(data, transform);
@@ -12,9 +8,6 @@ function getTransform(data) {
     getSkewAxis(data, transform);
     getRotation(data, transform);
     getOpacity(data, transform);
-
-//    if (!isEmpty(transform)) return transform;
-//    else return null;
 
     return transform;
 }

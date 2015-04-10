@@ -1,6 +1,4 @@
 function getSkewAxis(data, transform) {
-    if (!data instanceof PropertyGroup) return null;
-
     var obj;
 
     if (data.property('ADBE Vector Skew Axis')instanceof Property) {

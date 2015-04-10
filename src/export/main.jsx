@@ -20,7 +20,6 @@
 #include 'element/polystar.js'
 
 #include 'element/fill.js'
-#include 'element/gradient.js'
 #include 'element/stroke.js'
 
 #include 'element/merge.js'
@@ -29,11 +28,6 @@
 #include 'property/property.js'
 #include 'property/staticProperty.js'
 #include 'property/animatedProperty.js'
-
-#include 'optimize/optimize.js'
-#include 'optimize/groupOptimize.js'
-#include 'optimize/vectorTrimOptimize.js'
-
 
 function start() {
 

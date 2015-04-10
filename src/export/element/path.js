@@ -1,13 +1,9 @@
-﻿'use strict';
-
-function getPath(data) {
-    if (!(data instanceof PropertyGroup)) return null;
-
+﻿function getPath(data) {
     data = data.property('ADBE Vector Shape');
 
     var path = {};
     path.name = data.name;
-    path.index = data.propertyIndex;
+    //path.index = data.propertyIndex;
     path.type = 'path';
     path.closed = data.value.closed;
     path.frames = [];

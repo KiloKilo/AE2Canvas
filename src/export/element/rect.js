@@ -1,10 +1,8 @@
 ﻿function getRect(data) {
 
-    if (!(data instanceof PropertyGroup)) return null;
-
     var rect = {};
     rect.name = data.name;
-    rect.index = data.propertyIndex;
+    //rect.index = data.propertyIndex;
     rect.type = 'rect';
 
     rect.size = getProperty(data.property('ADBE Vector Rect Size'));

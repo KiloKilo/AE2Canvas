@@ -1,5 +1,3 @@
-'use strict';
-
 function normalizeKeyframes(frames) {
 
     for (var i = 1; i < frames.length; i++) {

@@ -28,7 +28,7 @@ AE2Canvas contains an ExtendScript File to save the animation data to JSON and a
 
 [ae2canvas.min.js](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas.min.js)
 ## Usage
-Open in After Effects the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
+In After Effects open and select the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
 
 Save the the file as JSON.
 

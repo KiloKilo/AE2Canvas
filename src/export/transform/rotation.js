@@ -1,6 +1,4 @@
 function getRotation(data, transform) {
-    if (!data instanceof PropertyGroup) return null;
-
     var obj;
 
     if (data.property('ADBE Rotate Z')instanceof Property) {

@@ -58,21 +58,17 @@ Animation.prototype = {
     play: function () {
         if (!this.started) {
             this.startTime = this.time;
-            //console.log(this.startTime, this.pausedTime);
             this.started = true;
-            console.log('test');
         }
     },
 
     stop: function () {
-        console.log('stop');
         this.reset(this.reversed);
         this.started = false;
         this.drawFrame = true;
     },
 
     pause: function () {
-        console.log('pause');
         if (this.started) {
             this.pausedTime = this.time - this.startTime + this.pausedTime;
             this.started = false;
@@ -80,7 +76,6 @@ Animation.prototype = {
     },
 
     gotoAndPlay: function (id) {
-        console.log('gotoAndPlay');
         var marker = this.getMarker(id);
         if (marker) {
             this.pausedTime = marker.time;
@@ -90,7 +85,6 @@ Animation.prototype = {
     },
 
     gotoAndStop: function (id) {
-        console.log('gotoAndStop');
         var marker = this.getMarker(id);
         if (marker) {
             this.started = false;
@@ -110,12 +104,10 @@ Animation.prototype = {
                 }
             }
         }
-
         console.warn('Marker not found');
     },
 
     setStep: function (step) {
-        console.log('setStep');
         this.started = false;
         this.compTime = step * this.timeRatio;
         this.pausedTime = this.compTime;
@@ -123,17 +115,14 @@ Animation.prototype = {
     },
 
     getStep: function () {
-        //console.log('getStep');
         return Math.floor(this.compTime / this.timeRatio);
     },
 
     update: function (time) {
         this.time = time;
         if (this.started) {
-            //console.log(this.time - this.startTime + this.pausedTime);
             this.compTime = this.time - this.startTime + this.pausedTime;
             if (this.reversed) this.compTime = this.duration - (this.time - this.startTime + this.pausedTime);
-            //console.log(this.compTime);
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
                 this.started = false;
                 this.onComplete();
@@ -145,7 +134,6 @@ Animation.prototype = {
                 this.draw(this.compTime);
             }
         } else if (this.drawFrame) {
-            console.log(this.compTime);
             this.drawFrame = false;
             this.draw(this.compTime);
         }
@@ -167,11 +155,9 @@ Animation.prototype = {
         for (var i = 0; i < this.groups.length; i++) {
             this.groups[i].reset(this.reversed);
         }
-        console.log('reset', this.compTime);
     },
 
     destroy: function () {
-        console.log('destroy');
         this.started = false;
         this.onComplete = null;
         var i = _animations.indexOf(this);
@@ -190,6 +176,7 @@ Animation.prototype = {
             this.canvas.height = width / this.ratio * factor;
             this.scale = width / this.baseWidth * factor;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
+            this.drawFrame = true;
         }
     }
 };

@@ -1,9 +1,4 @@
-﻿'use strict';
-
-function getComp(data) {
-
-    if (!(data instanceof CompItem))return null;
-
+﻿function getComp(data) {
     var comp = {};
     comp.groups = [];
     comp.duration = data.duration * 1000;
@@ -52,7 +47,7 @@ function getComp(data) {
             });
         }
 
-        tempNull.remove();
+        tempNull.source.remove();
 
         return markers;
     }

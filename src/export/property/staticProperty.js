@@ -1,5 +1,4 @@
 function getStaticProperty(data, split) {
-
     var arr = [];
 
     if (data.value instanceof Array && typeof split === 'number') {
@@ -13,6 +12,5 @@ function getStaticProperty(data, split) {
             v: data.value
         });
     }
-
     return arr;
 }

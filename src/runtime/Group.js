@@ -14,7 +14,6 @@ var Stroke = require('./Stroke'),
 function Group(data, bufferCtx, parentIn, parentOut) {
 
     this.name = data.name;
-    this.index = data.index;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
 

@@ -1,7 +1,5 @@
 function getVectorTrim(data) {
 
-    if (!data) return null;
-
     var trim = {};
     trim.index = data.propertyIndex;
     trim.type = data.property('ADBE Vector Trim Type').value;
@@ -12,8 +10,6 @@ function getVectorTrim(data) {
         trim.start = getProperty(start);
         trim.start = normalizeKeyframes(trim.start);
         trim.start = divideValue(trim.start, 100);
-        //trim.start = clampValue(trim.start, 0.01, 0.99);
-        //trim.start = clampValue(trim.start, 0, 1);
     }
 
     var end = data.property('ADBE Vector Trim End');
@@ -21,8 +17,6 @@ function getVectorTrim(data) {
         trim.end = getProperty(end);
         trim.end = normalizeKeyframes(trim.end);
         trim.end = divideValue(trim.end, 100);
-        //trim.end = clampValue(trim.end, 0.01, 0.99);
-        //trim.end = clampValue(trim.end, 0, 1);
     }
 
     //not implemented
@@ -33,7 +27,5 @@ function getVectorTrim(data) {
     //    trim.offset = divideValue(trim.offset, 100);
     //    trim.offset = capValue(trim.offset, 0.01, 0.99);
     //}
-
     return trim;
-
 }

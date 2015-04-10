@@ -1,6 +1,4 @@
 function getOpacity(data, transform) {
-    if (!data instanceof PropertyGroup) return null;
-
     var obj;
 
     if (data.property('ADBE Opacity')instanceof Property) {

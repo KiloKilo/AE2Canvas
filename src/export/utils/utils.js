@@ -1,5 +1,3 @@
-'use strict';
-
 function removeZValue(frames) {
     for (var i = 0; i < frames.length; i++) {
         if (frames[i].v.length > 2) {
