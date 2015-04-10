@@ -1,6 +1,6 @@
 'use strict';
 
-function normalizeKeyframes(frames, dimension) {
+function normalizeKeyframes(frames) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -10,10 +10,8 @@ function normalizeKeyframes(frames, dimension) {
             diff,
             easeOut, easeIn,
             normInfluenceIn, normSpeedIn,
-            normInfluenceOut, normSpeedOut,
-            ratio;
+            normInfluenceOut, normSpeedOut;
 
-        //break if lastkey and this key easing is both linear
         if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
             delete lastKey.outType;
             delete lastKey.easeOut;
@@ -24,20 +22,20 @@ function normalizeKeyframes(frames, dimension) {
             continue;
         }
 
-        diff = getValueDifference(lastKey, key);
+        diff = lastKey.len ? lastKey.len : getValueDifference(lastKey, key);
 
-        //FIXME hackiest shit ever :)
-        // fix problem if lastKey.v === key.v, but has easing
-        //TODO use modulo
+        var sign = 1;
         if (diff < 0.01 && diff > -0.01) {
             diff = 0.01;
             if (key.v instanceof Array) {
                 for (var j = 0; j < key.v.length; j++) {
-                    key.v[j] = lastKey.v[j] + 0.01;
+                    key.v[j] = lastKey.v[j] + 0.01 * sign;
                 }
             } else {
-                key.v = lastKey.v + 0.01;
+                key.v = lastKey.v + 0.01 * sign;
             }
+
+            sign = sign * -1;
         }
 
         var averageTempo = diff / duration * 1000;
@@ -50,17 +48,9 @@ function normalizeKeyframes(frames, dimension) {
             easeIn[0] = Math.round((1 - normInfluenceIn) * 1000) / 1000;
             easeIn[1] = Math.round((1 - normSpeedIn) * 1000) / 1000;
 
-            //dimension separated position
-            if (key.inTangent && !key.motionpath && typeof dimension === 'number') {
-                ratio = key.inTangent[dimension] / diff;
-                easeIn[0] = 0.000001;
-                easeIn[1] = 1 + ratio;
-            }
-
             key.easeIn = easeIn;
         }
 
-        //easeOut
         if (lastKey.easeOut) {
             normInfluenceOut = lastKey.easeOut[0] / 100;
             normSpeedOut = lastKey.easeOut[1] / averageTempo * normInfluenceOut;
@@ -69,29 +59,29 @@ function normalizeKeyframes(frames, dimension) {
             easeOut[0] = Math.round(normInfluenceOut * 1000) / 1000;
             easeOut[1] = Math.round(normSpeedOut * 1000) / 1000;
 
-            //dimension separated position
-            if (lastKey.outTangent && !lastKey.motionpath && typeof dimension === 'number') {
-
-                ratio = lastKey.outTangent[dimension] / diff;
-                easeOut[0] = 0.000001;
-                easeOut[1] = ratio;
-                delete lastKey.inTangent;
-                delete lastKey.outTangent;
-            }
-
             lastKey.easeOut = easeOut;
         }
 
-        //set default values if not set
         if (lastKey.easeOut && !key.easeIn) {
             key.easeIn = [0.16667, 1];
         } else if (key.easeIn && !lastKey.easeOut) {
             lastKey.easeOut = [0.16667, 0];
         }
 
-        //TODO remove in- & outType
+        if (lastKey.easeOut[0] === lastKey.easeOut[1] && key.easeIn[0] === key.easeIn[1]) {
+            delete lastKey.easeOut;
+            delete key.easeIn;
+        }
+
         if (key.inType) delete key.inType;
         if (key.outType) delete key.outType;
+        if (key.inTangent) delete key.inTangent;
+        if (key.outTangent) delete key.outTangent;
+
+        if (lastKey.inType) delete lastKey.inType;
+        if (lastKey.outType) delete lastKey.outType;
+        if (lastKey.inTangent) delete lastKey.inTangent;
+        if (lastKey.outTangent) delete lastKey.outTangent;
     }
 
     return frames;

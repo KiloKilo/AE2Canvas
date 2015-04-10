@@ -1,7 +1,7 @@
 'use strict';
 
 var Property = require('./Property'),
-    BezierEasing = require('../lib/BezierEasing');
+    BezierEasing = require('./BezierEasing');
 
 function AnimatedProperty(data) {
     Property.call(this, data);

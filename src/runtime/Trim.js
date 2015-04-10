@@ -15,18 +15,18 @@ function Trim(data) {
 
 Trim.prototype.getTrim = function (time) {
 
-    var start = this.start ? this.start.getValue(time) : 0.01,
-        end = this.end ? this.end.getValue(time) : 0.99;
+    var start = this.start ? this.start.getValue(time) : 0,
+        end = this.end ? this.end.getValue(time) : 1;
 
     var trim = {
         start: Math.min(start, end),
         end  : Math.max(start, end)
     };
 
-    if (trim.start !== 0.01 || trim.end !== 0.99) {
-        return trim;
-    } else {
+    if (trim.start === 0 && trim.end === 1) {
         return null;
+    } else {
+        return trim;
     }
 };
 

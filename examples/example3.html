@@ -3,33 +3,57 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
     <style>
         html {
             width: 100%;
             height: 100%;
+            font-family: "helvetica neue", helvetica, arial, verdana;
+            font-size: 16px;
         }
 
         body {
             width: 100%;
-            height: 100%;
             margin: 0;
             text-align: center;
-            overflow: hidden;
-            background: #000000;
+            background: #ffffff;
+        }
+
+        #canvasWrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto 30px auto;
+        }
+
+        button, label {
+            font-family: inherit;
+            font-size: 16px;
         }
 
         canvas {
-            cursor: pointer;
-            width: 5%;
-            max-width: 100%;
-            float: left;
-            margin: 0 10px 10px 0;
+            width: 100%;
         }
+
+        #slider {
+            display: block;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 600px;
+        }
+
     </style>
 </head>
 <body>
+<div id="canvasWrapper"></div>
+<button id="play" type="button">Play</button>
+<button id="stop" type="button">Stop</button>
+<button id="pause" type="button">Pause</button>
+<button id="gotoAndPlay" type="button">gotoAndPlay</button>
+<button id="gotoAndStop" type="button">gotoAndStop</button>
+<input id="slider" type="range" min="0" max="100" step="1" value="0">
+<input id="reversed" type="checkbox"><label for="reversed">Reversed</label>
+
+
 <script>
     (function () {
         var lastTime = 0;
@@ -60,7 +84,7 @@
 
     (function () {
 
-// prepare base perf object
+        // prepare base perf object
         if (typeof window.performance === 'undefined') {
             window.performance = {};
         }
@@ -76,17 +100,24 @@
             window.performance.now = function now() {
                 return Date.now() - nowOffset;
             }
-
         }
 
     })();
 </script>
-<script src="src/lib/stats.min.js"></script>
-<script src="build/ae2canvas.js"></script>
+<script src="../build/ae2canvas.min.js"></script>
 <script>
-    var stats, anis = [], canvasArr = [];
-    var step = 0;
+    var animation;
 
+    var slider = document.getElementById('slider');
+    var canvasWrapper = document.getElementById('canvasWrapper');
+    var playButton = document.getElementById('play');
+    var stopButton = document.getElementById('stop');
+    var pauseButton = document.getElementById('pause');
+    var gotoAndPlayButton = document.getElementById('gotoAndPlay');
+    var gotoAndStopButton = document.getElementById('gotoAndStop');
+    var checkbox = document.getElementById('reversed');
+
+    var step = 0;
     var isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches
     || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches))
     || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
@@ -109,59 +140,67 @@
         requestAnimationFrame(loop);
         if (!time) time = performance.now();
         AE2Canvas.update(time);
-        stats.update();
+        if (animation) slider.value = animation.getStep();
     }
 
-    fetchJSONFile('json/loader.json', function (data) {
-
-        for (var i = 0; i < 200; i++) {
-
-            var ani = new AE2Canvas.Animation({
-                data      : data,
-                loop      : false,
-                hd        : isHD,
-                onComplete: function () {
-                    this.destroy();
-                }
-            });
-            anis.push(ani);
-            document.getElementsByTagName('body')[0].appendChild(ani.canvas);
-
-            canvasArr.push(ani.canvas);
-
-            ani.canvas.addEventListener('mouseenter', function () {
-                for (var i = 0; i < canvasArr.length; i++) {
-                    if (event.target === canvasArr[i]) {
-                        anis[i].play();
-                        break;
-                    }
-                }
-            });
-
-            ani.canvas.addEventListener('touchstart', function () {
-                for (var i = 0; i < canvasArr.length; i++) {
-                    if (event.target === canvasArr[i]) {
-                        anis[i].play();
-                        break;
-                    }
-                }
-            });
-
-        }
-    });
-
-    stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0';
-    stats.domElement.style.left = '0';
-
-    window.addEventListener('resize', function () {
-        ani1.resize();
-    });
-
-    document.getElementsByTagName('body')[0].appendChild(stats.domElement);
-
+    //kick of the render loop
     loop();
+
+
+    //load the animation
+    fetchJSONFile('animation3.json', function (result) {
+
+        // create the animation
+        animation = new AE2Canvas.Animation({
+            data      : result,
+            hd        : isHD,
+            loop      : true,
+            onComplete: function () {
+            }
+        });
+
+        // add the canvas to the dom
+        canvasWrapper.appendChild(animation.canvas);
+
+        //trigger a resize for correct scaling
+        animation.resize();
+
+        //bind the resize function to the window resize event
+        window.addEventListener('resize', function () {
+            animation.resize();
+        });
+
+        //buttons
+        playButton.addEventListener('click', function () {
+            animation.play();
+        });
+
+        stopButton.addEventListener('click', function () {
+            animation.stop();
+        });
+
+        pauseButton.addEventListener('click', function () {
+            animation.pause();
+        });
+
+        //set animationsteps manually
+        slider.addEventListener('input', function () {
+            animation.setStep(this.value);
+        });
+
+        checkbox.addEventListener('change', function () {
+            animation.reversed = checkbox.checked;
+        });
+
+        gotoAndPlayButton.addEventListener('click', function () {
+            animation.gotoAndPlay('example marker name');
+        });
+
+        gotoAndStopButton.addEventListener('click', function () {
+            animation.gotoAndStop('example marker name');
+        });
+
+    });
 
 </script>
 </body>
