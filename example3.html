@@ -45,7 +45,7 @@
 </head>
 <body>
 <div id="canvasWrapper"></div>
-<button id="start" type="button">Start</button>
+<button id="play" type="button">Play</button>
 <button id="stop" type="button">Stop</button>
 <button id="pause" type="button">Pause</button>
 <button id="gotoAndPlay" type="button">gotoAndPlay</button>
@@ -110,7 +110,7 @@
 
     var slider = document.getElementById('slider');
     var canvasWrapper = document.getElementById('canvasWrapper');
-    var startButton = document.getElementById('start');
+    var playButton = document.getElementById('play');
     var stopButton = document.getElementById('stop');
     var pauseButton = document.getElementById('pause');
     var gotoAndPlayButton = document.getElementById('gotoAndPlay');
@@ -171,7 +171,7 @@
         });
 
         //buttons
-        startButton.addEventListener('click', function () {
+        playButton.addEventListener('click', function () {
             animation.play();
         });
 
