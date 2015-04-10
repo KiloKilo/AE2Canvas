@@ -77,18 +77,18 @@ Markers can be set in After Effects as composition marker. You can add a text to
 If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this index will be used.
 
 ##Example
-[example 1](http://futurecom.github.io/ae2canvas/example1.html)
+
+#####Example 1
+[Html](http://futurecom.github.io/ae2canvas/example1.html)
 
 [After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example1.aep)
 
-
-[example 2](http://futurecom.github.io/ae2canvas/example2.html)
+#####Example 2
+[Html](http://futurecom.github.io/ae2canvas/example2.html)
 
 [After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example2.aep)
 
-
-[example 3](http://futurecom.github.io/ae2canvas/example3.html)
+#####Example 3
+[Html](http://futurecom.github.io/ae2canvas/example3.html)
 
 [After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example3.aep)
-
-
