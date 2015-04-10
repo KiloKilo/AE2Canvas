@@ -1,9 +1,9 @@
-ae2canvas
+AE2Canvas
 =========
 
-AE2Canvas is a HTML Canvas 2d renderer for After Effects Shape Layers.
+AE2Canvas is a HTML Canvas 2D renderer for After Effects Shape Layers.
 
-AE2Canvas is an alpha state and supports atm only a subset of the functionality of shape layers.
+AE2Canvas is in an alpha state and supports at the moment only a subset of the functionality of shape layers.
 
 The following properties/objects are supported:
 * All Transform Properties
@@ -18,15 +18,15 @@ The following properties/objects are supported:
 * Merge (partially)
 * Trim Paths (only for Path)
 
-AE2Canvas contains an ExtendScript File to save the animation data to JSON and a Javascript runtime to play the animation in the Browser
+AE2Canvas contains an ExtendScript file to save the animation data to JSON and a Javascript runtime to play the animation in the Browser.
 
 ## Download
 ### Export Script
-[ae2canvas-export.jsx](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas-export.jsx)
+[ae2canvas-export.jsx](https://raw.githubusercontent.com/futurecom/ae2canvas/master/build/ae2canvas-export.jsx)
 ### Runtime
-[ae2canvas.js](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas.js)
+[ae2canvas.js](https://raw.githubusercontent.com/futurecom/ae2canvas/master/build/ae2canvas.js)
 
-[ae2canvas.min.js](https://raw.githubusercontent.com/ascii-husky/ae2canvas/master/build/ae2canvas.min.js)
+[ae2canvas.min.js](https://raw.githubusercontent.com/futurecom/ae2canvas/master/build/ae2canvas.min.js)
 ## Usage
 In After Effects open and select the composition you want to export and run the file `ae2canvas-export.jsx` from the menu: `File -> Scripts -> Run Script File...`.
 
@@ -77,18 +77,18 @@ Markers can be set in After Effects as composition marker. You can add a text to
 If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this index will be used.
 
 ##Example
-[example 1](http://ascii-husky.github.io/ae2canvas/example1.html)
 
-[After Effects Project](https://github.com/ascii-husky/ae2canvas/raw/master/ae/example1.aep)
+#####Example 1
+[Html](http://futurecom.github.io/ae2canvas/example1.html)
 
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example1.aep)
 
-[example 2](http://ascii-husky.github.io/ae2canvas/example2.html)
+#####Example 2
+[Html](http://futurecom.github.io/ae2canvas/example2.html)
 
-[After Effects Project](https://github.com/ascii-husky/ae2canvas/raw/master/ae/example2.aep)
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example2.aep)
 
+#####Example 3
+[Html](http://futurecom.github.io/ae2canvas/example3.html)
 
-[example 3](http://ascii-husky.github.io/ae2canvas/example3.html)
-
-[After Effects Project](https://github.com/ascii-husky/ae2canvas/raw/master/ae/example3.aep)
-
-
+[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/ae/example3.aep)
