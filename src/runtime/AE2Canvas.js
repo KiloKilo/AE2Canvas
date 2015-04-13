@@ -202,7 +202,6 @@ Animation.prototype = {
         } else if (!this.started) {
             this.compTime = this.reversed ? this.duration : 0;
         }
-        console.log('----------', this.compTime);
         this.setKeyframes(this.compTime);
     }
 };
