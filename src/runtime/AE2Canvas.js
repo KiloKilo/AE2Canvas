@@ -126,7 +126,7 @@ Animation.prototype = {
         this.then = time;
 
         if (this.started) {
-            this.compTime = this.reversed ? this.compTime -= delta : this.compTime += delta;
+            this.compTime = this.reversed ? this.compTime - delta : this.compTime + delta;
 
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
                 this.started = false;
@@ -155,7 +155,6 @@ Animation.prototype = {
 
     reset: function () {
         this.pausedTime = 0;
-        this.then = 0;
         this.compTime = this.reversed ? this.duration : 0;
         for (var i = 0; i < this.groups.length; i++) {
             this.groups[i].reset(this.reversed);
