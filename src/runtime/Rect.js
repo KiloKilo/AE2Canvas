@@ -40,6 +40,12 @@ Rect.prototype.draw = function (ctx, time, trim) {
 
 };
 
+Rect.prototype.setKeyframes = function (time) {
+    this.size.setKeyframes(time);
+    if (this.position) this.position.setKeyframes(time);
+    if (this.roundness) this.roundness.setKeyframes(time);
+};
+
 Rect.prototype.reset = function (reversed) {
     this.size.reset(reversed);
     if (this.position) this.position.reset(reversed);

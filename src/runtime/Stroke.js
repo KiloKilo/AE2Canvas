@@ -44,6 +44,13 @@ Stroke.prototype.setStroke = function (ctx, time) {
     ctx.strokeStyle = strokeColor;
 };
 
+Stroke.prototype.setKeyframes = function (time) {
+    this.color.setKeyframes(time);
+    this.opacity.setKeyframes(time);
+    this.width.setKeyframes(time);
+    if (this.miterLimit) this.miterLimit.setKeyframes(time);
+};
+
 Stroke.prototype.reset = function (reversed) {
     this.color.reset(reversed);
     this.opacity.reset(reversed);

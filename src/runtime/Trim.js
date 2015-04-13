@@ -29,6 +29,12 @@ Trim.prototype.getTrim = function (time) {
     }
 };
 
+Trim.prototype.setKeyframes = function (time) {
+    if (this.start) this.start.setKeyframes(time);
+    if (this.end) this.end.setKeyframes(time);
+    //if (this.offset) this.offset.reset();
+};
+
 Trim.prototype.reset = function (reversed) {
     if (this.start) this.start.reset(reversed);
     if (this.end) this.end.reset(reversed);

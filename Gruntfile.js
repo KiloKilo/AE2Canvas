@@ -50,9 +50,6 @@ module.exports = function (grunt) {
             }
         },
         concat          : {
-            //options: {
-            //    separator: ''
-            //},
             dist: {
                 src : [
                     'src/export/utils/json2.js',

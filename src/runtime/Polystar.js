@@ -102,6 +102,16 @@ Polystar.prototype.deg2rad = function (deg) {
     return deg * (Math.PI / 180);
 };
 
+Polystar.prototype.setKeyframes = function (time) {
+    this.points.setKeyframes(time);
+    this.innerRadius.setKeyframes(time);
+    this.outerRadius.setKeyframes(time);
+    if (this.position) this.position.setKeyframes(time);
+    if (this.rotation) this.rotation.setKeyframes(time);
+    if (this.innerRoundness) this.innerRoundness.setKeyframes(time);
+    if (this.outerRoundness) this.outerRoundness.setKeyframes(time);
+};
+
 Polystar.prototype.reset = function (reversed) {
     this.points.reset(reversed);
     this.innerRadius.reset(reversed);

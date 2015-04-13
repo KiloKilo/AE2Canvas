@@ -88,6 +88,19 @@ Transform.prototype.deg2rad = function (deg) {
     return deg * (Math.PI / 180);
 };
 
+Transform.prototype.setKeyframes = function (time) {
+    if (this.anchor) this.anchor.setKeyframes(time);
+    if (this.rotation) this.rotation.setKeyframes(time);
+    if (this.skew) this.skew.setKeyframes(time);
+    if (this.skewAxis) this.skewAxis.setKeyframes(time);
+    if (this.position) this.position.setKeyframes(time);
+    if (this.positionX) this.positionX.setKeyframes(time);
+    if (this.positionY) this.positionY.setKeyframes(time);
+    if (this.scaleX) this.scaleX.setKeyframes(time);
+    if (this.scaleY) this.scaleY.setKeyframes(time);
+    if (this.opacity) this.opacity.setKeyframes(time);
+};
+
 Transform.prototype.reset = function (reversed) {
     if (this.anchor) this.anchor.reset(reversed);
     if (this.rotation) this.rotation.reset(reversed);

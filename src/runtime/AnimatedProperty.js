@@ -61,6 +61,36 @@ AnimatedProperty.prototype.getValue = function (time) {
     }
 };
 
+AnimatedProperty.prototype.setKeyframes = function (time) {
+    //console.log(time, this.frames[this.frameCount - 2].t, this.frames[this.frameCount - 1].t);
+
+    if (time < this.frames[0].t) {
+        this.pointer = 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+    }
+
+    if (time > this.frames[this.frameCount - 1].t) {
+        this.pointer = this.frameCount - 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+    }
+
+    for (var i = 1; i < this.frameCount; i++) {
+        if (time >= this.frames[i - 1].t && time <= this.frames[i].t) {
+            this.pointer = i;
+            this.lastFrame = this.frames[i - 1];
+            this.nextFrame = this.frames[i];
+            this.onKeyframeChange();
+            return;
+        }
+    }
+};
+
 AnimatedProperty.prototype.onKeyframeChange = function () {
     this.setEasing();
 };

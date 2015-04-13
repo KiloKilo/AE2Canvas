@@ -84,6 +84,11 @@ Ellipse.prototype.getTrimValues = function (trim) {
     };
 };
 
+Ellipse.prototype.setKeyframes = function (time) {
+    this.size.setKeyframes(time);
+    if (this.position) this.position.setKeyframes(time);
+};
+
 Ellipse.prototype.reset = function (reversed) {
     this.size.reset(reversed);
     if (this.position) this.position.reset(reversed);

@@ -191,6 +191,9 @@ Path.prototype.isStraight = function (startX, startY, ctrl1X, ctrl1Y, ctrl2X, ct
     return startX === ctrl1X && startY === ctrl1Y && endX === ctrl2X && endY === ctrl2Y;
 };
 
+Path.prototype.setKeyframes = function (time) {
+};
+
 Path.prototype.reset = function (reversed) {
 };
 

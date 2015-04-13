@@ -32,7 +32,6 @@ function Group(data, bufferCtx, parentIn, parentOut) {
         }
     }
 
-
     //
     if (data.shapes) {
         this.shapes = [];
@@ -130,6 +129,25 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
         }
     }
     ctx.restore();
+};
+
+Group.prototype.setKeyframes = function (time) {
+    this.transform.setKeyframes(time);
+
+    if (this.shapes) {
+        for (var i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].setKeyframes(time);
+        }
+    }
+    if (this.groups) {
+        for (var j = 0; j < this.groups.length; j++) {
+            this.groups[j].setKeyframes(time);
+        }
+    }
+
+    if (this.fill) this.fill.setKeyframes(time);
+    if (this.stroke) this.stroke.setKeyframes(time);
+    if (this.trim) this.trim.reset(time);
 };
 
 Group.prototype.reset = function (reversed) {

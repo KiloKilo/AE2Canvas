@@ -9,6 +9,17 @@ function Animation(options) {
     this.data = options.data || function () {
         throw 'no data';
     }();
+
+    this.then = 0;
+    this.pausedTime = 0;
+    this.duration = this.data.duration;
+    this.timeRatio = this.duration / 100;
+    this.baseWidth = this.data.width;
+    this.baseHeight = this.data.height;
+    this.ratio = this.data.width / this.data.height;
+
+    this.markers = this.data.markers;
+
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
     this.hd = options.hd || false;
@@ -18,15 +29,6 @@ function Animation(options) {
     };
 
     this.ctx = this.canvas.getContext('2d');
-
-    this.time = 0;
-    this.duration = this.data.duration;
-    this.timeRatio = this.duration / 100;
-    this.baseWidth = this.data.width;
-    this.baseHeight = this.data.height;
-    this.ratio = this.data.width / this.data.height;
-
-    this.markers = this.data.markers;
 
     this.canvas.width = this.baseWidth;
     this.canvas.height = this.baseHeight;
@@ -42,7 +44,6 @@ function Animation(options) {
     }
     this.groupsLength = this.groups.length;
 
-    this.time = 0;
     this.reset(this.reversed);
     this.resize();
 
@@ -57,7 +58,7 @@ Animation.prototype = {
 
     play: function () {
         if (!this.started) {
-            this.startTime = this.time;
+            this.pausedTime = 0;
             this.started = true;
         }
     },
@@ -70,7 +71,7 @@ Animation.prototype = {
 
     pause: function () {
         if (this.started) {
-            this.pausedTime = this.time - this.startTime + this.pausedTime;
+            this.pausedTime = this.compTime;
             this.started = false;
         }
     },
@@ -78,8 +79,9 @@ Animation.prototype = {
     gotoAndPlay: function (id) {
         var marker = this.getMarker(id);
         if (marker) {
-            this.pausedTime = marker.time;
-            this.startTime = this.time;
+            this.compTime = marker.time;
+            this.pausedTime = 0;
+            this.setKeyframes(this.compTime);
             this.started = true;
         }
     },
@@ -89,7 +91,7 @@ Animation.prototype = {
         if (marker) {
             this.started = false;
             this.compTime = marker.time;
-            this.pausedTime = this.compTime;
+            this.setKeyframes(this.compTime);
             this.drawFrame = true;
         }
     },
@@ -111,6 +113,7 @@ Animation.prototype = {
         this.started = false;
         this.compTime = step * this.timeRatio;
         this.pausedTime = this.compTime;
+        this.setKeyframes(this.compTime);
         this.drawFrame = true;
     },
 
@@ -119,10 +122,12 @@ Animation.prototype = {
     },
 
     update: function (time) {
-        this.time = time;
+        var delta = time - this.then;
+        this.then = time;
+
         if (this.started) {
-            this.compTime = this.time - this.startTime + this.pausedTime;
-            if (this.reversed) this.compTime = this.duration - (this.time - this.startTime + this.pausedTime);
+            this.compTime = this.reversed ? this.compTime -= delta : this.compTime += delta;
+
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
                 this.started = false;
                 this.onComplete();
@@ -149,11 +154,17 @@ Animation.prototype = {
     },
 
     reset: function () {
-        this.startTime = 0;
         this.pausedTime = 0;
+        this.then = 0;
         this.compTime = this.reversed ? this.duration : 0;
         for (var i = 0; i < this.groups.length; i++) {
             this.groups[i].reset(this.reversed);
+        }
+    },
+
+    setKeyframes: function (time) {
+        for (var i = 0; i < this.groupsLength; i++) {
+            this.groups[i].setKeyframes(time);
         }
     },
 
@@ -178,6 +189,21 @@ Animation.prototype = {
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
             this.drawFrame = true;
         }
+    },
+
+    get reversed() {
+        return this._reversed;
+    },
+
+    set reversed(bool) {
+        this._reversed = bool;
+        if (this.pausedTime) {
+            this.compTime = this.pausedTime;
+        } else if (!this.started) {
+            this.compTime = this.reversed ? this.duration : 0;
+        }
+        console.log('----------', this.compTime);
+        this.setKeyframes(this.compTime);
     }
 };
 

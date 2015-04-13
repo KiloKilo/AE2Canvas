@@ -19,6 +19,11 @@ Fill.prototype.setColor = function (ctx, time) {
     ctx.fillStyle = color;
 };
 
+Fill.prototype.setKeyframes = function (time) {
+    this.color.setKeyframes(time);
+    if (this.opacity) this.opacity.setKeyframes(time);
+};
+
 Fill.prototype.reset = function (reversed) {
     this.color.reset(reversed);
     if (this.opacity) this.opacity.reset(reversed);
