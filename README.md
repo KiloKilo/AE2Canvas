@@ -3,20 +3,18 @@ AE2Canvas
 
 AE2Canvas is a HTML Canvas 2D renderer for After Effects Shape Layers.
 
-AE2Canvas is in an alpha state and supports at the moment only a subset of the functionality of shape layers.
-
-The following properties/objects are supported:
-* All Transform Properties
+The following properties/objects for shape layers are supported:
+* All Transform Properties (including Motionpath)
 * Group
 * Rectangle
 * Rounded Rectangle
 * Ellipse
-* Polystar (buggy)
+* Polystar (may be buggy)
 * Path
 * Stroke
 * Fill
 * Merge (partially)
-* Trim Paths (only for Path)
+* Trim Paths (only for Path and Ellipse atm)
 
 AE2Canvas contains an ExtendScript file to save the animation data to JSON and a Javascript runtime to play the animation in the Browser.
 
