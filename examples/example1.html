@@ -116,14 +116,12 @@
 
     function loop(time) {
         requestAnimationFrame(loop);
-        if (!time) time = performance.now();
         AE2Canvas.update(time);
         if (animation) slider.value = animation.getStep();
     }
 
     //kick of the render loop
     loop();
-
 
     //load the animation
     fetchJSONFile('animation1.json', function (result) {

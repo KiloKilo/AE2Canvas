@@ -81,28 +81,6 @@
                 clearTimeout(id);
             };
     }());
-
-    (function () {
-
-        // prepare base perf object
-        if (typeof window.performance === 'undefined') {
-            window.performance = {};
-        }
-
-        if (!window.performance.now) {
-
-            var nowOffset = Date.now();
-
-            if (performance.timing && performance.timing.navigationStart) {
-                nowOffset = performance.timing.navigationStart
-            }
-
-            window.performance.now = function now() {
-                return Date.now() - nowOffset;
-            }
-        }
-
-    })();
 </script>
 <script src="../build/ae2canvas.js"></script>
 <script>
@@ -138,7 +116,6 @@
 
     function loop(time) {
         requestAnimationFrame(loop);
-        if (!time) time = performance.now();
         AE2Canvas.update(time);
         if (animation) slider.value = animation.getStep();
     }
