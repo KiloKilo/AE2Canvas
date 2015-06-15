@@ -1,7 +1,7 @@
 {
   "name": "ae2canvas",
   "version": "1.0.0",
-  "main": "ae2canvas.js",
+  "main": "build/ae2canvas.js",
   "author": "Lukas Zgraggen <lukas.zgraggen@gmail.com>",
   "devDependencies": {
     "browserify-derequire": "0.9.x",
