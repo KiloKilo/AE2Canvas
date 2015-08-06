@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+            font-family: "helvetica neue", helvetica, arial, verdana;
+            font-size: 16px;
+        }
+
+        body {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        #canvasWrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto 30px auto;
+        }
+
+        canvas {
+            width: 100%;
+        }
+
+        #log1 {
+            color: red;
+        }
+
+        #log2 {
+            color: green;
+        }
+
+        #log3 {
+            color: blue;
+        }
+
+        #log4 {
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+<div id="canvasWrapper"></div>
+
+<div id="log1">test</div>
+<div id="log2">test</div>
+<div id="log3">test</div>
+<div id="log4">test</div>
+
+
+<script>
+    (function () {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame =
+                    window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame)
+            window.requestAnimationFrame = function (callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function () {
+                            callback(currTime + timeToCall);
+                        },
+                        timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+
+        if (!window.cancelAnimationFrame)
+            window.cancelAnimationFrame = function (id) {
+                clearTimeout(id);
+            };
+    }());
+</script>
+<script src="../build/ae2canvas.js"></script>
+<script>
+    var animation;
+
+    var canvasWrapper = document.getElementById('canvasWrapper');
+
+    var step = 0;
+    var isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches
+    || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches))
+    || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+
+    function fetchJSONFile(path, callback) {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    var data = JSON.parse(httpRequest.responseText);
+                    if (callback) callback(data);
+                }
+            }
+        };
+        httpRequest.open('GET', path);
+        httpRequest.send();
+    }
+
+    function loop(time) {
+        requestAnimationFrame(loop);
+        AE2Canvas.update(time);
+    }
+
+    //kick of the render loop
+    loop();
+
+    //load the animation
+    fetchJSONFile('test.json', function (result) {
+
+        // create the animation
+        animation = new AE2Canvas.Animation({
+            data: result,
+            hd  : isHD,
+            loop: true,
+        });
+
+        // add the canvas to the dom
+        canvasWrapper.appendChild(animation.canvas);
+
+        //trigger a resize for correct scaling
+        animation.resize();
+        animation.play();
+
+        //bind the resize function to the window resize event
+        window.addEventListener('resize', function () {
+            animation.resize();
+        });
+    });
+
+</script>
+</body>
+</html>

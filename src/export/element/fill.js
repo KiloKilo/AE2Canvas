@@ -5,7 +5,9 @@
     //fill.composite = data.property('ADBE Vector Composite Order');
 
     fill.color = getProperty(data.property('ADBE Vector Fill Color'));
+    fill.color = removeValues(fill.color, 3);
     fill.color = multiplyValue(fill.color, 255);
+    fill.color = roundValue(fill.color);
     fill.color = normalizeKeyframes(fill.color);
 
     //optional

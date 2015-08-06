@@ -1,8 +1,17 @@
+// TODO use removeValue
 function removeZValue(frames) {
     for (var i = 0; i < frames.length; i++) {
         if (frames[i].v.length > 2) {
             frames[i].v.pop();
         }
+    }
+
+    return frames;
+}
+
+function removeValues(frames, index) {
+    for (var i = 0; i < frames.length; i++) {
+        frames[i].v.splice(index);
     }
 
     return frames;
