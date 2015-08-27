@@ -5,7 +5,7 @@ function Bezier(path) {
 }
 
 Bezier.prototype.getLength = function (len) {
-    this.steps = Math.floor(len / 10);
+    this.steps = Math.max(Math.floor(len / 10), 1);
     this.arcLengths = new Array(this.steps + 1);
     this.arcLengths[0] = 0;
 

@@ -5,15 +5,38 @@ var Group = require('./Group');
 var _animations = [],
     _animationsLength = 0;
 
+// @license http://opensource.org/licenses/MIT
+// copyright Paul Irish 2015
+(function () {
+
+    if ('performance' in window == false) {
+        window.performance = {};
+    }
+
+    if ('now' in window.performance == false) {
+
+        var nowOffset = Date.now();
+
+        if (performance.timing && performance.timing.navigationStart) {
+            nowOffset = performance.timing.navigationStart
+        }
+
+        window.performance.now = function now() {
+            return Date.now() - nowOffset;
+        }
+    }
+
+})();
+
+
 function Animation(options) {
     this.data = options.data || function () {
-        throw 'no data';
-    }();
+            throw 'no data';
+        }();
 
     this.then = 0;
     this.pausedTime = 0;
     this.duration = this.data.duration;
-    this.timeRatio = this.duration / 100;
     this.baseWidth = this.data.width;
     this.baseHeight = this.data.height;
     this.ratio = this.data.width / this.data.height;
@@ -22,11 +45,11 @@ function Animation(options) {
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
-    this.hd = options.hd || false;
+    this.devicePixelRatio = options.devicePixelRatio || 1;
     this.fluid = options.fluid || true;
     this.reversed = options.reversed || false;
     this.onComplete = options.onComplete || function () {
-    };
+        };
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -47,7 +70,8 @@ function Animation(options) {
     this.reset(this.reversed);
     this.resize();
 
-    this.started = false;
+    this.isPaused = false;
+    this.isPlaying = false;
     this.drawFrame = true;
 
     _animations.push(this);
@@ -57,22 +81,25 @@ function Animation(options) {
 Animation.prototype = {
 
     play: function () {
-        if (!this.started) {
+        if (!this.isPlaying) {
+            if (!this.isPaused) this.reset(this.reversed);
+            this.isPaused = false;
             this.pausedTime = 0;
-            this.started = true;
+            this.isPlaying = true;
         }
     },
 
     stop: function () {
         this.reset(this.reversed);
-        this.started = false;
+        this.isPlaying = false;
         this.drawFrame = true;
     },
 
     pause: function () {
-        if (this.started) {
+        if (this.isPlaying) {
+            this.isPaused = true;
             this.pausedTime = this.compTime;
-            this.started = false;
+            this.isPlaying = false;
         }
     },
 
@@ -82,14 +109,14 @@ Animation.prototype = {
             this.compTime = marker.time;
             this.pausedTime = 0;
             this.setKeyframes(this.compTime);
-            this.started = true;
+            this.isPlaying = true;
         }
     },
 
     gotoAndStop: function (id) {
         var marker = this.getMarker(id);
         if (marker) {
-            this.started = false;
+            this.isPlaying = false;
             this.compTime = marker.time;
             this.setKeyframes(this.compTime);
             this.drawFrame = true;
@@ -109,32 +136,46 @@ Animation.prototype = {
         console.warn('Marker not found');
     },
 
+    checkStopMarkers: function (from, to) {
+        for (var i = 0; i < this.markers.length; i++) {
+            if (this.markers[i].stop && this.markers[i].time > from && this.markers[i].time < to) {
+                return this.markers[i];
+            }
+        }
+        return false;
+    },
+
     setStep: function (step) {
-        this.started = false;
-        this.compTime = step * this.timeRatio;
+        this.isPlaying = false;
+        this.compTime = step * this.duration;
         this.pausedTime = this.compTime;
         this.setKeyframes(this.compTime);
         this.drawFrame = true;
     },
 
     getStep: function () {
-        return Math.floor(this.compTime / this.timeRatio);
+        return this.compTime / this.duration;
     },
 
     update: function (time) {
         var delta = time - this.then;
         this.then = time;
 
-        if (this.started) {
+        if (this.isPlaying) {
             this.compTime = this.reversed ? this.compTime - delta : this.compTime + delta;
 
+            var stopMarker = this.checkStopMarkers(this.compTime - delta, this.compTime);
+
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
-                this.started = false;
+                this.compTime = this.reversed ? 0 : this.duration - 1;
+                this.isPlaying = false;
                 this.onComplete();
-                this.reset();
                 if (this.loop) {
                     this.play();
                 }
+            } else if (stopMarker) {
+                this.compTime = stopMarker.time;
+                this.pause();
             } else {
                 this.draw(this.compTime);
             }
@@ -168,7 +209,7 @@ Animation.prototype = {
     },
 
     destroy: function () {
-        this.started = false;
+        this.isPlaying = false;
         this.onComplete = null;
         var i = _animations.indexOf(this);
         if (i > -1) {
@@ -180,12 +221,12 @@ Animation.prototype = {
 
     resize: function () {
         if (this.fluid) {
-            var factor = this.hd ? 2 : 1;
             var width = this.canvas.clientWidth || this.baseWidth;
-            this.canvas.width = width * factor;
-            this.canvas.height = width / this.ratio * factor;
-            this.scale = width / this.baseWidth * factor;
+            this.canvas.width = width * this.devicePixelRatio;
+            this.canvas.height = width / this.ratio * this.devicePixelRatio;
+            this.scale = width / this.baseWidth * this.devicePixelRatio;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
+            this.setKeyframes(this.compTime);
             this.drawFrame = true;
         }
     },
@@ -198,7 +239,7 @@ Animation.prototype = {
         this._reversed = bool;
         if (this.pausedTime) {
             this.compTime = this.pausedTime;
-        } else if (!this.started) {
+        } else if (!this.isPlaying) {
             this.compTime = this.reversed ? this.duration : 0;
         }
         this.setKeyframes(this.compTime);
@@ -210,8 +251,7 @@ module.exports = {
     Animation: Animation,
 
     update: function (time) {
-        //https://github.com/sole/tween.js
-        time = time !== undefined ? time : ( typeof window !== 'undefined' && window.performance !== undefined && window.performance.now !== undefined ? window.performance.now() : Date.now() );
+        time = time !== undefined ? time : window.performance.now();
 
         for (var i = 0; i < _animationsLength; i++) {
             _animations[i].update(time);

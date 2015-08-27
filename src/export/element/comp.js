@@ -43,7 +43,8 @@
 
             markers.push({
                 comment: comment,
-                time   : time
+                time: time,
+                stop: comment.toLocaleLowerCase().indexOf('stop') > -1
             });
         }
 
