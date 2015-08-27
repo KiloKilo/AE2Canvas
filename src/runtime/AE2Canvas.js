@@ -26,8 +26,9 @@ var _animations = [],
         }
     }
 
-})();
+    //
 
+})();
 
 function Animation(options) {
     this.data = options.data || function () {

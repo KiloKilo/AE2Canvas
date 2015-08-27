@@ -19,7 +19,7 @@ Trim.prototype.getTrim = function (time) {
 
     var trim = {
         start: Math.min(start, end),
-        end  : Math.max(start, end)
+        end: Math.max(start, end)
     };
 
     if (trim.start === 0 && trim.end === 1) {

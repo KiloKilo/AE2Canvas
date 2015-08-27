@@ -147,7 +147,7 @@ Group.prototype.setKeyframes = function (time) {
 
     if (this.fill) this.fill.setKeyframes(time);
     if (this.stroke) this.stroke.setKeyframes(time);
-    if (this.trim) this.trim.reset(time);
+    if (this.trim) this.trim.setKeyframes(time);
 };
 
 Group.prototype.reset = function (reversed) {

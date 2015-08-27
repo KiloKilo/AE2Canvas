@@ -1,29 +1,29 @@
 module.exports = function (grunt) {
     grunt.initConfig({
-        pkg             : grunt.file.readJSON('package.json'),
-        browserify      : {
-            dev  : {
-                files  : {
+        pkg: grunt.file.readJSON('package.json'),
+        browserify: {
+            dev: {
+                files: {
                     'build/ae2canvas.js': ['src/runtime/AE2Canvas.js']
                 },
                 options: {
-                    watch            : true,
-                    keepAlive        : true,
-                    plugin           : [
+                    watch: true,
+                    keepAlive: true,
+                    plugin: [
                         ["browserify-derequire"]
                     ],
                     browserifyOptions: {
                         standalone: 'AE2Canvas',
-                        debug     : true
+                        debug: true
                     }
                 }
             },
             build: {
-                files  : {
+                files: {
                     'build/ae2canvas.js': ['src/runtime/AE2Canvas.js']
                 },
                 options: {
-                    plugin           : [
+                    plugin: [
                         ["browserify-derequire"]
                     ],
                     browserifyOptions: {
@@ -32,14 +32,14 @@ module.exports = function (grunt) {
                 }
             }
         },
-        uglify          : {
-            build : {
+        uglify: {
+            build: {
                 options: {
                     compress: {
                         drop_console: true
                     }
                 },
-                files  : {
+                files: {
                     'build/ae2canvas.min.js': ['build/ae2canvas.js']
                 }
             },
@@ -49,9 +49,9 @@ module.exports = function (grunt) {
                 }
             }
         },
-        concat          : {
+        concat: {
             dist: {
-                src : [
+                src: [
                     'src/export/utils/json2.js',
                     'src/export/utils/utils.js',
                     'src/export/utils/keyframes.js',
@@ -90,12 +90,12 @@ module.exports = function (grunt) {
         },
         'string-replace': {
             dist: {
-                files  : {
+                files: {
                     'build/ae2canvas-export.jsx': 'build/ae2canvas-export.jsx'
                 },
                 options: {
                     replacements: [{
-                        pattern    : /#include.*/g,
+                        pattern: /#include.*/g,
                         replacement: ''
                     }]
                 }
