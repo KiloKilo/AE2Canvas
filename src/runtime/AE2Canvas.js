@@ -220,9 +220,9 @@ Animation.prototype = {
         if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
     },
 
-    resize: function () {
+    resize: function (w) {
         if (this.fluid) {
-            var width = this.canvas.clientWidth || this.baseWidth;
+            var width = w || this.canvas.clientWidth || this.baseWidth;
             this.canvas.width = width * this.devicePixelRatio;
             this.canvas.height = width / this.ratio * this.devicePixelRatio;
             this.scale = width / this.baseWidth * this.devicePixelRatio;
