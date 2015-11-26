@@ -14,9 +14,11 @@ Path.prototype.draw = function (ctx, time, trim) {
         vertices = frame.v;
 
     if (trim) {
-        trim = this.getTrimValues(trim, frame);
-        if (trim.start === 0 && trim.end === 0) {
+        if ((trim.start === 0 && trim.end === 0) ||
+            (trim.start === 1 && trim.end === 1)) {
             return;
+        } else {
+            trim = this.getTrimValues(trim, frame);
         }
     }
 
@@ -67,16 +69,18 @@ Path.prototype.getTrimValues = function (trim, frame) {
 
     var actualTrim = {
         startIndex: 0,
-        endIndex  : 0,
-        start     : 0,
-        end       : 0
+        endIndex: 0,
+        start: 0,
+        end: 0
     };
 
+// TODO clean up
     if (trim.start === 0) {
         if (trim.end === 0) {
             return actualTrim;
         } else if (trim.end === 1) {
             actualTrim.endIndex = frame.len.length;
+            actualTrim.end = 1;
             return actualTrim;
         }
     }
@@ -94,14 +98,20 @@ Path.prototype.getTrimValues = function (trim, frame) {
         trimAtLen -= frame.len[i];
     }
 
-    trimAtLen = totalLen * trim.end;
+    if (trim.end === 1) {
+        actualTrim.endIndex = frame.len.length;
+        actualTrim.end = 1;
+        return actualTrim;
+    } else {
+        trimAtLen = totalLen * trim.end;
 
-    for (i = 0; i < frame.len.length; i++) {
-        if (trimAtLen > 0 && trimAtLen < frame.len[i]) {
-            actualTrim.endIndex = i;
-            actualTrim.end = trimAtLen / frame.len[i];
+        for (i = 0; i < frame.len.length; i++) {
+            if (trimAtLen > 0 && trimAtLen < frame.len[i]) {
+                actualTrim.endIndex = i;
+                actualTrim.end = trimAtLen / frame.len[i];
+            }
+            trimAtLen -= frame.len[i];
         }
-        trimAtLen -= frame.len[i];
     }
 
     return actualTrim;
@@ -112,7 +122,7 @@ Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
     if (from === 0 && to === 1) {
         return {
             start: lastVertex,
-            end  : nextVertex
+            end: nextVertex
         };
     }
 
@@ -140,6 +150,7 @@ Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
         this.bezier.getLength(len);
         from = this.bezier.map(from);
         to = this.bezier.map(to);
+        to = (to - from) / (1 - from);
 
         var e1, f1, g1, h1, j1, k1,
             e2, f2, g2, h2, j2, k2,
@@ -159,6 +170,7 @@ Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
         e2 = [this.lerp(startVertex[4], startVertex[0], to), this.lerp(startVertex[5], startVertex[1], to)];
         f2 = [this.lerp(startVertex[0], endVertex[2], to), this.lerp(startVertex[1], endVertex[3], to)];
         g2 = [this.lerp(endVertex[2], endVertex[4], to), this.lerp(endVertex[3], endVertex[5], to)];
+
         h2 = [this.lerp(e2[0], f2[0], to), this.lerp(e2[1], f2[1], to)];
         j2 = [this.lerp(f2[0], g2[0], to), this.lerp(f2[1], g2[1], to)];
         k2 = [this.lerp(h2[0], j2[0], to), this.lerp(h2[1], j2[1], to)];
@@ -170,7 +182,7 @@ Path.prototype.trim = function (lastVertex, nextVertex, from, to, len) {
 
     return {
         start: startVertex,
-        end  : endVertex
+        end: endVertex
     };
 };
 
