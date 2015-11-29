@@ -9,6 +9,7 @@ function getImage(data) {
 
     image.name = data.name;
     image.source = data.source.name;
+    image.type = 'image';
 
     for (var i = 1; i <= data.numProperties; i++) {
         var prop = data.property(i);

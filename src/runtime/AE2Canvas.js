@@ -64,17 +64,15 @@ function Animation(options) {
     this.buffer.height = this.baseHeight;
     this.bufferCtx = this.buffer.getContext('2d');
 
-    this.groups = [];
-    for (var i = 0; i < this.data.groups.length; i++) {
-        this.groups.push(new Group(this.data.groups[i], this.bufferCtx, 0, this.duration));
+    this.layers = [];
+    for (var i = 0; i < this.data.layers.length; i++) {
+        if (this.data.layers[i].type === 'vector') {
+            this.layers.push(new Group(this.data.layers[i], this.bufferCtx, 0, this.duration));
+        } else if (this.data.layers[i].type === 'image') {
+            this.layers.push(new ImageLayer(this.data.layers[i], this.bufferCtx, 0, this.duration, this.imageBasePath));
+        }
     }
-    this.groupsLength = this.groups.length;
-
-    this.images = [];
-    for (var j = 0; j < this.data.images.length; j++) {
-        this.images.push(new ImageLayer(this.data.images[j], this.bufferCtx, 0, this.duration, this.imageBasePath));
-    }
-    this.imagesLength = this.images.length;
+    this.numLayers = this.layers.length;
 
     this.reset(this.reversed);
     this.resize();
@@ -82,6 +80,8 @@ function Animation(options) {
     this.isPaused = false;
     this.isPlaying = false;
     this.drawFrame = true;
+
+    console.log(this);
 
     _animations.push(this);
     _animationsLength = _animations.length;
@@ -197,15 +197,9 @@ Animation.prototype = {
     draw: function (time) {
         this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
 
-        for (var i = 0; i < this.groupsLength; i++) {
-            if (time >= this.groups[i].in && time < this.groups[i].out) {
-                this.groups[i].draw(this.ctx, time);
-            }
-        }
-
-        for (var j = 0; j < this.imagesLength; j++) {
-            if (time >= this.images[j].in && time < this.images[j].out) {
-                this.images[j].draw(this.ctx, time);
+        for (var i = 0; i < this.numLayers; i++) {
+            if (time >= this.layers[i].in && time < this.layers[i].out) {
+                this.layers[i].draw(this.ctx, time);
             }
         }
     },
@@ -213,21 +207,14 @@ Animation.prototype = {
     reset: function () {
         this.pausedTime = 0;
         this.compTime = this.reversed ? this.duration : 0;
-        for (var i = 0; i < this.groupsLength; i++) {
-            this.groups[i].reset(this.reversed);
-        }
-
-        for (var j = 0; j < this.imagesLength; j++) {
-            this.images[j].reset(this.reversed);
+        for (var i = 0; i < this.numLayers; i++) {
+            this.layers[i].reset(this.reversed);
         }
     },
 
     setKeyframes: function (time) {
-        for (var i = 0; i < this.groupsLength; i++) {
-            this.groups[i].setKeyframes(time);
-        }
-        for (var j = 0; j < this.imagesLength; j++) {
-            this.images[j].setKeyframes(time);
+        for (var i = 0; i < this.numLayers; i++) {
+            this.layers[i].setKeyframes(time);
         }
     },
 

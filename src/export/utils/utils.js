@@ -80,7 +80,7 @@ function clampValue(frames, from, to) {
 
 function getArcLength(path) {
 
-    var steps = 500,
+    var steps = 100, //500
         t = 1 / steps,
         aX = 0,
         aY = 0,
