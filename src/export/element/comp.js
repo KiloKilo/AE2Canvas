@@ -1,6 +1,7 @@
 ﻿function getComp(data) {
     var comp = {};
     comp.groups = [];
+    comp.images = [];
     comp.duration = data.duration * 1000;
     comp.width = data.width;
     comp.height = data.height;
@@ -11,7 +12,10 @@
 
         if (layer instanceof ShapeLayer && layer.enabled) {
             comp.groups.push(getGroup(layer));
+        } else if (layer instanceof AVLayer && layer.enabled) {
+            comp.images.push(getImage(layer));
         }
+
     }
 
     return comp;
