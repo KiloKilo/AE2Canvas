@@ -1,7 +1,7 @@
 ﻿function getRect(data) {
 
     var rect = {};
-    rect.name = data.name;
+    //rect.name = data.name;
     //rect.index = data.propertyIndex;
     rect.type = 'rect';
 

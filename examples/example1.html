@@ -128,11 +128,16 @@
 
         // create the animation
         animation = new AE2Canvas.Animation({
-            data      : result,
-            hd        : isHD,
-            loop      : true,
+            data: result,
+            hd: isHD,
+            loop: true,
             onComplete: function () {
+                animation.gotoAndPlay('test');
             }
+        });
+
+        animation.preload(function () {
+            console.log('test');
         });
 
         // add the canvas to the dom

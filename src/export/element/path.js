@@ -2,7 +2,7 @@
     data = data.property('ADBE Vector Shape');
 
     var path = {};
-    path.name = data.name;
+    //path.name = data.name;
     //path.index = data.propertyIndex;
     path.type = 'path';
     path.closed = data.value.closed;

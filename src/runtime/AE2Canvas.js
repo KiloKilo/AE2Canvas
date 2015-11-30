@@ -81,8 +81,6 @@ function Animation(options) {
     this.isPlaying = false;
     this.drawFrame = true;
 
-    console.log(this);
-
     _animations.push(this);
     _animationsLength = _animations.length;
 }
@@ -201,6 +199,30 @@ Animation.prototype = {
             if (time >= this.layers[i].in && time < this.layers[i].out) {
                 this.layers[i].draw(this.ctx, time);
             }
+        }
+    },
+
+    preload: function (cb) {
+        this.onloadCB = cb;
+        for (var i = 0; i < this.numLayers; i++) {
+            if (this.layers[i] instanceof ImageLayer) {
+                this.layers[i].preload(this.onload.bind(this));
+            }
+        }
+    },
+
+    onload: function () {
+        for (var i = 0; i < this.numLayers; i++) {
+            if (this.layers[i] instanceof ImageLayer) {
+                console.log(this.layers[i]);
+                if (!this.layers[i].isLoaded) {
+                    return;
+                }
+            }
+        }
+        this.isLoaded = true;
+        if (typeof this.onloadCB === 'function') {
+            this.onloadCB();
         }
     },
 

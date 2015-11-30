@@ -4,7 +4,7 @@ var Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Polystar(data) {
-    this.name = data.name;
+    //this.name = data.name;
     this.closed = true; // TODO ??
 
     this.starType = data.starType;

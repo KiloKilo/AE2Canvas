@@ -1,7 +1,7 @@
 function getVectorTrim(data) {
 
     var trim = {};
-    trim.index = data.propertyIndex;
+    //trim.index = data.propertyIndex;
     trim.type = data.property('ADBE Vector Trim Type').value;
 
     //optionals

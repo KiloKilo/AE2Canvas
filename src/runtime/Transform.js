@@ -7,7 +7,7 @@ var Property = require('./Property'),
 function Transform(data) {
     if (!data) return;
 
-    this.name = data.name;
+    //this.name = data.name;
 
     if (data.positionX && data.positionY) {
         if (data.positionX.length > 1 && data.positionY.length > 1) {

@@ -1,7 +1,7 @@
 ﻿function getEllipse(data) {
     var ellipse = {};
-    ellipse.name = data.name;
-    ellipse.index = data.propertyIndex;
+    //ellipse.name = data.name;
+    //ellipse.index = data.propertyIndex;
     ellipse.type = 'ellipse';
 
     ellipse.size = getProperty(data.property('ADBE Vector Ellipse Size'));

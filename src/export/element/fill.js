@@ -1,7 +1,7 @@
 ﻿function getFill(data) {
     var fill = {};
 
-    fill.index = data.propertyIndex;
+    //fill.index = data.propertyIndex;
     //fill.composite = data.property('ADBE Vector Composite Order');
 
     fill.color = getProperty(data.property('ADBE Vector Fill Color'));

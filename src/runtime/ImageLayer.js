@@ -2,19 +2,12 @@
 
 var Transform = require('./Transform');
 
-function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
+function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath, onLoad) {
 
     this.isLoaded = false;
 
-    this.name = data.name;
+    //this.name = data.name;
     this.source = basePath + data.source;
-
-    this.img = new Image;
-    this.img.onload = function () {
-        this.isLoaded = true;
-    }.bind(this);
-
-    this.img.src = this.source;
 
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
@@ -22,6 +15,18 @@ function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
     this.transform = new Transform(data.transform);
     this.bufferCtx = bufferCtx;
 }
+
+ImageLayer.prototype.preload = function (cb) {
+    this.img = new Image;
+    this.img.onload = function () {
+        this.isLoaded = true;
+        if (typeof cb === 'function') {
+            cb();
+        }
+    }.bind(this);
+
+    this.img.src = this.source;
+};
 
 ImageLayer.prototype.draw = function (ctx, time) {
 

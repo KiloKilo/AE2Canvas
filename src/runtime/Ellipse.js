@@ -5,7 +5,7 @@ var Path = require('./Path'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Ellipse(data) {
-    this.name = data.name;
+    //this.name = data.name;
     this.closed = true;
 
     this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);

@@ -7,7 +7,7 @@ function getImage(data) {
 
     if (typeof image.in !== 'undefined' && image.in < 0) image.in = 0;
 
-    image.name = data.name;
+    //image.name = data.name;
     image.source = data.source.name;
     image.type = 'image';
 

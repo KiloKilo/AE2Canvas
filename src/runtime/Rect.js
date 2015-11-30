@@ -4,7 +4,7 @@ var Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
 function Rect(data) {
-    this.name = data.name;
+    //this.name = data.name;
     this.closed = true;
 
     this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);
