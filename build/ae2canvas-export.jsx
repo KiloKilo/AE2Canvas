@@ -316,6 +316,21 @@ function getGroup(data) {
     return optimizeGroup(group);
 }
 
+function getImage(data) {
+    var image = {};
+    data.inPoint && (image["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (image.out = Math.round(1e3 * data.outPoint)), 
+    "undefined" != typeof image["in"] && image["in"] < 0 && (image["in"] = 0), image.source = data.source.name, 
+    image.type = "image";
+    for (var i = 1; i <= data.numProperties; i++) {
+        var prop = data.property(i), matchName = prop.matchName;
+        if (prop.enabled) switch (matchName) {
+          case "ADBE Transform Group":
+            image.transform = getTransform(prop);
+        }
+    }
+    return image;
+}
+
 function getPath(data) {
     function getPoint(pointData) {
         for (var vertices = [], i = 0; i < pointData.vertices.length; i++) {

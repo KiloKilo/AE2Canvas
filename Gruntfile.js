@@ -75,6 +75,7 @@ module.exports = function (grunt) {
 
                     'src/export/element/comp.js',
                     'src/export/element/group.js',
+                    'src/export/element/image.js',
                     'src/export/element/path.js',
                     'src/export/element/rect.js',
                     'src/export/element/ellipse.js',
