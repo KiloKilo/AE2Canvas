@@ -32,18 +32,18 @@ var _animations = [],
 })();
 
 function Animation(options) {
-    this.data = options.data || function () {
-            throw 'no data';
-        }();
+    if (!options.data) {
+        console.error('no data');
+        return;
+    }
 
-    this.then = 0;
     this.pausedTime = 0;
-    this.duration = this.data.duration;
-    this.baseWidth = this.data.width;
-    this.baseHeight = this.data.height;
-    this.ratio = this.data.width / this.data.height;
+    this.duration = options.data.duration;
+    this.baseWidth = options.data.width;
+    this.baseHeight = options.data.height;
+    this.ratio = options.data.width / options.data.height;
 
-    this.markers = this.data.markers;
+    this.markers = options.data.markers;
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
@@ -65,11 +65,11 @@ function Animation(options) {
     this.bufferCtx = this.buffer.getContext('2d');
 
     this.layers = [];
-    for (var i = 0; i < this.data.layers.length; i++) {
-        if (this.data.layers[i].type === 'vector') {
-            this.layers.push(new Group(this.data.layers[i], this.bufferCtx, 0, this.duration));
-        } else if (this.data.layers[i].type === 'image') {
-            this.layers.push(new ImageLayer(this.data.layers[i], this.bufferCtx, 0, this.duration, this.imageBasePath));
+    for (var i = 0; i < options.data.layers.length; i++) {
+        if (options.data.layers[i].type === 'vector') {
+            this.layers.push(new Group(options.data.layers[i], this.bufferCtx, 0, this.duration));
+        } else if (options.data.layers[i].type === 'image') {
+            this.layers.push(new ImageLayer(options.data.layers[i], this.bufferCtx, 0, this.duration, this.imageBasePath));
         }
     }
     this.numLayers = this.layers.length;
@@ -165,6 +165,8 @@ Animation.prototype = {
     },
 
     update: function (time) {
+        if (!this.then) this.then = time;
+
         var delta = time - this.then;
         this.then = time;
 

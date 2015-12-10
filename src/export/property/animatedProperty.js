@@ -1,4 +1,4 @@
-﻿function getAnimatedProperty(data, split) {
+function getAnimatedProperty(data, split) {
 
     var arr = [],
         numKeys = data.numKeys;

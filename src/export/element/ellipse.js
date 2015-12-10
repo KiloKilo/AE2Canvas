@@ -1,4 +1,4 @@
-﻿function getEllipse(data) {
+function getEllipse(data) {
     var ellipse = {};
     //ellipse.name = data.name;
     //ellipse.index = data.propertyIndex;

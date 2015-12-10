@@ -1,4 +1,4 @@
-﻿function getComp(data) {
+function getComp(data) {
     var comp = {};
     comp.layers = [];
     comp.duration = data.duration * 1000;

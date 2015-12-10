@@ -1,4 +1,4 @@
-﻿function getProperty(data, split) {
+function getProperty(data, split) {
     if (data.numKeys < 1) {
         return getStaticProperty(data, split);
     } else {

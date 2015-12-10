@@ -1,4 +1,4 @@
-﻿function getFill(data) {
+function getFill(data) {
     var fill = {};
 
     //fill.index = data.propertyIndex;

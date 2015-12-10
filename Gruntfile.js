@@ -44,12 +44,19 @@ module.exports = function (grunt) {
                 }
             },
             export: {
+                options: {
+                    mangle: false,
+                    beautify: true
+                },
                 files: {
                     'build/ae2canvas-export.jsx': ['build/ae2canvas-export.jsx']
                 }
             }
         },
         concat: {
+            options: {
+                //separator: ';'
+            },
             dist: {
                 src: [
                     'src/export/utils/json2.js',
@@ -102,8 +109,6 @@ module.exports = function (grunt) {
             }
         }
     });
-
-    //
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');

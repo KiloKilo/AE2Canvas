@@ -1,4 +1,4 @@
-﻿function getMotionpath(frames) {
+function getMotionpath(frames) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -49,7 +49,7 @@
             pY = (m * m * ctrlY + m * ctrlX + b) / (m * m + 1);
 
         if (dist2d(pX, pY, startX, startY) > dist2d(startX, startY, endX, endY) || dist2d(pX, pY, endX, endY) > dist2d(startX, startY, endX, endY)) {
-            return Infinity
+            return Infinity;
         } else {
             return dist2d(pX, pY, ctrlX, ctrlY);
         }

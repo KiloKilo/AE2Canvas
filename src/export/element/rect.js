@@ -1,4 +1,4 @@
-﻿function getRect(data) {
+function getRect(data) {
 
     var rect = {};
     //rect.name = data.name;

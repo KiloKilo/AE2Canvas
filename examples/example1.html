@@ -20,8 +20,8 @@
         }
 
         #canvasWrapper {
-            width: 500px;
-            /*max-width: 1280px;*/
+            width: 100%;
+            max-width: 1280px;
             margin: 0 auto 30px auto;
         }
 
@@ -124,7 +124,7 @@
     loop();
 
     //load the animation
-    fetchJSONFile('test.json', function (result) {
+    fetchJSONFile('animation1.json', function (result) {
 
         // create the animation
         animation = new AE2Canvas.Animation({
@@ -134,10 +134,6 @@
             onComplete: function () {
                 animation.gotoAndPlay('test');
             }
-        });
-
-        animation.preload(function () {
-            console.log('test');
         });
 
         // add the canvas to the dom

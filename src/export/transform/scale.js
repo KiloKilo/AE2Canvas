@@ -1,4 +1,4 @@
-﻿function getScale(data, transform) {
+function getScale(data, transform) {
 
     var obj;
 

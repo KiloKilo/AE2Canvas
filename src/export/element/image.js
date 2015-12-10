@@ -15,8 +15,6 @@ function getImage(data) {
         var prop = data.property(i);
         var matchName = prop.matchName;
 
-        $.writeln(matchName);
-
         if (prop.enabled) {
             switch (matchName) {
                 case 'ADBE Transform Group':

@@ -1,4 +1,4 @@
-﻿function getPolystar(data) {
+function getPolystar(data) {
     var polystar = {};
     //polystar.name = data.name;
     //polystar.index = data.propertyIndex;

@@ -1,4 +1,4 @@
-﻿function getPosition(data, transform) {
+function getPosition(data, transform) {
     var obj;
 
     if (data.property('ADBE Position') instanceof Property) {

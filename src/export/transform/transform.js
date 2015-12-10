@@ -1,4 +1,4 @@
-﻿function getTransform(data) {
+function getTransform(data) {
     var transform = {};
 
     getAnchor(data, transform);

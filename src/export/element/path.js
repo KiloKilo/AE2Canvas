@@ -1,5 +1,5 @@
-﻿function getPath(data) {
-    data = data.property('ADBE Vector Shape');
+function getPath(data) {
+    var data = data.property('ADBE Vector Shape');
 
     var path = {};
     //path.name = data.name;
