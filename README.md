@@ -77,16 +77,16 @@ If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this in
 ##Example
 
 #####Example 1
-[Html](http://futurecom.github.io/ae2canvas/example1.html)
+[Html](http://futurecom.github.io/KiloKilo/example1.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example1.aep)
+[After Effects Project](https://github.com/futurecom/KiloKilo/raw/master/examples/ae/example1.aep)
 
 #####Example 2
-[Html](http://futurecom.github.io/ae2canvas/example2.html)
+[Html](http://futurecom.github.io/KiloKilo/example2.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example2.aep)
+[After Effects Project](https://github.com/futurecom/KiloKilo/raw/master/examples/ae/example2.aep)
 
 #####Example 3
-[Html](http://futurecom.github.io/ae2canvas/example3.html)
+[Html](http://futurecom.github.io/KiloKilo/example3.html)
 
-[After Effects Project](https://github.com/futurecom/ae2canvas/raw/master/examples/ae/example3.aep)
+[After Effects Project](https://github.com/futurecom/KiloKilo/raw/master/examples/ae/example3.aep)
