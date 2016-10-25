@@ -524,7 +524,7 @@ function getAnimatedProperty(data, split) {
         i > 1 && inType !== KeyframeInterpolationType.HOLD && (obj.inType = inType, obj.easeIn = [], 
         obj.easeIn[0] = easeIn.influence, obj.easeIn[1] = easeIn.speed), numKeys > i && outType !== KeyframeInterpolationType.HOLD && (obj.outType = outType, 
         obj.easeOut = [], obj.easeOut[0] = easeOut.influence, obj.easeOut[1] = easeOut.speed), 
-        (data.propertyValueType === PropertyValueType.TwoD_SPATIAL || data.propertyValueType === PropertyValueType.ThreeD_SPATIAL) && (i > 1 && (obj.inTangent = data.keyInSpatialTangent(i), 
+        data.propertyValueType !== PropertyValueType.TwoD_SPATIAL && data.propertyValueType !== PropertyValueType.ThreeD_SPATIAL || (i > 1 && (obj.inTangent = data.keyInSpatialTangent(i), 
         obj.easeIn = [], obj.easeIn[0] = easeIn.influence, obj.easeIn[1] = easeIn.speed), 
         numKeys > i && (obj.outTangent = data.keyOutSpatialTangent(i), obj.easeOut = [], 
         obj.easeOut[0] = easeOut.influence, obj.easeOut[1] = easeOut.speed)), arr.push(obj);

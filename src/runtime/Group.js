@@ -13,6 +13,7 @@ var Stroke = require('./Stroke'),
 
 function Group(data, bufferCtx, parentIn, parentOut) {
 
+
     //this.name = data.name;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
@@ -53,9 +54,16 @@ function Group(data, bufferCtx, parentIn, parentOut) {
 
 Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim) {
 
+    //console.log(ctx.currentTransform);
+    //console.log(ctx.mozCurrentTransform);
+
+    //console.log('buffer', this.bufferCtx.currentTransform);
+
+
     var i;
 
     ctx.save();
+    this.bufferCtx.save();
 
     //TODO check if color/stroke is changing over time
     var fill = this.fill || parentFill;
@@ -66,11 +74,14 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     if (stroke) stroke.setStroke(ctx, time);
 
     this.transform.transform(ctx, time);
+    this.transform.transform(this.bufferCtx, time);
 
     if (this.merge) {
+
         this.bufferCtx.save();
+        this.bufferCtx.setTransform(1, 0, 0, 1, 0, 0);
         this.bufferCtx.clearRect(0, 0, this.bufferCtx.canvas.width, this.bufferCtx.canvas.height);
-        this.transform.transform(this.bufferCtx, time);
+        this.bufferCtx.restore();
 
         if (fill) fill.setColor(this.bufferCtx, time);
         if (stroke) stroke.setStroke(this.bufferCtx, time);
@@ -90,8 +101,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
             }
 
             ctx.restore();
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.drawImage(this.bufferCtx.canvas, 0, 0);
-            this.bufferCtx.restore();
+            ctx.restore();
 
         } else {
             for (i = 0; i < this.shapes.length; i++) {
@@ -129,6 +142,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
         }
     }
     ctx.restore();
+    this.bufferCtx.restore();
 };
 
 Group.prototype.setKeyframes = function (time) {

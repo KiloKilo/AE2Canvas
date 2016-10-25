@@ -1,4 +1,4 @@
-function getImage(data) {
+﻿function getImage(data) {
 
     var image = {};
 
@@ -11,9 +11,14 @@ function getImage(data) {
     image.source = data.source.name;
     image.type = 'image';
 
+        var effects = data.property('Effects');
+
     for (var i = 1; i <= data.numProperties; i++) {
         var prop = data.property(i);
         var matchName = prop.matchName;
+
+
+    
 
         if (prop.enabled) {
             switch (matchName) {

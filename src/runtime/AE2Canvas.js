@@ -258,8 +258,13 @@ Animation.prototype = {
             var width = w || this.canvas.clientWidth || this.baseWidth;
             this.canvas.width = width * this.devicePixelRatio;
             this.canvas.height = width / this.ratio * this.devicePixelRatio;
+
+            this.buffer.width = width * this.devicePixelRatio;
+            this.buffer.height = width / this.ratio * this.devicePixelRatio;
+
             this.scale = width / this.baseWidth * this.devicePixelRatio;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
+            this.bufferCtx.transform(this.scale, 0, 0, this.scale, 0, 0);
             this.setKeyframes(this.compTime);
             this.drawFrame = true;
         }
