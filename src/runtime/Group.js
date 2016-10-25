@@ -13,7 +13,6 @@ var Stroke = require('./Stroke'),
 
 function Group(data, bufferCtx, parentIn, parentOut) {
 
-
     //this.name = data.name;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
@@ -33,7 +32,6 @@ function Group(data, bufferCtx, parentIn, parentOut) {
         }
     }
 
-    //
     if (data.shapes) {
         this.shapes = [];
         for (var j = 0; j < data.shapes.length; j++) {
@@ -52,13 +50,7 @@ function Group(data, bufferCtx, parentIn, parentOut) {
     }
 }
 
-Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim) {
-
-    //console.log(ctx.currentTransform);
-    //console.log(ctx.mozCurrentTransform);
-
-    //console.log('buffer', this.bufferCtx.currentTransform);
-
+Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim, isBuffer) {
 
     var i;
 
@@ -73,11 +65,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
 
-    this.transform.transform(ctx, time);
+    if (!isBuffer) this.transform.transform(ctx, time);
     this.transform.transform(this.bufferCtx, time);
 
     if (this.merge) {
-
         this.bufferCtx.save();
         this.bufferCtx.setTransform(1, 0, 0, 1, 0, 0);
         this.bufferCtx.clearRect(0, 0, this.bufferCtx.canvas.width, this.bufferCtx.canvas.height);
@@ -118,19 +109,20 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
 
     //TODO get order
     if (fill) ctx.fill();
-    if (stroke) ctx.stroke();
+    if (!isBuffer && stroke) ctx.stroke();
 
     if (this.groups) {
         if (this.merge) {
-
             for (i = 0; i < this.groups.length; i++) {
                 if (time >= this.groups[i].in && time < this.groups[i].out) {
-                    this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues);
+                    this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues, true);
                     this.merge.setCompositeOperation(this.bufferCtx);
                 }
             }
-            ctx.restore();
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.drawImage(this.bufferCtx.canvas, 0, 0);
+            ctx.restore();
             this.bufferCtx.restore();
         }
         else {

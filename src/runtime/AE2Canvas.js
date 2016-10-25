@@ -64,6 +64,8 @@ function Animation(options) {
     this.buffer.height = this.baseHeight;
     this.bufferCtx = this.buffer.getContext('2d');
 
+    document.body.appendChild(this.buffer)
+
     this.layers = [];
     for (var i = 0; i < options.data.layers.length; i++) {
         if (options.data.layers[i].type === 'vector') {
@@ -196,7 +198,6 @@ Animation.prototype = {
 
     draw: function (time) {
         this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
-
         for (var i = 0; i < this.numLayers; i++) {
             if (time >= this.layers[i].in && time < this.layers[i].out) {
                 this.layers[i].draw(this.ctx, time);

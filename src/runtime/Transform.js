@@ -57,6 +57,8 @@ Transform.prototype.transform = function (ctx, time) {
         positionY = 0;
     }
 
+    // console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
+
     //order very very important :)
     ctx.transform(1, 0, 0, 1, positionX - anchor[0], positionY - anchor[1]);
     this.setRotation(ctx, rotation, anchor[0], anchor[1]);
