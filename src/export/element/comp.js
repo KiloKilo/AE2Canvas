@@ -1,4 +1,4 @@
-function getComp(data) {
+﻿function getComp(data) {
     var comp = {};
     comp.layers = [];
     comp.duration = data.duration * 1000;
@@ -14,7 +14,6 @@ function getComp(data) {
         } else if (layer instanceof AVLayer && layer.enabled) {
             comp.layers.push(getImage(layer));
         }
-
     }
 
     return comp;

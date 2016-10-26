@@ -11,14 +11,16 @@
     image.source = data.source.name;
     image.type = 'image';
 
-        var effects = data.property('Effects');
+    var masks = getMask(data);
+    if (masks && masks.length > 0) {
+        image.masks = masks;
+    }
+
+    var effects = data.property('Effects');
 
     for (var i = 1; i <= data.numProperties; i++) {
         var prop = data.property(i);
         var matchName = prop.matchName;
-
-
-    
 
         if (prop.enabled) {
             switch (matchName) {
