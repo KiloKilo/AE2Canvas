@@ -2,7 +2,7 @@
 
 var Transform = require('./Transform');
 
-function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath, onLoad) {
+function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
 
     this.isLoaded = false;
 

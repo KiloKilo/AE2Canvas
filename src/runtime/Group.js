@@ -48,6 +48,15 @@ function Group(data, bufferCtx, parentIn, parentOut) {
             }
         }
     }
+
+    if (data.masks) {
+        this.masks = [];
+        for (var k = 0; k < data.masks.length; k++) {
+            var mask = data.masks[k];
+            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));
+            else this.masks.push(new Path(mask));
+        }
+    }
 }
 
 Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim, isBuffer) {
@@ -76,6 +85,14 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
 
         if (fill) fill.setColor(this.bufferCtx, time);
         if (stroke) stroke.setStroke(this.bufferCtx, time);
+    }
+
+    if (this.masks) {
+        ctx.beginPath();
+        for (i = 0; i < this.masks.length; i++) {
+            this.masks[i].draw(ctx, time);
+        }
+        ctx.clip();
     }
 
     ctx.beginPath();
