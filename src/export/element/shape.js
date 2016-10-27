@@ -52,6 +52,7 @@ function getShape(data) {
     }
 
     path.frames = getTotalLength(path.frames);
+
     return path;
 
     function getPoint(pointData) {
@@ -64,7 +65,14 @@ function getShape(data) {
                 outY = y + pointData.outTangents[i][1],
                 inX = x + pointData.inTangents[i][0],
                 inY = y + pointData.inTangents[i][1],
-                vertex = [outX, outY, inX, inY, x, y];
+                vertex = [
+                    roundValue(outX, 10000),
+                    roundValue(outY, 10000),
+                    roundValue(inX, 10000),
+                    roundValue(inY, 10000),
+                    roundValue(x, 10000),
+                    roundValue(y, 10000)
+                ];
 
             vertices.push(vertex);
         }
@@ -103,7 +111,8 @@ function getShape(data) {
                         endY
                     ];
 
-                    frames[i].len.push(getArcLength(path));
+                    var len = getArcLength(path);
+                    frames[i].len.push(roundValue(len, 1000));
                 }
             }
         }

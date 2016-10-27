@@ -17,22 +17,35 @@ function removeValues(frames, index) {
     return frames;
 }
 
-function roundValue(frames, prcsn) {
+function round(value, precision) {
+    if (typeof value !== 'number') {
+        $.writeln('Trying to round a: ' + typeof value);
+    }
+    return Math.round(value * precision) / precision;
+}
+
+
+function roundValue(value, prcsn) {
 
     var precision = prcsn || 1;
 
-    for (var i = 0; i < frames.length; i++) {
-        if (frames[i].v instanceof Array) {
-            for (var j = 0; j < frames[i].v.length; j++) {
-                frames[i].v[j] = Math.round(frames[i].v[j] * precision) / precision;
+    if (value instanceof Array) {
+        for (var i = 0; i < value.length; i++) {
+            if (value[i].v instanceof Array) {
+                for (var j = 0; j < value[i].v.length; j++) {
+                    value[i].v[j] = round(value[i].v[j], precision)
+                }
+            } else {
+                value[i].v = round(value[i].v, precision);
             }
-        } else {
-            frames[i].v = Math.round(frames[i].v * precision) / precision;
         }
+    } else {
+        value = round(value, precision);
     }
 
-    return frames;
+    return value;
 }
+
 
 function divideValue(frames, divider) {
     for (var i = 0; i < frames.length; i++) {
@@ -175,7 +188,7 @@ function clearConsole() {
     var bt = new BridgeTalk();
     bt.target = 'estoolkit-4.0';
     bt.body = function () {
-        app.clc();
-    }.toSource() + "()";
+            app.clc();
+        }.toSource() + "()";
     bt.send(5);
 }
