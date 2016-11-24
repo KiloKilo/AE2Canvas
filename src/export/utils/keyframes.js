@@ -1,4 +1,4 @@
-function normalizeKeyframes(frames) {
+function normalizeKeyframes(frames, isSpatial) {
 
     for (var i = 1; i < frames.length; i++) {
 
@@ -10,7 +10,9 @@ function normalizeKeyframes(frames) {
             normInfluenceIn, normSpeedIn,
             normInfluenceOut, normSpeedOut;
 
-        if (lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
+        // $.writeln(lastKey.,PropertyValueType.TwoD_SPATIAL);
+
+        if (!isSpatial && lastKey.outType === KeyframeInterpolationType.LINEAR && key.inType === KeyframeInterpolationType.LINEAR) {
             delete lastKey.outType;
             delete lastKey.easeOut;
             delete lastKey.outTangent;

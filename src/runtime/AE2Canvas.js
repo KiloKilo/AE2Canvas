@@ -8,28 +8,28 @@ var _animations = [],
 
 // @license http://opensource.org/licenses/MIT
 // copyright Paul Irish 2015
-(function () {
-
-    if ('performance' in window == false) {
-        window.performance = {};
-    }
-
-    if ('now' in window.performance == false) {
-
-        var nowOffset = Date.now();
-
-        if (performance.timing && performance.timing.navigationStart) {
-            nowOffset = performance.timing.navigationStart
-        }
-
-        window.performance.now = function now() {
-            return Date.now() - nowOffset;
-        }
-    }
-
-    //
-
-})();
+// (function () {
+//
+//     if ('performance' in window == false) {
+//         window.performance = {};
+//     }
+//
+//     if ('now' in window.performance == false) {
+//
+//         var nowOffset = Date.now();
+//
+//         if (performance.timing && performance.timing.navigationStart) {
+//             nowOffset = performance.timing.navigationStart
+//         }
+//
+//         window.performance.now = function now() {
+//             return Date.now() - nowOffset;
+//         }
+//     }
+//
+//     //
+//
+// })();
 
 function Animation(options) {
     if (!options.data) {
@@ -63,8 +63,6 @@ function Animation(options) {
     this.buffer.width = this.baseWidth;
     this.buffer.height = this.baseHeight;
     this.bufferCtx = this.buffer.getContext('2d');
-
-    document.body.appendChild(this.buffer)
 
     this.layers = [];
     for (var i = 0; i < options.data.layers.length; i++) {
@@ -217,7 +215,6 @@ Animation.prototype = {
     onload: function () {
         for (var i = 0; i < this.numLayers; i++) {
             if (this.layers[i] instanceof ImageLayer) {
-                console.log(this.layers[i]);
                 if (!this.layers[i].isLoaded) {
                     return;
                 }
@@ -291,7 +288,7 @@ module.exports = {
     Animation: Animation,
 
     update: function (time) {
-        time = time !== undefined ? time : window.performance.now();
+        time = time !== undefined ? time : performance.now();
 
         for (var i = 0; i < _animationsLength; i++) {
             _animations[i].update(time);

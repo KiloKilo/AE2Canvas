@@ -162,9 +162,14 @@ Group.prototype.setKeyframes = function (time) {
             this.shapes[i].setKeyframes(time);
         }
     }
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].setKeyframes(time);
+        }
+    }
     if (this.groups) {
-        for (var j = 0; j < this.groups.length; j++) {
-            this.groups[j].setKeyframes(time);
+        for (var k = 0; k < this.groups.length; k++) {
+            this.groups[k].setKeyframes(time);
         }
     }
 
@@ -181,9 +186,14 @@ Group.prototype.reset = function (reversed) {
             this.shapes[i].reset(reversed);
         }
     }
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].reset(reversed);
+        }
+    }
     if (this.groups) {
-        for (var j = 0; j < this.groups.length; j++) {
-            this.groups[j].reset(reversed);
+        for (var k = 0; k < this.groups.length; k++) {
+            this.groups[k].reset(reversed);
         }
     }
     if (this.fill) this.fill.reset(reversed);

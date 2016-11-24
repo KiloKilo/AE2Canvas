@@ -23,7 +23,8 @@
             width: 100%;
             max-width: 1280px;
             margin: 0 auto 30px auto;
-            /*background: url(test.jpg);*/
+            background: url(test.jpg);
+            background-size: contain;
         }
 
         button, label {
@@ -33,8 +34,7 @@
 
         canvas {
             width: 100%;
-            max-width: 1280px;
-            background: #eee;
+            /*max-width: 1280px;*/
         }
 
         #slider {
@@ -47,7 +47,9 @@
     </style>
 </head>
 <body>
-<div id="canvasWrapper"></div>
+<div id="canvasWrapper">
+    <canvas width="1920" height="1080"></canvas>
+</div>
 <button id="play" type="button">Play</button>
 <button id="stop" type="button">Stop</button>
 <button id="pause" type="button">Pause</button>
@@ -64,7 +66,7 @@
         for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
             window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
             window.cancelAnimationFrame =
-                    window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+                window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
         }
 
         if (!window.requestAnimationFrame)
@@ -72,9 +74,9 @@
                 var currTime = new Date().getTime();
                 var timeToCall = Math.max(0, 16 - (currTime - lastTime));
                 var id = window.setTimeout(function () {
-                            callback(currTime + timeToCall);
-                        },
-                        timeToCall);
+                        callback(currTime + timeToCall);
+                    },
+                    timeToCall);
                 lastTime = currTime + timeToCall;
                 return id;
             };
@@ -91,6 +93,8 @@
 
     var slider = document.getElementById('slider');
     var canvasWrapper = document.getElementById('canvasWrapper');
+    var canvas = canvasWrapper.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
     var playButton = document.getElementById('play');
     var stopButton = document.getElementById('stop');
     var pauseButton = document.getElementById('pause');
@@ -131,16 +135,13 @@
 
         // create the animation
         animation = new AE2Canvas.Animation({
+            canvas: canvas,
             data: result,
-            hd: isHD,
-            loop: true,
-            onComplete: function () {
-                animation.gotoAndPlay('test');
-            }
+            loop: true
         });
 
         // add the canvas to the dom
-        canvasWrapper.appendChild(animation.canvas);
+//        canvasWrapper.appendChild(animation.canvas);
 
         //trigger a resize for correct scaling
         animation.resize();

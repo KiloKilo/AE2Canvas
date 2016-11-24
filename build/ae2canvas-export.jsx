@@ -8,9 +8,15 @@ function removeValues(frames, index) {
     return frames;
 }
 
-function roundValue(frames, prcsn) {
-    for (var precision = prcsn || 1, i = 0; i < frames.length; i++) if (frames[i].v instanceof Array) for (var j = 0; j < frames[i].v.length; j++) frames[i].v[j] = Math.round(frames[i].v[j] * precision) / precision; else frames[i].v = Math.round(frames[i].v * precision) / precision;
-    return frames;
+function round(value, precision) {
+    return "number" != typeof value && $.writeln("Trying to round a: " + typeof value), 
+    Math.round(value * precision) / precision;
+}
+
+function roundValue(value, prcsn) {
+    var precision = prcsn || 1;
+    if (value instanceof Array) for (var i = 0; i < value.length; i++) if (value[i].v instanceof Array) for (var j = 0; j < value[i].v.length; j++) value[i].v[j] = round(value[i].v[j], precision); else value[i].v = round(value[i].v, precision); else value = round(value, precision);
+    return value;
 }
 
 function divideValue(frames, divider) {
@@ -253,6 +259,8 @@ function getGroup(data) {
     var group = {};
     data.inPoint && (group["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (group.out = Math.round(1e3 * data.outPoint)), 
     "undefined" != typeof group["in"] && group["in"] < 0 && (group["in"] = 0), group.type = "vector";
+    var masks = getMask(data);
+    masks && masks.length > 0 && (group.masks = masks);
     for (var i = 1; i <= data.numProperties; i++) {
         var prop = data.property(i), matchName = prop.matchName;
         if (prop.enabled) switch (matchName) {
@@ -321,7 +329,9 @@ function getImage(data) {
     data.inPoint && (image["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (image.out = Math.round(1e3 * data.outPoint)), 
     "undefined" != typeof image["in"] && image["in"] < 0 && (image["in"] = 0), image.source = data.source.name, 
     image.type = "image";
-    for (var i = 1; i <= data.numProperties; i++) {
+    var masks = getMask(data);
+    masks && masks.length > 0 && (image.masks = masks);
+    for (var i = (data.property("Effects"), 1); i <= data.numProperties; i++) {
         var prop = data.property(i), matchName = prop.matchName;
         if (prop.enabled) switch (matchName) {
           case "ADBE Transform Group":
@@ -332,57 +342,8 @@ function getImage(data) {
 }
 
 function getPath(data) {
-    function getPoint(pointData) {
-        for (var vertices = [], i = 0; i < pointData.vertices.length; i++) {
-            var x = pointData.vertices[i][0], y = pointData.vertices[i][1], outX = x + pointData.outTangents[i][0], outY = y + pointData.outTangents[i][1], inX = x + pointData.inTangents[i][0], inY = y + pointData.inTangents[i][1], vertex = [ outX, outY, inX, inY, x, y ];
-            vertices.push(vertex);
-        }
-        return vertices;
-    }
-    function getTotalLength(frames) {
-        for (var i = 0; i < frames.length; i++) {
-            frames[i].len = [];
-            for (var j = 1; j < frames[i].v.length; j++) {
-                var path, point = frames[i].v[j], lastPoint = frames[i].v[j - 1];
-                if (lastPoint && point) {
-                    var startX = lastPoint[4], startY = lastPoint[5], ctrl1X = lastPoint[0], ctrl1Y = lastPoint[1], ctrl2X = point[2], ctrl2Y = point[3], endX = point[4], endY = point[5];
-                    path = [ startX, startY, ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY ], frames[i].len.push(getArcLength(path));
-                }
-            }
-        }
-        return frames;
-    }
-    function normalizePathKeyframes(frames) {
-        for (var i = 1; i < frames.length; i++) {
-            var key = frames[i], lastKey = frames[i - 1];
-            lastKey.easeOut && !key.easeIn ? key.easeIn = [ .16667, 1 ] : key.easeIn && !lastKey.easeOut && (lastKey.easeOut = [ .16667, 0 ]);
-        }
-        return frames;
-    }
-    var data = data.property("ADBE Vector Shape"), path = {};
-    path.type = "path", path.closed = data.value.closed, path.frames = [];
-    var numKeys = data.numKeys;
-    if (numKeys > 1) {
-        path.isAnimated = !0;
-        for (var i = 1; numKeys >= i; i++) {
-            var obj = {}, inType = data.keyInInterpolationType(i), outType = data.keyOutInterpolationType(i);
-            if (obj.v = getPoint(data.keyValue(i)), obj.t = Math.round(1e3 * data.keyTime(i)), 
-            i > 1 && inType === KeyframeInterpolationType.BEZIER) {
-                var easeIn = data.keyInTemporalEase(i)[0];
-                obj.easeIn = [], obj.easeIn[0] = 1 - easeIn.influence / 100, obj.easeIn[1] = 1 - Math.round(1e4 * easeIn.speed) / 1e4;
-            }
-            if (numKeys > i && outType === KeyframeInterpolationType.BEZIER) {
-                var easeOut = data.keyOutTemporalEase(i)[0];
-                obj.easeOut = [], obj.easeOut[0] = easeOut.influence / 100, obj.easeOut[1] = Math.round(1e4 * easeOut.speed) / 1e4;
-            }
-            path.frames.push(obj);
-        }
-        path.frames = normalizePathKeyframes(path.frames);
-    } else {
-        var obj = {};
-        path.isAnimated = !1, obj.t = 0, obj.v = getPoint(data.value), path.frames.push(obj);
-    }
-    return path.frames = getTotalLength(path.frames), path;
+    var data = data.property("ADBE Vector Shape");
+    return getShape(data);
 }
 
 function getRect(data) {
