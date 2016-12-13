@@ -80,10 +80,10 @@ function clearConsole() {
     }.toSource() + "()", bt.send(5);
 }
 
-function normalizeKeyframes(frames) {
+function normalizeKeyframes(frames, isSpatial) {
     for (var i = 1; i < frames.length; i++) {
         var diff, easeOut, easeIn, normInfluenceIn, normSpeedIn, normInfluenceOut, normSpeedOut, lastKey = frames[i - 1], key = frames[i], duration = key.t - lastKey.t;
-        if (lastKey.outType !== KeyframeInterpolationType.LINEAR || key.inType !== KeyframeInterpolationType.LINEAR) {
+        if (isSpatial || lastKey.outType !== KeyframeInterpolationType.LINEAR || key.inType !== KeyframeInterpolationType.LINEAR) {
             diff = lastKey.len ? lastKey.len : getValueDifference(lastKey, key);
             var sign = 1;
             if (.01 > diff && diff > -.01) {
@@ -164,13 +164,25 @@ function getScale(data, transform) {
 }
 
 function getPosition(data, transform) {
-    var obj;
-    if (data.property("ADBE Position") instanceof Property) obj = data.property("ADBE Position"); else {
+    var pos, posX, posY;
+    if (data.property("ADBE Position_0") instanceof Property && data.property("ADBE Position_1") instanceof Property && data.property("ADBE Position") instanceof Property) posX = data.property("ADBE Position_0"), 
+    posY = data.property("ADBE Position_1"), pos = data.property("ADBE Position"); else if (data.property("ADBE Position") instanceof Property) pos = data.property("ADBE Position"); else {
         if (!(data.property("ADBE Vector Position") instanceof Property)) return null;
-        obj = data.property("ADBE Vector Position");
+        pos = data.property("ADBE Vector Position");
     }
-    if (obj.isTimeVarying || 0 !== obj.value[0] || 0 !== obj.value[1]) {
-        var position = getProperty(obj);
+    if (pos.dimensionsSeparated) {
+        if (posX.isTimeVarying || 0 !== posX.value[0]) {
+            var positionX = getProperty(posX);
+            positionX = roundValue(positionX), positionX.length > 1 && (positionX = normalizeKeyframes(positionX, !0)), 
+            transform.positionX = positionX;
+        }
+        if (posY.isTimeVarying || 0 !== posY.value[1]) {
+            var positionY = getProperty(posY);
+            positionY = roundValue(positionY), positionY.length > 1 && (positionY = normalizeKeyframes(positionY, !0)), 
+            transform.positionY = positionY;
+        }
+    } else if (pos.isTimeVarying || 0 !== pos.value[0] || 0 !== pos.value[1]) {
+        var position = getProperty(pos);
         position = removeZValue(position), position = roundValue(position), position.length > 1 && (position = getMotionpath(position), 
         position = normalizeKeyframes(position)), transform.position = position;
     }

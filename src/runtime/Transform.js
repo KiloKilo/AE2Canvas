@@ -9,15 +9,7 @@ function Transform(data) {
 
     //this.name = data.name;
 
-    if (data.positionX && data.positionY) {
-        if (data.positionX.length > 1 && data.positionY.length > 1) {
-            this.positionX = new AnimatedProperty(data.positionX);
-            this.positionY = new AnimatedProperty(data.positionY);
-        } else {
-            this.positionX = new Property(data.positionX);
-            this.positionY = new Property(data.positionY);
-        }
-    } else if (data.position) {
+    if (data.position) {
         if (data.position.length > 1) {
             this.position = new Position(data.position);
         } else {
@@ -25,6 +17,8 @@ function Transform(data) {
         }
     }
 
+    if (data.positionX) this.positionX = data.positionX.length > 1 ? new AnimatedProperty(data.positionX) : new Property(data.positionX);
+    if (data.positionY) this.positionY = data.positionY.length > 1 ? new AnimatedProperty(data.positionY) : new Property(data.positionY);
     if (data.anchor) this.anchor = data.anchor.length > 1 ? new AnimatedProperty(data.anchor) : new Property(data.anchor);
     if (data.scaleX) this.scaleX = data.scaleX.length > 1 ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX);
     if (data.scaleY) this.scaleY = data.scaleY.length > 1 ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY);
@@ -45,16 +39,13 @@ Transform.prototype.transform = function (ctx, time) {
         scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
         opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha; // FIXME wrong transparency if nested
 
-    if (this.positionX && this.positionY) {
-        positionX = this.positionX.getValue(time);
-        positionY = this.positionY.getValue(time);
-    } else if (this.position) {
+    if (this.position) {
         var position = this.position.getValue(time, ctx);
         positionX = position[0];
         positionY = position[1];
     } else {
-        positionX = 0;
-        positionY = 0;
+        positionX = this.positionX ? this.positionX.getValue(time) : 0;
+        positionY = this.positionY ? this.positionY.getValue(time) : 0;
     }
 
     // console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
