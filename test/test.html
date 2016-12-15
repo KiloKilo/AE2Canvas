@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+            font-family: "helvetica neue", helvetica, arial, verdana;
+            font-size: 16px;
+        }
+
+        body {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+            background: #fff;
+        }
+
+        #canvasWrapper {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto 30px auto;
+            background-size: contain;
+        }
+
+        button, label {
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        canvas {
+            width: 100%;
+            /*max-width: 1280px;*/
+        }
+
+        #slider {
+            display: block;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 600px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="canvasWrapper">
+    <canvas width="1920" height="1080"></canvas>
+</div>
+<button id="play" type="button">Play</button>
+<button id="stop" type="button">Stop</button>
+<button id="pause" type="button">Pause</button>
+<button id="gotoAndPlay" type="button">gotoAndPlay</button>
+<button id="gotoAndStop" type="button">gotoAndStop</button>
+<input id="slider" type="range" min="0" max="1" step="0.001" value="0">
+<input id="reversed" type="checkbox"><label for="reversed">Reversed</label>
+
+
+<script src="../build/ae2canvas.js"></script>
+<script>
+    var animation;
+
+    var slider = document.getElementById('slider');
+    var canvasWrapper = document.getElementById('canvasWrapper');
+    var canvas = canvasWrapper.querySelector('canvas');
+    var playButton = document.getElementById('play');
+    var stopButton = document.getElementById('stop');
+    var pauseButton = document.getElementById('pause');
+    var gotoAndPlayButton = document.getElementById('gotoAndPlay');
+    var gotoAndStopButton = document.getElementById('gotoAndStop');
+    var checkbox = document.getElementById('reversed');
+
+    function fetchJSONFile(path, callback) {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4) {
+                if (httpRequest.status === 200) {
+                    var data = JSON.parse(httpRequest.responseText);
+                    if (callback) callback(data);
+                }
+            }
+        };
+        httpRequest.open('GET', path);
+        httpRequest.send();
+    }
+
+    function loop(time) {
+        requestAnimationFrame(loop);
+        AE2Canvas.update(time);
+        if (animation) slider.value = animation.getStep();
+    }
+
+    fetchJSONFile('animation1.json', function (result) {
+
+        animation = new AE2Canvas.Animation({
+            canvas: canvas,
+            data: result,
+            loop: true
+        });
+
+        loop();
+
+        animation.resize();
+
+        window.addEventListener('resize', function () {
+            animation.resize();
+        });
+
+        playButton.addEventListener('click', function () {
+            animation.play();
+        });
+
+        stopButton.addEventListener('click', function () {
+            animation.stop();
+        });
+
+        pauseButton.addEventListener('click', function () {
+            animation.pause();
+        });
+
+        slider.addEventListener('input', function () {
+            animation.setStep(this.value);
+        });
+
+        checkbox.addEventListener('change', function () {
+            animation.reversed = checkbox.checked;
+        });
+
+        gotoAndPlayButton.addEventListener('click', function () {
+            animation.gotoAndPlay('example marker name');
+        });
+
+        gotoAndStopButton.addEventListener('click', function () {
+            animation.gotoAndStop('example marker name');
+        });
+
+    });
+
+</script>
+</body>
+</html>
