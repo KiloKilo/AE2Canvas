@@ -21,9 +21,9 @@
 
         #canvasWrapper {
             width: 100%;
-            max-width: 1280px;
+            max-width: 1600px;
             margin: 0 auto 30px auto;
-            background: url(test.jpg);
+            /*background: url(test.jpg);*/
             background-size: contain;
         }
 
@@ -139,6 +139,9 @@
             data: result,
             loop: true
         });
+
+        animation.preload();
+
 
         // add the canvas to the dom
 //        canvasWrapper.appendChild(animation.canvas);
