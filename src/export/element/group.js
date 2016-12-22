@@ -9,9 +9,11 @@
         group.out = Math.round(data.outPoint * 1000);
     }
 
+    group.type = 'vector';
+
     if (typeof group.in !== 'undefined' && group.in < 0) group.in = 0;
 
-    group.type = 'vector';
+    var blendMode;
 
     var masks = getMask(data);
     if (masks && masks.length > 0) {
@@ -39,7 +41,7 @@
                         var innerMatchName = innerProp.matchName;
 
                         if (innerProp.enabled) {
-                                          
+
                             switch (innerMatchName) {
                                 case 'ADBE Vector Group':
                                     if (!group.groups) group.groups = [];
