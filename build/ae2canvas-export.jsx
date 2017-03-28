@@ -270,7 +270,7 @@ function getGroup(data) {
     }
     var group = {};
     data.inPoint && (group["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (group.out = Math.round(1e3 * data.outPoint)), 
-    "undefined" != typeof group["in"] && group["in"] < 0 && (group["in"] = 0), group.type = "vector";
+    group.type = "vector", "undefined" != typeof group["in"] && group["in"] < 0 && (group["in"] = 0);
     var masks = getMask(data);
     masks && masks.length > 0 && (group.masks = masks);
     for (var i = 1; i <= data.numProperties; i++) {

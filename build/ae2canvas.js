@@ -7,31 +7,6 @@ var Group = _dereq_('./Group'),
 var _animations = [],
     _animationsLength = 0;
 
-// @license http://opensource.org/licenses/MIT
-// copyright Paul Irish 2015
-// (function () {
-//
-//     if ('performance' in window == false) {
-//         window.performance = {};
-//     }
-//
-//     if ('now' in window.performance == false) {
-//
-//         var nowOffset = Date.now();
-//
-//         if (performance.timing && performance.timing.navigationStart) {
-//             nowOffset = performance.timing.navigationStart
-//         }
-//
-//         window.performance.now = function now() {
-//             return Date.now() - nowOffset;
-//         }
-//     }
-//
-//     //
-//
-// })();
-
 function Animation(options) {
     if (!options.data) {
         console.error('no data');
@@ -48,12 +23,13 @@ function Animation(options) {
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
-    this.devicePixelRatio = options.devicePixelRatio || 1;
+    this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
     this.fluid = options.fluid || true;
     this.reversed = options.reversed || false;
     this.imageBasePath = options.imageBasePath || '';
     this.onComplete = options.onComplete || function () {
         };
+
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -1162,6 +1138,8 @@ module.exports = Group;
 'use strict';
 
 var Transform = _dereq_('./Transform');
+var Path = _dereq_('./Path');
+var AnimatedPath = _dereq_('./AnimatedPath');
 
 function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
 
@@ -1175,6 +1153,15 @@ function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
 
     this.transform = new Transform(data.transform);
     this.bufferCtx = bufferCtx;
+
+    if (data.masks) {
+        this.masks = [];
+        for (var k = 0; k < data.masks.length; k++) {
+            var mask = data.masks[k];
+            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));
+            else this.masks.push(new Path(mask));
+        }
+    }
 }
 
 ImageLayer.prototype.preload = function (cb) {
@@ -1196,6 +1183,14 @@ ImageLayer.prototype.draw = function (ctx, time) {
     ctx.save();
     this.transform.transform(ctx, time);
 
+    if (this.masks) {
+        ctx.beginPath();
+        for (var i = 0; i < this.masks.length; i++) {
+            this.masks[i].draw(ctx, time);
+        }
+        ctx.clip();
+    }
+
     ctx.drawImage(this.img, 0, 0);
 
     ctx.restore();
@@ -1203,10 +1198,21 @@ ImageLayer.prototype.draw = function (ctx, time) {
 
 ImageLayer.prototype.setKeyframes = function (time) {
     this.transform.setKeyframes(time);
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].setKeyframes(time);
+        }
+    }
 };
 
 ImageLayer.prototype.reset = function (reversed) {
     this.transform.reset(reversed);
+
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].reset(reversed);
+        }
+    }
 };
 
 module.exports = ImageLayer;
@@ -1236,7 +1242,7 @@ module.exports = ImageLayer;
 
 
 
-},{"./Transform":17}],10:[function(_dereq_,module,exports){
+},{"./AnimatedPath":2,"./Path":11,"./Transform":17}],10:[function(_dereq_,module,exports){
 'use strict';
 
 function Merge(data) {
