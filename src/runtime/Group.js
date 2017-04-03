@@ -131,7 +131,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     if (this.groups) {
         if (this.merge) {
             for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time < this.groups[i].out) {
+                if (time >= this.groups[i].in && time <= this.groups[i].out) {
                     this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues, true);
                     this.merge.setCompositeOperation(this.bufferCtx);
                 }
@@ -144,7 +144,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
         }
         else {
             for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time < this.groups[i].out) {
+                if (time >= this.groups[i].in && time <= this.groups[i].out) {
                     this.groups[i].draw(ctx, time, fill, stroke, trimValues);
                 }
             }
