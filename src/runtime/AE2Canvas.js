@@ -26,6 +26,8 @@ function Animation(options) {
     this.fluid = options.fluid || true;
     this.reversed = options.reversed || false;
     this.imageBasePath = options.imageBasePath || '';
+    this.onUpdate = options.onUpdate || function () {
+        };
     this.onComplete = options.onComplete || function () {
         };
 
@@ -164,9 +166,11 @@ Animation.prototype = {
             } else {
                 this.draw(this.compTime);
             }
+            this.onUpdate();
         } else if (this.drawFrame) {
             this.drawFrame = false;
             this.draw(this.compTime);
+            this.onUpdate();
         }
     },
 
