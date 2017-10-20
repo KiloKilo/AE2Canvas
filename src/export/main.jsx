@@ -2,6 +2,7 @@
 #include 'utils/utils.js'
 #include 'utils/keyframes.js'
 #include 'utils/motionpath.js'
+#include 'utils/project.jsx'
 
 #include 'transform/transform.js'
 #include 'transform/anchor.js'
@@ -22,6 +23,7 @@
 #include 'element/polystar.js'
 
 #include 'element/fill.js'
+#include 'element/gradientFill.js'
 #include 'element/stroke.js'
 
 #include 'element/merge.js'

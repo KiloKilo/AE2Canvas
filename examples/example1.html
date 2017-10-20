@@ -21,7 +21,7 @@
 
         #canvasWrapper {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto 30px auto;
             /*background: url(test.jpg);*/
             background-size: contain;
@@ -104,8 +104,8 @@
 
     var step = 0;
     var isHD = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches
-    || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches))
-    || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
+        || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches))
+        || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
 
     function fetchJSONFile(path, callback) {
         var httpRequest = new XMLHttpRequest();
@@ -121,6 +121,32 @@
         httpRequest.send();
     }
 
+    function findByName(obj, search) {
+        var hit = null;
+
+        if (Object.prototype.toString.call(obj) === '[object Object]') {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (key === 'name' && obj.name === search) {
+                        return obj;
+                    } else if (Object.prototype.toString.call(obj[key]) === '[object Object]' || Object.prototype.toString.call(obj[key]) === '[object Array]') {
+                        hit = findByName(obj[key], search);
+                        if (hit) return hit;
+                    }
+                }
+            }
+        } else if (Object.prototype.toString.call(obj) === '[object Array]') {
+            for (var i = 0; i < obj.length; i++) {
+                if (Object.prototype.toString.call(obj[i]) === '[object Object]' || Object.prototype.toString.call(obj[i]) === '[object Array]') {
+                    hit = findByName(obj[i], search);
+                    if (hit) return hit;
+                }
+            }
+        }
+
+        return hit;
+    }
+
     function loop(time) {
         requestAnimationFrame(loop);
         AE2Canvas.update(time);
@@ -132,6 +158,13 @@
 
     //load the animation
     fetchJSONFile('animation1.json', function (result) {
+
+
+        var grad1 = findByName(result, 'grad1');
+        grad1.colors = [
+            [255, 255, 0, 0.8],
+            [0, 60, 60, 1]
+        ];
 
         // create the animation
         animation = new AE2Canvas.Animation({
@@ -177,7 +210,7 @@
         });
 
         gotoAndPlayButton.addEventListener('click', function () {
-            animation.gotoAndPlay('example marker name');
+            animation.gotoAndPlay('scene3');
         });
 
         gotoAndStopButton.addEventListener('click', function () {

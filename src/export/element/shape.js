@@ -36,7 +36,7 @@ function getShape(data) {
                 obj.easeOut[1] = Math.round(easeOut.speed * 10000) / 10000;
             }
 
-            path.frames.push(obj);
+            if (obj.v.length) path.frames.push(obj);
         }
 
         path.frames = normalizePathKeyframes(path.frames);
@@ -48,12 +48,12 @@ function getShape(data) {
         path.isAnimated = false;
         obj.t = 0;
         obj.v = getPoint(data.value);
-        path.frames.push(obj);
+        if (obj.v.length) path.frames.push(obj);
     }
 
     path.frames = getTotalLength(path.frames);
 
-    return path;
+    return path.frames.length ? path : null;
 
     function getPoint(pointData) {
         var vertices = [];

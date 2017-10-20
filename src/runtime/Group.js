@@ -7,6 +7,7 @@ var Stroke = require('./Stroke'),
     Polystar = require('./Polystar'),
     AnimatedPath = require('./AnimatedPath'),
     Fill = require('./Fill'),
+    GradientFill = require('./GradientFill'),
     Transform = require('./Transform'),
     Merge = require('./Merge'),
     Trim = require('./Trim');
@@ -18,6 +19,7 @@ function Group(data, bufferCtx, parentIn, parentOut) {
     this.out = data.out ? data.out : parentOut;
 
     if (data.fill) this.fill = new Fill(data.fill);
+    if (data.gradientFill) this.fill = new GradientFill(data.gradientFill);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
     if (data.trim) this.trim = new Trim(data.trim);
     if (data.merge) this.merge = new Merge(data.merge);
@@ -71,7 +73,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     var stroke = this.stroke || parentStroke;
     var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
 
-    if (fill) fill.setColor(ctx, time);
+    if (fill) fill.setColor(ctx, time, this.transform);
     if (stroke) stroke.setStroke(ctx, time);
 
     if (!isBuffer) this.transform.transform(ctx, time);

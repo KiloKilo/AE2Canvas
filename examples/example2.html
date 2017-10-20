@@ -129,12 +129,12 @@
 
         // create the animation
         animation = new AE2Canvas.Animation({
-            data      : result,
-            hd        : isHD,
-            loop      : true,
-            onComplete: function () {
-            }
+            data      : result
         });
+
+        animation.canvas
+
+        animation.play();
 
         // add the canvas to the dom
         canvasWrapper.appendChild(animation.canvas);

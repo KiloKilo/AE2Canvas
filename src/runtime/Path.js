@@ -56,6 +56,7 @@ Path.prototype.draw = function (ctx, time, trim) {
     }
 
     if (!trim && this.closed) {
+        if (!nextVertex) debugger;
         ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
     }
 };

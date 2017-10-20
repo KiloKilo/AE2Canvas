@@ -446,13 +446,17 @@ function getStroke(data) {
     stroke.opacity = getProperty(data.property("ADBE Vector Stroke Opacity")), stroke.opacity = normalizeKeyframes(stroke.opacity), 
     stroke.opacity = divideValue(stroke.opacity, 100), stroke.width = getProperty(data.property("ADBE Vector Stroke Width")), 
     stroke.width = normalizeKeyframes(stroke.width);
-    var dash = data.property("ADBE Vector Stroke Dash 1");
-    stroke.dash && (stroke.dash = getProperty(dash), stroke.dash = normalizeKeyframes(dash));
-    var gap = data.property("ADBE Vector Stroke Gap 1");
-    gap && (stroke.gap = getProperty(gap), stroke.gap = normalizeKeyframes(gap));
-    var offset = data.property("ADBE Vector Stroke Offset");
-    return offset && (stroke.offset = getProperty(offset), stroke.offset = normalizeKeyframes(offset)), 
-    stroke;
+    var dashes = data.property("ADBE Vector Stroke Dashes");
+    if ($.writeln(dashes), dashes) {
+        var obj = {}, dash = dashes.property("ADBE Vector Stroke Dash 1");
+        dash && (obj.dash = getProperty(dash), obj.dash = normalizeKeyframes(obj.dash));
+        var gap = dashes.property("ADBE Vector Stroke Gap 1");
+        gap && (obj.gap = getProperty(gap), obj.gap = normalizeKeyframes(obj.gap));
+        var offset = dashes.property("ADBE Vector Stroke Offset");
+        offset && (obj.offset = getProperty(offset), obj.offset = normalizeKeyframes(obj.offset)), 
+        stroke.dashes = obj;
+    }
+    return stroke;
 }
 
 function getMerge(data) {

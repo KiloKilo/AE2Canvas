@@ -48,8 +48,9 @@
                                     group.groups.unshift(getGroup(innerProp));
                                     break;
                                 case 'ADBE Vector Shape - Group':
-                                    if (!group.shapes) group.shapes = [];
-                                    group.shapes.unshift(getPath(innerProp));
+                                    var path = getPath(innerProp);
+                                    if (path && !group.shapes) group.shapes = [];
+                                    if (path) group.shapes.unshift(path);
                                     break;
                                 case 'ADBE Vector Shape - Rect':
                                     if (!group.shapes) group.shapes = [];
@@ -67,12 +68,14 @@
                                     if (!group.fill) group.fill = getFill(innerProp);
                                     break;
                                 case 'ADBE Vector Graphic - G-Fill':
+                                    if (!group.gradientFill) group.gradientFill = getGradientFill(innerProp);
                                     break;
                                 case 'ADBE Vector Graphic - Stroke':
                                     if (!group.stroke) group.stroke = getStroke(innerProp);
                                     break;
                                 case 'ADBE Vector Filter - Merge':
-                                    group.merge = getMerge(innerProp);
+                                    var merge = getMerge(innerProp);
+                                    if (merge) group.merge = merge;
                                     break;
                                 case 'ADBE Vector Filter - Trim':
                                     group.trim = getVectorTrim(innerProp);
