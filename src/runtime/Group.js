@@ -76,7 +76,7 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     var stroke = this.stroke || parentStroke;
     var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
 
-    if (fill) fill.setColor(ctx, time, this.transform);
+    if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
 
     if (!isBuffer) {

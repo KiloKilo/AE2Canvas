@@ -251,10 +251,8 @@ function getComp(data) {
     var comp = {};
     comp.layers = [], comp.duration = 1e3 * data.duration, comp.width = data.width, 
     comp.height = data.height, comp.markers = getCompMarkers(data);
-    for (var i = data.numLayers; i > 0; i--) {
-        var layer = data.layer(i);
-        layer instanceof ShapeLayer && layer.enabled ? comp.layers.push(getGroup(layer)) : layer instanceof AVLayer && layer.enabled && comp.layers.push(getImage(layer));
-    }
+    var i, layer;
+    for (i = data.numLayers; i > 0; i--) layer = data.layer(i), layer instanceof ShapeLayer && layer.enabled ? comp.layers.push(getGroup(layer)) : layer instanceof AVLayer && layer.enabled && comp.layers.push(getImage(layer));
     return comp;
 }
 
@@ -269,8 +267,9 @@ function getGroup(data) {
         return group;
     }
     var group = {};
+    group.index = data.index, group.type = "vector", data.parent && (group.parent = data.parent.index), 
     data.inPoint && (group["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (group.out = Math.round(1e3 * data.outPoint)), 
-    group.type = "vector", "undefined" != typeof group["in"] && group["in"] < 0 && (group["in"] = 0);
+    "undefined" != typeof group["in"] && group["in"] < 0 && (group["in"] = 0);
     var masks = getMask(data);
     masks && masks.length > 0 && (group.masks = masks);
     for (var i = 1; i <= data.numProperties; i++) {
@@ -297,7 +296,8 @@ function getGroup(data) {
                     break;
 
                   case "ADBE Vector Shape - Group":
-                    group.shapes || (group.shapes = []), group.shapes.unshift(getPath(innerProp));
+                    var path = getPath(innerProp);
+                    path && !group.shapes && (group.shapes = []), path && group.shapes.unshift(path);
                     break;
 
                   case "ADBE Vector Shape - Rect":
@@ -317,6 +317,7 @@ function getGroup(data) {
                     break;
 
                   case "ADBE Vector Graphic - G-Fill":
+                    group.gradientFill || (group.gradientFill = getGradientFill(innerProp));
                     break;
 
                   case "ADBE Vector Graphic - Stroke":
@@ -324,7 +325,8 @@ function getGroup(data) {
                     break;
 
                   case "ADBE Vector Filter - Merge":
-                    group.merge = getMerge(innerProp);
+                    var merge = getMerge(innerProp);
+                    merge && (group.merge = merge);
                     break;
 
                   case "ADBE Vector Filter - Trim":
@@ -338,9 +340,9 @@ function getGroup(data) {
 
 function getImage(data) {
     var image = {};
-    data.inPoint && (image["in"] = Math.round(1e3 * data.inPoint)), data.outPoint && (image.out = Math.round(1e3 * data.outPoint)), 
-    "undefined" != typeof image["in"] && image["in"] < 0 && (image["in"] = 0), image.source = data.source.name, 
-    image.type = "image";
+    image.index = data.index, image.source = data.source.name, image.type = "image", 
+    data.parent && (image.parent = data.parent.index), data.inPoint && (image["in"] = Math.round(1e3 * data.inPoint)), 
+    data.outPoint && (image.out = Math.round(1e3 * data.outPoint)), "undefined" != typeof image["in"] && image["in"] < 0 && (image["in"] = 0);
     var masks = getMask(data);
     masks && masks.length > 0 && (image.masks = masks);
     for (var i = (data.property("Effects"), 1); i <= data.numProperties; i++) {
@@ -447,7 +449,7 @@ function getStroke(data) {
     stroke.opacity = divideValue(stroke.opacity, 100), stroke.width = getProperty(data.property("ADBE Vector Stroke Width")), 
     stroke.width = normalizeKeyframes(stroke.width);
     var dashes = data.property("ADBE Vector Stroke Dashes");
-    if ($.writeln(dashes), dashes) {
+    if (dashes && dashes.enabled) {
         var obj = {}, dash = dashes.property("ADBE Vector Stroke Dash 1");
         dash && (obj.dash = getProperty(dash), obj.dash = normalizeKeyframes(obj.dash));
         var gap = dashes.property("ADBE Vector Stroke Gap 1");
@@ -461,7 +463,7 @@ function getStroke(data) {
 
 function getMerge(data) {
     var merge = {};
-    return merge.type = data.property("ADBE Vector Merge Type").value, merge;
+    return merge.type = data.property("ADBE Vector Merge Type").value, 1 !== merge.type ? merge : null;
 }
 
 function getVectorTrim(data) {
@@ -512,7 +514,7 @@ function getAnimatedProperty(data, split) {
 function start() {
     clearConsole();
     var data = getComp(app.project.activeItem), json = JSON.stringify(data), theFile = File.saveDialog("Save the json file");
-    null != theFile && (theFile.open("w", "TEXT", "????"), theFile.write(json), theFile.close());
+    null !== theFile && (theFile.open("w", "TEXT", "????"), theFile.write(json), theFile.close());
 }
 
 "object" != typeof JSON && (JSON = {}), function() {

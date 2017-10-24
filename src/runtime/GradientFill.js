@@ -14,41 +14,20 @@ function GradientFill(data, gradients) {
     if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
 }
 
-GradientFill.prototype.setColor = function (ctx, time, transform) {
-
-    var positionX = 0;
-    var positionY = 0;
-
-    if (transform.position) {
-        var position = transform.position.getValue(time);
-        positionX = position[0];
-        positionY = position[1];
-    } else {
-        positionX = transform.positionX ? transform.positionX.getValue(time) : 0;
-        positionY = transform.positionY ? transform.positionY.getValue(time) : 0;
-    }
-
-    var anchor = this.transform.anchor.getValue(time);
-
+GradientFill.prototype.setColor = function (ctx, time) {
     var startPoint = this.startPoint.getValue(time);
     var endPoint = this.endPoint.getValue(time);
-
-    var startX = startPoint[0] - positionX - anchor[0];
-    var startY = startPoint[1] - positionY - anchor[1];
-    var endX = endPoint[0] - positionX - anchor[0];
-    var endY = endPoint[1] - positionY - anchor[1];
-
     var radius = 0;
 
     if (this.type === 'radial') {
-        var distX = startX - endX;
-        var distY = startY - endY;
+        var distX = startPoint[0] - endPoint[0];
+        var distY = startPoint[1] - endPoint[1];
         radius = Math.sqrt(distX * distX + distY * distY);
     }
 
     var gradient = this.type === 'radial' ?
-        ctx.createRadialGradient(startX, startY, 0, startX, startY, radius) :
-        ctx.createLinearGradient(startX, startY, endX, endY);
+        ctx.createRadialGradient(startPoint[0], startPoint[1], 0, startPoint[0], startPoint[1], radius) :
+        ctx.createLinearGradient(startPoint[0], startPoint[1], endPoint[0], endPoint[1]);
 
     var opacity = this.opacity ? this.opacity.getValue(time) : 1;
 
