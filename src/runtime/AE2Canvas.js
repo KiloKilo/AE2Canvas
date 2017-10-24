@@ -1,7 +1,8 @@
 'use strict';
 
-var Group = require('./Group'),
-    ImageLayer = require('./ImageLayer');
+var Group = require('./Group');
+var ImageLayer = require('./ImageLayer');
+var TextLayer = require('./TextLayer');
 
 var _animations = [],
     _animationsLength = 0;
@@ -48,6 +49,8 @@ function Animation(options) {
             this.layers.push(new Group(options.data.layers[i], this.bufferCtx, 0, this.duration, this.gradients));
         } else if (options.data.layers[i].type === 'image') {
             this.layers.push(new ImageLayer(options.data.layers[i], 0, this.duration, this.imageBasePath));
+        } else if (options.data.layers[i].type === 'text') {
+            this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration));
         }
     }
     this.numLayers = this.layers.length;
@@ -287,15 +290,13 @@ Animation.prototype = {
 
 };
 
-module.exports = {
 
-    Animation: Animation,
+const update = function (time) {
+    time = time !== undefined ? time : performance.now();
 
-    update: function (time) {
-        time = time !== undefined ? time : performance.now();
-
-        for (var i = 0; i < _animationsLength; i++) {
-            _animations[i].update(time);
-        }
+    for (var i = 0; i < _animationsLength; i++) {
+        _animations[i].update(time);
     }
 };
+
+export { Animation, update };

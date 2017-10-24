@@ -121,28 +121,6 @@
         httpRequest.send();
     }
 
-    function findByName(obj, search, hits) {
-
-        if (Object.prototype.toString.call(obj) === '[object Object]') {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (key === 'name' && obj.name === search) {
-                        console.log(obj);
-                        hits.push(obj);
-                    } else if (Object.prototype.toString.call(obj[key]) === '[object Object]' || Object.prototype.toString.call(obj[key]) === '[object Array]') {
-                        findByName(obj[key], search, hits);
-                    }
-                }
-            }
-        } else if (Object.prototype.toString.call(obj) === '[object Array]') {
-            for (var i = 0; i < obj.length; i++) {
-                if (Object.prototype.toString.call(obj[i]) === '[object Object]' || Object.prototype.toString.call(obj[i]) === '[object Array]') {
-                    findByName(obj[i], search, hits);
-                }
-            }
-        }
-    }
-
     function loop(time) {
         requestAnimationFrame(loop);
         AE2Canvas.update(time);

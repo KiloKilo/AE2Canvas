@@ -16,17 +16,10 @@
             comp.layers.push(getGroup(layer));
         } else if (layer instanceof AVLayer && layer.enabled) {
             comp.layers.push(getImage(layer));
+        } else if (layer instanceof TextLayer && layer.enabled) {
+            comp.layers.push(getText(layer));
         }
     }
-
-
-    // for (i = 0; i < comp.layers.length; i++) {
-    //     layer = comp.layers[i];
-    //     $.writeln(layer.parent);
-    //     if (layer.parent) {
-    //         $.writeln(layer);
-    //     }
-    // }
 
     return comp;
 

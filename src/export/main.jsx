@@ -16,6 +16,7 @@
 #include 'element/mask.js'
 #include 'element/comp.js'
 #include 'element/image.js'
+#include 'element/text.js'
 #include 'element/group.js'
 #include 'element/path.js'
 #include 'element/rect.js'
