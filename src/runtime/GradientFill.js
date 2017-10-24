@@ -20,7 +20,7 @@ GradientFill.prototype.setColor = function (ctx, time, transform) {
     var positionY = 0;
 
     if (transform.position) {
-        var position = transform.position.getValue(time, ctx);
+        var position = transform.position.getValue(time);
         positionX = position[0];
         positionY = position[1];
     } else {
@@ -28,13 +28,15 @@ GradientFill.prototype.setColor = function (ctx, time, transform) {
         positionY = transform.positionY ? transform.positionY.getValue(time) : 0;
     }
 
+    var anchor = this.transform.anchor.getValue(time);
+
     var startPoint = this.startPoint.getValue(time);
     var endPoint = this.endPoint.getValue(time);
 
-    var startX = startPoint[0] - positionX;
-    var startY = startPoint[1] - positionY;
-    var endX = endPoint[0] - positionX;
-    var endY = endPoint[1] - positionY;
+    var startX = startPoint[0] - positionX - anchor[0];
+    var startY = startPoint[1] - positionY - anchor[1];
+    var endX = endPoint[0] - positionX - anchor[0];
+    var endY = endPoint[1] - positionY - anchor[1];
 
     var radius = 0;
 
@@ -55,6 +57,7 @@ GradientFill.prototype.setColor = function (ctx, time, transform) {
         var color = stop.color;
         gradient.addColorStop(stop.location, 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', ' + color[3] * opacity + ')');
     }
+
     ctx.fillStyle = gradient;
 };
 
