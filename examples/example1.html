@@ -121,30 +121,26 @@
         httpRequest.send();
     }
 
-    function findByName(obj, search) {
-        var hit = null;
+    function findByName(obj, search, hits) {
 
         if (Object.prototype.toString.call(obj) === '[object Object]') {
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'name' && obj.name === search) {
-                        return obj;
+                        console.log(obj);
+                        hits.push(obj);
                     } else if (Object.prototype.toString.call(obj[key]) === '[object Object]' || Object.prototype.toString.call(obj[key]) === '[object Array]') {
-                        hit = findByName(obj[key], search);
-                        if (hit) return hit;
+                        findByName(obj[key], search, hits);
                     }
                 }
             }
         } else if (Object.prototype.toString.call(obj) === '[object Array]') {
             for (var i = 0; i < obj.length; i++) {
                 if (Object.prototype.toString.call(obj[i]) === '[object Object]' || Object.prototype.toString.call(obj[i]) === '[object Array]') {
-                    hit = findByName(obj[i], search);
-                    if (hit) return hit;
+                    findByName(obj[i], search, hits);
                 }
             }
         }
-
-        return hit;
     }
 
     function loop(time) {
@@ -160,12 +156,7 @@
     fetchJSONFile('animation1.json', function (result) {
 
 
-        var grad1 = findByName(result, 'grad1');
-        grad1.colors = [
-            [255, 255, 0, 0.8],
-            [0, 60, 60, 1]
-        ];
-
+//
         // create the animation
         animation = new AE2Canvas.Animation({
             canvas: canvas,
@@ -173,8 +164,35 @@
             loop: true
         });
 
+        animation.setGradients('sunGrad', [
+            { color: [253, 248, 213, 1], location: 0.65 },
+            { color: [70, 48, 97, 0], location: 1 }
+        ]);
+        animation.setGradients('sun2Grad', [
+            { color: [253, 248, 213, 0.5], location: 0.65 },
+            { color: [188, 216, 241, 0], location: 1 }
+        ]);
+        animation.setGradients('sun3Grad', [
+            { color: [253, 248, 213, 0.5], location: 0.65 },
+            { color: [227, 150, 167, 0], location: 1 }
+        ]);
+        animation.setGradients('earthGrad', [
+            { color: [133, 221, 255, 1], location: 0 },
+            { color: [74, 167, 221, 1], location: 1 }
+        ]);
+        animation.setGradients('skyGrad', [
+            { color: [160, 200, 235, 1], location: 0 },
+            { color: [255, 255, 255, 1], location: 1 }
+        ]);
+        animation.setGradients('sky2Grad', [
+            { color: [253, 229, 161, 1], location: 0 },
+            { color: [228, 150, 167, 1], location: 0.66 },
+            { color: [164, 97, 251675, 1], location: 1 }
+        ]);
+
         animation.preload();
 
+        console.log(animation);
 
         // add the canvas to the dom
 //        canvasWrapper.appendChild(animation.canvas);

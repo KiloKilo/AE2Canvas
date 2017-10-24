@@ -8,9 +8,11 @@ function getGradientFill(data) {
     gradientFill.startPoint = normalizeKeyframes(gradientFill.startPoint);
     gradientFill.endPoint = normalizeKeyframes(gradientFill.endPoint);
 
-    gradientFill.colors = [[255, 255, 255, 0.5], [0, 0, 0, 1]];
+    gradientFill.stops = [
+        { color: [255, 255, 255, 1], location: 0 },
+        { color: [0, 0, 0, 1], location: 1 }
+    ];
 
-    //optional
     var opacity = data.property('ADBE Vector Fill Opacity');
 
     if (opacity.isTimeVarying || opacity.value !== 100) {
@@ -19,8 +21,6 @@ function getGradientFill(data) {
         opacity = divideValue(opacity, 100);
         gradientFill.opacity = opacity;
     }
-
-    $.writeln(gradientFill);
 
     return gradientFill;
 

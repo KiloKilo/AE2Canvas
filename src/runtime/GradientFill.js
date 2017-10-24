@@ -3,8 +3,11 @@
 var Property = require('./Property'),
     AnimatedProperty = require('./AnimatedProperty');
 
-function GradientFill(data) {
-    this.colors = data.colors;
+function GradientFill(data, gradients) {
+    if (!gradients[data.name]) gradients[data.name] = [];
+    gradients[data.name].push(this);
+
+    this.stops = data.stops;
     this.type = data.type;
     this.startPoint = data.startPoint.length > 1 ? new AnimatedProperty(data.startPoint) : new Property(data.startPoint);
     this.endPoint = data.endPoint.length > 1 ? new AnimatedProperty(data.endPoint) : new Property(data.endPoint);
@@ -47,8 +50,11 @@ GradientFill.prototype.setColor = function (ctx, time, transform) {
 
     var opacity = this.opacity ? this.opacity.getValue(time) : 1;
 
-    gradient.addColorStop(0, 'rgba(' + this.colors[0][0] + ', ' + this.colors[0][1] + ', ' + this.colors[0][2] + ', ' + this.colors[0][3] * opacity + ')');
-    gradient.addColorStop(1, 'rgba(' + this.colors[1][0] + ', ' + this.colors[1][1] + ', ' + this.colors[1][2] + ', ' + this.colors[1][3] * opacity + ')');
+    for (var i = 0; i < this.stops.length; i++) {
+        var stop = this.stops[i];
+        var color = stop.color;
+        gradient.addColorStop(stop.location, 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', ' + color[3] * opacity + ')');
+    }
     ctx.fillStyle = gradient;
 };
 

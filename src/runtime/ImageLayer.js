@@ -4,18 +4,18 @@ var Transform = require('./Transform');
 var Path = require('./Path');
 var AnimatedPath = require('./AnimatedPath');
 
-function ImageLayer(data, bufferCtx, parentIn, parentOut, basePath) {
+function ImageLayer(data, parentIn, parentOut, basePath) {
 
     this.isLoaded = false;
 
-    //this.name = data.name;
+    this.index = data.index;
     this.source = basePath + data.source;
-
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
 
+    if (data.parent) this.parent = data.parent;
+
     this.transform = new Transform(data.transform);
-    this.bufferCtx = bufferCtx;
 
     if (data.masks) {
         this.masks = [];
@@ -44,6 +44,7 @@ ImageLayer.prototype.draw = function (ctx, time) {
     if (!this.isLoaded) return;
 
     ctx.save();
+    if (this.parent) this.parent.setParentTransform(ctx, time);
     this.transform.transform(ctx, time);
 
     if (this.masks) {
@@ -57,6 +58,11 @@ ImageLayer.prototype.draw = function (ctx, time) {
     ctx.drawImage(this.img, 0, 0);
 
     ctx.restore();
+};
+
+ImageLayer.prototype.setParentTransform = function (ctx, time) {
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
 };
 
 ImageLayer.prototype.setKeyframes = function (time) {

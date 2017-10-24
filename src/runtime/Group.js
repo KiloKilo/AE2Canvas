@@ -12,14 +12,15 @@ var Stroke = require('./Stroke'),
     Merge = require('./Merge'),
     Trim = require('./Trim');
 
-function Group(data, bufferCtx, parentIn, parentOut) {
+function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
-    //this.name = data.name;
+    this.index = data.index;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
 
+    if (data.parent) this.parent = data.parent;
     if (data.fill) this.fill = new Fill(data.fill);
-    if (data.gradientFill) this.fill = new GradientFill(data.gradientFill);
+    if (data.gradientFill) this.fill = new GradientFill(data.gradientFill, gradients);
     if (data.stroke) this.stroke = new Stroke(data.stroke);
     if (data.trim) this.trim = new Trim(data.trim);
     if (data.merge) this.merge = new Merge(data.merge);
@@ -30,7 +31,7 @@ function Group(data, bufferCtx, parentIn, parentOut) {
     if (data.groups) {
         this.groups = [];
         for (var i = 0; i < data.groups.length; i++) {
-            this.groups.push(new Group(data.groups[i], this.bufferCtx, this.in, this.out));
+            this.groups.push(new Group(data.groups[i], this.bufferCtx, this.in, this.out, gradients));
         }
     }
 
@@ -63,6 +64,8 @@ function Group(data, bufferCtx, parentIn, parentOut) {
 
 Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim, isBuffer) {
 
+    if (this.transform.opacity && this.transform.opacity.getValue(time) === 0) return;
+
     var i;
 
     ctx.save();
@@ -76,7 +79,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     if (fill) fill.setColor(ctx, time, this.transform);
     if (stroke) stroke.setStroke(ctx, time);
 
-    if (!isBuffer) this.transform.transform(ctx, time);
+    if (!isBuffer) {
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.transform(ctx, time);
+    }
     this.transform.transform(this.bufferCtx, time);
 
     if (this.merge) {
@@ -98,62 +104,74 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     }
 
     ctx.beginPath();
-    if (this.shapes) {
-        if (this.merge) {
-
-            for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(this.bufferCtx, time, trimValues);
-                this.bufferCtx.closePath();
-                if (fill) this.bufferCtx.fill();
-                if (stroke) this.bufferCtx.stroke();
-                this.bufferCtx.beginPath();
-                this.merge.setCompositeOperation(this.bufferCtx);
-            }
-
-            ctx.restore();
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
-            ctx.restore();
-
-        } else {
-            for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(ctx, time, trimValues);
-            }
-            if (this.shapes[this.shapes.length - 1].closed) {
-                //ctx.closePath();
-            }
-        }
-    }
+    if (this.shapes) this.drawShapes(ctx, time, fill, stroke, trimValues);
 
     //TODO get order
     if (fill) ctx.fill();
     if (!isBuffer && stroke) ctx.stroke();
 
-    if (this.groups) {
-        if (this.merge) {
-            for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time <= this.groups[i].out) {
-                    this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues, true);
-                    this.merge.setCompositeOperation(this.bufferCtx);
-                }
-            }
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
-            ctx.restore();
-            this.bufferCtx.restore();
+    if (this.groups) this.drawGroups(ctx, time, fill, stroke, trimValues);
+
+    ctx.restore();
+    this.bufferCtx.restore();
+};
+
+Group.prototype.drawShapes = function (ctx, time, fill, stroke, trimValues) {
+    var i;
+    if (this.merge) {
+        for (i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].draw(this.bufferCtx, time, trimValues);
+            this.bufferCtx.closePath();
+            if (fill) this.bufferCtx.fill();
+            if (stroke) this.bufferCtx.stroke();
+            this.bufferCtx.beginPath();
+            this.merge.setCompositeOperation(this.bufferCtx);
         }
-        else {
-            for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time <= this.groups[i].out) {
-                    this.groups[i].draw(ctx, time, fill, stroke, trimValues);
-                }
+
+        ctx.restore();
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.drawImage(this.bufferCtx.canvas, 0, 0);
+        ctx.restore();
+
+    } else {
+        for (i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].draw(ctx, time, trimValues);
+        }
+        if (this.shapes[this.shapes.length - 1].closed) {
+            //ctx.closePath();
+        }
+    }
+};
+
+
+Group.prototype.drawGroups = function (ctx, time, fill, stroke, trimValues) {
+    var i;
+    if (this.merge) {
+        for (i = 0; i < this.groups.length; i++) {
+            if (time >= this.groups[i].in && time <= this.groups[i].out) {
+                this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues, true);
+                this.merge.setCompositeOperation(this.bufferCtx);
+            }
+        }
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.drawImage(this.bufferCtx.canvas, 0, 0);
+        ctx.restore();
+        this.bufferCtx.restore();
+    }
+    else {
+        for (i = 0; i < this.groups.length; i++) {
+            if (time >= this.groups[i].in && time <= this.groups[i].out) {
+                this.groups[i].draw(ctx, time, fill, stroke, trimValues, false);
             }
         }
     }
-    ctx.restore();
-    this.bufferCtx.restore();
+};
+
+Group.prototype.setParentTransform = function (ctx, time) {
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
 };
 
 Group.prototype.setKeyframes = function (time) {

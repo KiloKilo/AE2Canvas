@@ -12,6 +12,7 @@ function Animation(options) {
         return;
     }
 
+    this.gradients = {};
     this.pausedTime = 0;
     this.duration = options.data.duration;
     this.baseWidth = options.data.width;
@@ -27,10 +28,9 @@ function Animation(options) {
     this.reversed = options.reversed || false;
     this.imageBasePath = options.imageBasePath || '';
     this.onUpdate = options.onUpdate || function () {
-        };
+    };
     this.onComplete = options.onComplete || function () {
-        };
-
+    };
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -45,12 +45,24 @@ function Animation(options) {
     this.layers = [];
     for (var i = 0; i < options.data.layers.length; i++) {
         if (options.data.layers[i].type === 'vector') {
-            this.layers.push(new Group(options.data.layers[i], this.bufferCtx, 0, this.duration));
+            this.layers.push(new Group(options.data.layers[i], this.bufferCtx, 0, this.duration, this.gradients));
         } else if (options.data.layers[i].type === 'image') {
-            this.layers.push(new ImageLayer(options.data.layers[i], this.bufferCtx, 0, this.duration, this.imageBasePath));
+            this.layers.push(new ImageLayer(options.data.layers[i], 0, this.duration, this.imageBasePath));
         }
     }
     this.numLayers = this.layers.length;
+
+    for (var j = 0; j < this.layers.length; j++) {
+        var layer = this.layers[j];
+        if (layer.parent) {
+            for (var k = 0; k < this.layers.length; k++) {
+                //TODO stop loop
+                if (layer.parent === this.layers[k].index) {
+                    layer.parent = this.layers[k];
+                }
+            }
+        }
+    }
 
     this.reset(this.reversed);
     this.resize();
@@ -248,6 +260,17 @@ Animation.prototype = {
         }
     },
 
+    setGradients: function (name, stops) {
+        if (!this.gradients[name]) {
+            console.warn('Gradient with name: ' + name + ' not found.');
+            return;
+        }
+
+        this.gradients[name].forEach(function (gradient) {
+            gradient.stops = stops;
+        });
+    },
+
     get reversed() {
         return this._reversed;
     },
@@ -261,6 +284,7 @@ Animation.prototype = {
         }
         this.setKeyframes(this.compTime);
     }
+
 };
 
 module.exports = {

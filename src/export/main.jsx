@@ -38,10 +38,11 @@ function start() {
     clearConsole();
 
     var data = getComp(app.project.activeItem);
+
     var json = JSON.stringify(data);
 
     var theFile = File.saveDialog('Save the json file');
-    if (theFile != null) {
+    if (theFile !== null) {
        theFile.open("w", "TEXT", "????");
        theFile.write(json);
        theFile.close();

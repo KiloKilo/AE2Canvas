@@ -6,8 +6,11 @@
     comp.height = data.height;
     comp.markers = getCompMarkers(data);
 
-    for (var i = data.numLayers; i > 0; i--) {
-        var layer = data.layer(i);
+    var i;
+    var layer;
+
+    for (i = data.numLayers; i > 0; i--) {
+        layer = data.layer(i);
 
         if (layer instanceof ShapeLayer && layer.enabled) {
             comp.layers.push(getGroup(layer));
@@ -15,6 +18,15 @@
             comp.layers.push(getImage(layer));
         }
     }
+
+
+    // for (i = 0; i < comp.layers.length; i++) {
+    //     layer = comp.layers[i];
+    //     $.writeln(layer.parent);
+    //     if (layer.parent) {
+    //         $.writeln(layer);
+    //     }
+    // }
 
     return comp;
 

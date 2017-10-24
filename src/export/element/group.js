@@ -1,16 +1,13 @@
 ﻿function getGroup(data) {
 
     var group = {};
-
-    if (data.inPoint) {
-        group.in = Math.round(data.inPoint * 1000);
-    }
-    if (data.outPoint) {
-        group.out = Math.round(data.outPoint * 1000);
-    }
-
+    group.index = data.index;
     group.type = 'vector';
 
+    if (data.parent) group.parent = data.parent.index;
+
+    if (data.inPoint) group.in = Math.round(data.inPoint * 1000);
+    if (data.outPoint) group.out = Math.round(data.outPoint * 1000);
     if (typeof group.in !== 'undefined' && group.in < 0) group.in = 0;
 
     var blendMode;
