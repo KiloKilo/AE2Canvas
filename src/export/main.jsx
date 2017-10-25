@@ -44,9 +44,10 @@ function start() {
 
     var theFile = File.saveDialog('Save the json file');
     if (theFile !== null) {
-       theFile.open("w", "TEXT", "????");
-       theFile.write(json);
-       theFile.close();
+        theFile.encoding = 'UTF-8';
+        theFile.open("w", "TEXT", "????");
+        theFile.write(json);
+        theFile.close();
     }
 }
 start();

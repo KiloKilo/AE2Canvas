@@ -26,10 +26,11 @@
                     break;
                 case 'ADBE Text Properties': {
                     var textDoc = prop.property('ADBE Text Document').value;
-                    text.text = textDoc.text;
+                    text.text = textDoc.text.split('\r');
+                    text.leading = textDoc.leading;
                     text.fontSize = textDoc.fontSize;
                     text.font = textDoc.font;
-                    text.color = textDoc.fillColor;
+                    text.color = setTextColor(textDoc.fillColor);
                     text.justification = setJustifitcationAsString(textDoc.justification);
                     break;
                 }
@@ -53,6 +54,14 @@
             default:
                 return 'left';
         }
+    }
+
+    function setTextColor(color) {
+        for (var i = 0; i < color.length; i++) {
+            color[i] = Math.round(color[i] * 255);
+        }
+
+        return color;
     }
 }
 

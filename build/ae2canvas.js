@@ -103,7 +103,7 @@ module.exports = Property;
 
 
 var Property = __webpack_require__(0),
-    BezierEasing = __webpack_require__(3);
+    BezierEasing = __webpack_require__(5);
 
 function AnimatedProperty(data) {
     Property.call(this, data);
@@ -228,7 +228,7 @@ module.exports = AnimatedProperty;
 "use strict";
 
 
-var Bezier = __webpack_require__(4);
+var Bezier = __webpack_require__(6);
 
 function Path(data) {
     //this.name = data.name;
@@ -421,6 +421,255 @@ module.exports = Path;
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var Path = __webpack_require__(2),
+    BezierEasing = __webpack_require__(5);
+
+function AnimatedPath(data) {
+    Path.call(this, data);
+    this.frameCount = this.frames.length;
+}
+
+AnimatedPath.prototype = Object.create(Path.prototype);
+
+AnimatedPath.prototype.getValue = function (time) {
+    if (this.finished && time >= this.nextFrame.t) {
+        return this.nextFrame;
+    } else if (!this.started && time <= this.lastFrame.t) {
+        return this.lastFrame;
+    } else {
+        this.started = true;
+        this.finished = false;
+        if (time > this.nextFrame.t) {
+            if (this.pointer + 1 === this.frameCount) {
+                this.finished = true;
+            } else {
+                this.pointer++;
+                this.lastFrame = this.frames[this.pointer - 1];
+                this.nextFrame = this.frames[this.pointer];
+                this.onKeyframeChange();
+            }
+        } else if (time < this.lastFrame.t) {
+            if (this.pointer < 2) {
+                this.started = false;
+            } else {
+                this.pointer--;
+                this.lastFrame = this.frames[this.pointer - 1];
+                this.nextFrame = this.frames[this.pointer];
+                this.onKeyframeChange();
+            }
+        }
+        return this.getValueAtTime(time);
+    }
+};
+
+AnimatedPath.prototype.setKeyframes = function (time) {
+    if (time < this.frames[0].t) {
+        this.pointer = 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+    }
+
+    if (time > this.frames[this.frameCount - 1].t) {
+        this.pointer = this.frameCount - 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+    }
+
+    for (var i = 1; i < this.frameCount; i++) {
+        if (time >= this.frames[i - 1].t && time <= this.frames[i]) {
+            this.pointer = i;
+            this.lastFrame = this.frames[i - 1];
+            this.nextFrame = this.frames[i];
+            this.onKeyframeChange();
+            return;
+        }
+    }
+};
+
+AnimatedPath.prototype.onKeyframeChange = function () {
+    this.setEasing();
+};
+
+AnimatedPath.prototype.lerp = function (a, b, t) {
+    return a + t * (b - a);
+};
+
+AnimatedPath.prototype.setEasing = function () {
+    if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
+        this.easing = new BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
+    } else {
+        this.easing = null;
+    }
+};
+
+AnimatedPath.prototype.getValueAtTime = function (time) {
+    var delta = time - this.lastFrame.t;
+    var duration = this.nextFrame.t - this.lastFrame.t;
+    var elapsed = delta / duration;
+    if (elapsed > 1) elapsed = 1;else if (elapsed < 0) elapsed = 0;else if (this.easing) elapsed = this.easing(elapsed);
+    var actualVertices = [],
+        actualLength = [];
+
+    for (var i = 0; i < this.verticesCount; i++) {
+        var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed),
+            cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed),
+            cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed),
+            cp2y = this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed),
+            x = this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed),
+            y = this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed);
+
+        actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
+    }
+
+    for (var j = 0; j < this.verticesCount - 1; j++) {
+        actualLength.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed));
+    }
+
+    return {
+        v: actualVertices,
+        len: actualLength
+    };
+};
+
+AnimatedPath.prototype.reset = function (reversed) {
+    this.finished = false;
+    this.started = false;
+    this.pointer = reversed ? this.frameCount - 1 : 1;
+    this.nextFrame = this.frames[this.pointer];
+    this.lastFrame = this.frames[this.pointer - 1];
+    this.onKeyframeChange();
+};
+
+module.exports = AnimatedPath;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Property = __webpack_require__(0),
+    AnimatedProperty = __webpack_require__(1),
+    Position = __webpack_require__(15);
+
+function Transform(data) {
+    if (!data) return;
+
+    //this.name = data.name;
+
+    if (data.position) {
+        if (data.position.length > 1) {
+            this.position = new Position(data.position);
+        } else {
+            this.position = new Property(data.position);
+        }
+    }
+
+    if (data.positionX) this.positionX = data.positionX.length > 1 ? new AnimatedProperty(data.positionX) : new Property(data.positionX);
+    if (data.positionY) this.positionY = data.positionY.length > 1 ? new AnimatedProperty(data.positionY) : new Property(data.positionY);
+    if (data.anchor) this.anchor = data.anchor.length > 1 ? new AnimatedProperty(data.anchor) : new Property(data.anchor);
+    if (data.scaleX) this.scaleX = data.scaleX.length > 1 ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX);
+    if (data.scaleY) this.scaleY = data.scaleY.length > 1 ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY);
+    if (data.skew) this.skew = data.skew.length > 1 ? new AnimatedProperty(data.skew) : new Property(data.skew);
+    if (data.skewAxis) this.skewAxis = data.skewAxis.length > 1 ? new AnimatedProperty(data.skewAxis) : new Property(data.skewAxis);
+    if (data.rotation) this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation);
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
+}
+
+Transform.prototype.transform = function (ctx, time) {
+
+    var positionX,
+        positionY,
+        anchor = this.anchor ? this.anchor.getValue(time) : [0, 0],
+        rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0,
+        skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0,
+        skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0,
+        scaleX = this.scaleX ? this.scaleX.getValue(time) : 1,
+        scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
+        opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha; // FIXME wrong transparency if nested
+
+    if (this.position) {
+        var position = this.position.getValue(time, ctx);
+        positionX = position[0];
+        positionY = position[1];
+    } else {
+        positionX = this.positionX ? this.positionX.getValue(time) : 0;
+        positionY = this.positionY ? this.positionY.getValue(time) : 0;
+    }
+
+    // console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
+
+    //order very very important :)
+    ctx.transform(1, 0, 0, 1, positionX - anchor[0], positionY - anchor[1]);
+    this.setRotation(ctx, rotation, anchor[0], anchor[1]);
+    this.setSkew(ctx, skew, skewAxis, anchor[0], anchor[1]);
+    this.setScale(ctx, scaleX, scaleY, anchor[0], anchor[1]);
+    ctx.globalAlpha = opacity;
+};
+
+Transform.prototype.setRotation = function (ctx, rad, x, y) {
+    var c = Math.cos(rad);
+    var s = Math.sin(rad);
+    var dx = x - c * x + s * y;
+    var dy = y - s * x - c * y;
+    ctx.transform(c, s, -s, c, dx, dy);
+};
+
+Transform.prototype.setScale = function (ctx, sx, sy, x, y) {
+    ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y);
+};
+
+Transform.prototype.setSkew = function (ctx, skew, axis, x, y) {
+    var t = Math.tan(-skew);
+    this.setRotation(ctx, -axis, x, y);
+    ctx.transform(1, 0, t, 1, -y * t, 0);
+    this.setRotation(ctx, axis, x, y);
+};
+
+Transform.prototype.deg2rad = function (deg) {
+    return deg * (Math.PI / 180);
+};
+
+Transform.prototype.setKeyframes = function (time) {
+    if (this.anchor) this.anchor.setKeyframes(time);
+    if (this.rotation) this.rotation.setKeyframes(time);
+    if (this.skew) this.skew.setKeyframes(time);
+    if (this.skewAxis) this.skewAxis.setKeyframes(time);
+    if (this.position) this.position.setKeyframes(time);
+    if (this.positionX) this.positionX.setKeyframes(time);
+    if (this.positionY) this.positionY.setKeyframes(time);
+    if (this.scaleX) this.scaleX.setKeyframes(time);
+    if (this.scaleY) this.scaleY.setKeyframes(time);
+    if (this.opacity) this.opacity.setKeyframes(time);
+};
+
+Transform.prototype.reset = function (reversed) {
+    if (this.anchor) this.anchor.reset(reversed);
+    if (this.rotation) this.rotation.reset(reversed);
+    if (this.skew) this.skew.reset(reversed);
+    if (this.skewAxis) this.skewAxis.reset(reversed);
+    if (this.position) this.position.reset(reversed);
+    if (this.positionX) this.positionX.reset(reversed);
+    if (this.positionY) this.positionY.reset(reversed);
+    if (this.scaleX) this.scaleX.reset(reversed);
+    if (this.scaleY) this.scaleY.reset(reversed);
+    if (this.opacity) this.opacity.reset(reversed);
+};
+
+module.exports = Transform;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /**
  * BezierEasing - use bezier curve for transition easing function
  * is based on Firefox's nsSMILKeySpline.cpp
@@ -573,7 +822,7 @@ module.exports = Path;
 });
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -653,255 +902,6 @@ Bezier.prototype.cubicN = function (pct, a, b, c, d) {
 module.exports = Bezier;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Path = __webpack_require__(2),
-    BezierEasing = __webpack_require__(3);
-
-function AnimatedPath(data) {
-    Path.call(this, data);
-    this.frameCount = this.frames.length;
-}
-
-AnimatedPath.prototype = Object.create(Path.prototype);
-
-AnimatedPath.prototype.getValue = function (time) {
-    if (this.finished && time >= this.nextFrame.t) {
-        return this.nextFrame;
-    } else if (!this.started && time <= this.lastFrame.t) {
-        return this.lastFrame;
-    } else {
-        this.started = true;
-        this.finished = false;
-        if (time > this.nextFrame.t) {
-            if (this.pointer + 1 === this.frameCount) {
-                this.finished = true;
-            } else {
-                this.pointer++;
-                this.lastFrame = this.frames[this.pointer - 1];
-                this.nextFrame = this.frames[this.pointer];
-                this.onKeyframeChange();
-            }
-        } else if (time < this.lastFrame.t) {
-            if (this.pointer < 2) {
-                this.started = false;
-            } else {
-                this.pointer--;
-                this.lastFrame = this.frames[this.pointer - 1];
-                this.nextFrame = this.frames[this.pointer];
-                this.onKeyframeChange();
-            }
-        }
-        return this.getValueAtTime(time);
-    }
-};
-
-AnimatedPath.prototype.setKeyframes = function (time) {
-    if (time < this.frames[0].t) {
-        this.pointer = 1;
-        this.nextFrame = this.frames[this.pointer];
-        this.lastFrame = this.frames[this.pointer - 1];
-        this.onKeyframeChange();
-        return;
-    }
-
-    if (time > this.frames[this.frameCount - 1].t) {
-        this.pointer = this.frameCount - 1;
-        this.nextFrame = this.frames[this.pointer];
-        this.lastFrame = this.frames[this.pointer - 1];
-        this.onKeyframeChange();
-        return;
-    }
-
-    for (var i = 1; i < this.frameCount; i++) {
-        if (time >= this.frames[i - 1].t && time <= this.frames[i]) {
-            this.pointer = i;
-            this.lastFrame = this.frames[i - 1];
-            this.nextFrame = this.frames[i];
-            this.onKeyframeChange();
-            return;
-        }
-    }
-};
-
-AnimatedPath.prototype.onKeyframeChange = function () {
-    this.setEasing();
-};
-
-AnimatedPath.prototype.lerp = function (a, b, t) {
-    return a + t * (b - a);
-};
-
-AnimatedPath.prototype.setEasing = function () {
-    if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
-        this.easing = new BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
-    } else {
-        this.easing = null;
-    }
-};
-
-AnimatedPath.prototype.getValueAtTime = function (time) {
-    var delta = time - this.lastFrame.t;
-    var duration = this.nextFrame.t - this.lastFrame.t;
-    var elapsed = delta / duration;
-    if (elapsed > 1) elapsed = 1;else if (elapsed < 0) elapsed = 0;else if (this.easing) elapsed = this.easing(elapsed);
-    var actualVertices = [],
-        actualLength = [];
-
-    for (var i = 0; i < this.verticesCount; i++) {
-        var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed),
-            cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed),
-            cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed),
-            cp2y = this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed),
-            x = this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed),
-            y = this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed);
-
-        actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
-    }
-
-    for (var j = 0; j < this.verticesCount - 1; j++) {
-        actualLength.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed));
-    }
-
-    return {
-        v: actualVertices,
-        len: actualLength
-    };
-};
-
-AnimatedPath.prototype.reset = function (reversed) {
-    this.finished = false;
-    this.started = false;
-    this.pointer = reversed ? this.frameCount - 1 : 1;
-    this.nextFrame = this.frames[this.pointer];
-    this.lastFrame = this.frames[this.pointer - 1];
-    this.onKeyframeChange();
-};
-
-module.exports = AnimatedPath;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Property = __webpack_require__(0),
-    AnimatedProperty = __webpack_require__(1),
-    Position = __webpack_require__(15);
-
-function Transform(data) {
-    if (!data) return;
-
-    //this.name = data.name;
-
-    if (data.position) {
-        if (data.position.length > 1) {
-            this.position = new Position(data.position);
-        } else {
-            this.position = new Property(data.position);
-        }
-    }
-
-    if (data.positionX) this.positionX = data.positionX.length > 1 ? new AnimatedProperty(data.positionX) : new Property(data.positionX);
-    if (data.positionY) this.positionY = data.positionY.length > 1 ? new AnimatedProperty(data.positionY) : new Property(data.positionY);
-    if (data.anchor) this.anchor = data.anchor.length > 1 ? new AnimatedProperty(data.anchor) : new Property(data.anchor);
-    if (data.scaleX) this.scaleX = data.scaleX.length > 1 ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX);
-    if (data.scaleY) this.scaleY = data.scaleY.length > 1 ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY);
-    if (data.skew) this.skew = data.skew.length > 1 ? new AnimatedProperty(data.skew) : new Property(data.skew);
-    if (data.skewAxis) this.skewAxis = data.skewAxis.length > 1 ? new AnimatedProperty(data.skewAxis) : new Property(data.skewAxis);
-    if (data.rotation) this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation);
-    if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
-}
-
-Transform.prototype.transform = function (ctx, time) {
-
-    var positionX,
-        positionY,
-        anchor = this.anchor ? this.anchor.getValue(time) : [0, 0],
-        rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0,
-        skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0,
-        skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0,
-        scaleX = this.scaleX ? this.scaleX.getValue(time) : 1,
-        scaleY = this.scaleY ? this.scaleY.getValue(time) : 1,
-        opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha; // FIXME wrong transparency if nested
-
-    if (this.position) {
-        var position = this.position.getValue(time, ctx);
-        positionX = position[0];
-        positionY = position[1];
-    } else {
-        positionX = this.positionX ? this.positionX.getValue(time) : 0;
-        positionY = this.positionY ? this.positionY.getValue(time) : 0;
-    }
-
-    // console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
-
-    //order very very important :)
-    ctx.transform(1, 0, 0, 1, positionX - anchor[0], positionY - anchor[1]);
-    this.setRotation(ctx, rotation, anchor[0], anchor[1]);
-    this.setSkew(ctx, skew, skewAxis, anchor[0], anchor[1]);
-    this.setScale(ctx, scaleX, scaleY, anchor[0], anchor[1]);
-    ctx.globalAlpha = opacity;
-};
-
-Transform.prototype.setRotation = function (ctx, rad, x, y) {
-    var c = Math.cos(rad);
-    var s = Math.sin(rad);
-    var dx = x - c * x + s * y;
-    var dy = y - s * x - c * y;
-    ctx.transform(c, s, -s, c, dx, dy);
-};
-
-Transform.prototype.setScale = function (ctx, sx, sy, x, y) {
-    ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y);
-};
-
-Transform.prototype.setSkew = function (ctx, skew, axis, x, y) {
-    var t = Math.tan(-skew);
-    this.setRotation(ctx, -axis, x, y);
-    ctx.transform(1, 0, t, 1, -y * t, 0);
-    this.setRotation(ctx, axis, x, y);
-};
-
-Transform.prototype.deg2rad = function (deg) {
-    return deg * (Math.PI / 180);
-};
-
-Transform.prototype.setKeyframes = function (time) {
-    if (this.anchor) this.anchor.setKeyframes(time);
-    if (this.rotation) this.rotation.setKeyframes(time);
-    if (this.skew) this.skew.setKeyframes(time);
-    if (this.skewAxis) this.skewAxis.setKeyframes(time);
-    if (this.position) this.position.setKeyframes(time);
-    if (this.positionX) this.positionX.setKeyframes(time);
-    if (this.positionY) this.positionY.setKeyframes(time);
-    if (this.scaleX) this.scaleX.setKeyframes(time);
-    if (this.scaleY) this.scaleY.setKeyframes(time);
-    if (this.opacity) this.opacity.setKeyframes(time);
-};
-
-Transform.prototype.reset = function (reversed) {
-    if (this.anchor) this.anchor.reset(reversed);
-    if (this.rotation) this.rotation.reset(reversed);
-    if (this.skew) this.skew.reset(reversed);
-    if (this.skewAxis) this.skewAxis.reset(reversed);
-    if (this.position) this.position.reset(reversed);
-    if (this.positionX) this.positionX.reset(reversed);
-    if (this.positionY) this.positionY.reset(reversed);
-    if (this.scaleX) this.scaleX.reset(reversed);
-    if (this.scaleY) this.scaleY.reset(reversed);
-    if (this.opacity) this.opacity.reset(reversed);
-};
-
-module.exports = Transform;
-
-/***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -941,6 +941,7 @@ function Animation(options) {
     this.imageBasePath = options.imageBasePath || '';
     this.onUpdate = options.onUpdate || function () {};
     this.onComplete = options.onComplete || function () {};
+    this.onStop = options.onStop || function () {};
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -1086,6 +1087,7 @@ Animation.prototype = {
                 }
             } else if (stopMarker) {
                 this.compTime = stopMarker.time;
+                this.onStop(stopMarker);
                 this.pause();
             } else {
                 this.draw(this.compTime);
@@ -1221,10 +1223,10 @@ var Stroke = __webpack_require__(9),
     Rect = __webpack_require__(10),
     Ellipse = __webpack_require__(11),
     Polystar = __webpack_require__(12),
-    AnimatedPath = __webpack_require__(5),
+    AnimatedPath = __webpack_require__(3),
     Fill = __webpack_require__(13),
     GradientFill = __webpack_require__(14),
-    Transform = __webpack_require__(6),
+    Transform = __webpack_require__(4),
     Merge = __webpack_require__(16),
     Trim = __webpack_require__(17);
 
@@ -1910,7 +1912,7 @@ module.exports = GradientFill;
 "use strict";
 
 
-var Bezier = __webpack_require__(4),
+var Bezier = __webpack_require__(6),
     AnimatedProperty = __webpack_require__(1);
 
 function Position(data) {
@@ -2031,9 +2033,9 @@ module.exports = Trim;
 "use strict";
 
 
-var Transform = __webpack_require__(6);
+var Transform = __webpack_require__(4);
 var Path = __webpack_require__(2);
-var AnimatedPath = __webpack_require__(5);
+var AnimatedPath = __webpack_require__(3);
 
 function ImageLayer(data, parentIn, parentOut, basePath) {
 
@@ -2123,13 +2125,14 @@ module.exports = ImageLayer;
 "use strict";
 
 
-var Transform = __webpack_require__(6);
+var Transform = __webpack_require__(4);
 var Path = __webpack_require__(2);
-var AnimatedPath = __webpack_require__(5);
+var AnimatedPath = __webpack_require__(3);
 
 function TextLayer(data, parentIn, parentOut) {
     this.index = data.index;
     this.text = data.text;
+    this.leading = data.leading;
     this.fontSize = data.fontSize;
     this.font = data.font;
     this.color = data.color;
@@ -2166,9 +2169,9 @@ TextLayer.prototype.draw = function (ctx, time) {
     ctx.textAlign = this.justification;
     ctx.font = this.fontSize + 'px ' + this.font;
     ctx.fillStyle = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')';
-    ctx.fillText(this.text, 0, 0);
-
-    console.log(this.fontSize + 'px ' + this.font);
+    for (var j = 0; j < this.text.length; j++) {
+        ctx.fillText(this.text[j], 0, j * this.leading);
+    }
 
     ctx.restore();
 };

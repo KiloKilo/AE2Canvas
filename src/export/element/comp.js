@@ -41,17 +41,20 @@
             var comment = tempText.property('ADBE Text Properties').property('ADBE Text Document').value.text,
                 time = tempText.property('ADBE Transform Group').property('ADBE Position').value[0] * 1000;
 
-            //remove linebreaks
-            comment = comment.replace(/(\r\n|\n|\r)/gm, ' ');
 
             time = Math.round(time);
-
             tempText.remove();
+
+            var isStopMarker = comment.toLocaleLowerCase().indexOf('{stop}') > -1;
+
+            comment = comment.replace(/(\r\n|\n|\r)/gm, '');
+            comment = comment.replace(/\{.*?\}/g, '');
+            comment = comment.replace(/^\s+|\s+$/g, '');
 
             markers.push({
                 comment: comment,
                 time: time,
-                stop: comment.toLocaleLowerCase().indexOf('stop') > -1
+                stop: isStopMarker
             });
         }
 

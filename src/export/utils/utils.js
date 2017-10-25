@@ -188,7 +188,7 @@ function clearConsole() {
     var bt = new BridgeTalk();
     bt.target = 'estoolkit-4.0';
     bt.body = function () {
-            app.clc();
-        }.toSource() + "()";
+        app.clc();
+    }.toSource() + '()';
     bt.send(5);
 }

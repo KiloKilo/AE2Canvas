@@ -32,6 +32,8 @@ function Animation(options) {
     };
     this.onComplete = options.onComplete || function () {
     };
+    this.onStop = options.onStop || function () {
+    };
 
     this.ctx = this.canvas.getContext('2d');
 
@@ -177,6 +179,7 @@ Animation.prototype = {
                 }
             } else if (stopMarker) {
                 this.compTime = stopMarker.time;
+                this.onStop(stopMarker);
                 this.pause();
             } else {
                 this.draw(this.compTime);

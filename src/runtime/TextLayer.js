@@ -7,6 +7,7 @@ var AnimatedPath = require('./AnimatedPath');
 function TextLayer(data, parentIn, parentOut) {
     this.index = data.index;
     this.text = data.text;
+    this.leading = data.leading;
     this.fontSize = data.fontSize;
     this.font = data.font;
     this.color = data.color;
@@ -44,9 +45,9 @@ TextLayer.prototype.draw = function (ctx, time) {
     ctx.textAlign = this.justification;
     ctx.font = this.fontSize + 'px ' + this.font;
     ctx.fillStyle = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')';
-    ctx.fillText(this.text, 0, 0);
-
-    console.log(this.fontSize + 'px ' + this.font);
+    for (var j = 0; j < this.text.length; j++) {
+        ctx.fillText(this.text[j], 0, j * this.leading);
+    }
 
     ctx.restore();
 };
