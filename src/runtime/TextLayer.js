@@ -4,7 +4,7 @@ var Transform = require('./Transform');
 var Path = require('./Path');
 var AnimatedPath = require('./AnimatedPath');
 
-function TextLayer(data, parentIn, parentOut) {
+function TextLayer(data, parentIn, parentOut, baseFont) {
     this.index = data.index;
     this.text = data.text;
     this.leading = data.leading;
@@ -14,6 +14,7 @@ function TextLayer(data, parentIn, parentOut) {
     this.justification = data.justification;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
+    this.baseFont = baseFont;
 
     if (data.parent) this.parent = data.parent;
     this.transform = new Transform(data.transform);
@@ -43,7 +44,7 @@ TextLayer.prototype.draw = function (ctx, time) {
     }
 
     ctx.textAlign = this.justification;
-    ctx.font = this.fontSize + 'px ' + this.font;
+    ctx.font = this.fontSize + 'px ' + this.baseFont || this.font;
     ctx.fillStyle = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')';
     for (var j = 0; j < this.text.length; j++) {
         ctx.fillText(this.text[j], 0, j * this.leading);

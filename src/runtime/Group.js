@@ -139,7 +139,7 @@ Group.prototype.drawShapes = function (ctx, time, fill, stroke, trimValues) {
             this.shapes[i].draw(ctx, time, trimValues);
         }
         if (this.shapes[this.shapes.length - 1].closed) {
-            //ctx.closePath();
+            // ctx.closePath();
         }
     }
 };

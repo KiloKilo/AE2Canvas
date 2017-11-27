@@ -1,65 +1,37 @@
 ﻿function getComp(data) {
+
     var comp = {};
-    comp.layers = [];
-    comp.duration = data.duration * 1000;
-    comp.width = data.width;
-    comp.height = data.height;
-    comp.markers = getCompMarkers(data);
+    comp.index = data.index;
+    comp.type = 'comp';
 
-    var i;
-    var layer;
+    if (data.parent) comp.parent = data.parent.index;
 
-    for (i = data.numLayers; i > 0; i--) {
-        layer = data.layer(i);
+    if (data.inPoint) comp.in = Math.round(data.inPoint * 1000);
+    if (data.outPoint) comp.out = Math.round(data.outPoint * 1000);
+    if (typeof comp.in !== 'undefined' && comp.in < 0) comp.in = 0;
 
-        if (layer instanceof ShapeLayer && layer.enabled) {
-            comp.layers.push(getGroup(layer));
-        } else if (layer instanceof AVLayer && layer.enabled) {
-            comp.layers.push(getImage(layer));
-        } else if (layer instanceof TextLayer && layer.enabled) {
-            comp.layers.push(getText(layer));
+    var masks = getMask(data);
+    if (masks && masks.length > 0) {
+        comp.masks = masks;
+    }
+
+    for (var i = 1; i <= data.numProperties; i++) {
+        var prop = data.property(i);
+        var matchName = prop.matchName;
+
+        if (prop.enabled) {
+            switch (matchName) {
+                case 'ADBE Transform Group':
+                    comp.transform = getTransform(prop);
+                    break;
+
+            }
         }
     }
+
+    comp.layers = getLayer(data.source);
 
     return comp;
 
-    function getCompMarkers(data) {
-
-        var markers = [],
-            tempNull = data.layers.addNull(data.duration),
-            tempPos = tempNull.property('ADBE Transform Group').property('ADBE Position');
-
-        tempPos.expression = 'x = thisComp.marker.numKeys;[x,0];';
-        var result = tempPos.value[0];
-
-        for (var i = 1; i <= result; i++) {
-            var tempText = data.layers.addText();
-            var pos = tempText.property('ADBE Transform Group').property('ADBE Position');
-            pos.expression = '[thisComp.marker.key(' + i + ').time,0];';
-            tempText.property('ADBE Text Properties').property('ADBE Text Document').expression = 'thisComp.marker.key(' + i + ').comment;';
-
-            var comment = tempText.property('ADBE Text Properties').property('ADBE Text Document').value.text,
-                time = tempText.property('ADBE Transform Group').property('ADBE Position').value[0] * 1000;
-
-
-            time = Math.round(time);
-            tempText.remove();
-
-            var isStopMarker = comment.toLocaleLowerCase().indexOf('{stop}') > -1;
-
-            comment = comment.replace(/(\r\n|\n|\r)/gm, '');
-            comment = comment.replace(/\{.*?\}/g, '');
-            comment = comment.replace(/^\s+|\s+$/g, '');
-
-            markers.push({
-                comment: comment,
-                time: time,
-                stop: isStopMarker
-            });
-        }
-
-        tempNull.source.remove();
-
-        return markers;
-    }
 }
+

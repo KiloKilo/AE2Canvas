@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -558,7 +558,7 @@ module.exports = AnimatedPath;
 
 var Property = __webpack_require__(0),
     AnimatedProperty = __webpack_require__(1),
-    Position = __webpack_require__(15);
+    Position = __webpack_require__(17);
 
 function Transform(data) {
     if (!data) return;
@@ -903,6 +903,183 @@ module.exports = Bezier;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Transform = __webpack_require__(4);
+var Path = __webpack_require__(2);
+var AnimatedPath = __webpack_require__(3);
+
+function ImageLayer(data, parentIn, parentOut, basePath) {
+
+    this.isLoaded = false;
+
+    this.index = data.index;
+    this.source = basePath + data.source;
+    this.in = data.in ? data.in : parentIn;
+    this.out = data.out ? data.out : parentOut;
+
+    if (data.parent) this.parent = data.parent;
+
+    this.transform = new Transform(data.transform);
+
+    if (data.masks) {
+        this.masks = [];
+        for (var k = 0; k < data.masks.length; k++) {
+            var mask = data.masks[k];
+            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));else this.masks.push(new Path(mask));
+        }
+    }
+}
+
+ImageLayer.prototype.preload = function (cb) {
+    this.img = new Image();
+    this.img.onload = function () {
+        this.isLoaded = true;
+        if (typeof cb === 'function') {
+            cb();
+        }
+    }.bind(this);
+
+    this.img.src = this.source;
+};
+
+ImageLayer.prototype.draw = function (ctx, time) {
+
+    if (!this.isLoaded) return;
+
+    ctx.save();
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
+
+    if (this.masks) {
+        ctx.beginPath();
+        for (var i = 0; i < this.masks.length; i++) {
+            this.masks[i].draw(ctx, time);
+        }
+        ctx.clip();
+    }
+
+    ctx.drawImage(this.img, 0, 0);
+
+    ctx.restore();
+};
+
+ImageLayer.prototype.setParentTransform = function (ctx, time) {
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
+};
+
+ImageLayer.prototype.setKeyframes = function (time) {
+    this.transform.setKeyframes(time);
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].setKeyframes(time);
+        }
+    }
+};
+
+ImageLayer.prototype.reset = function (reversed) {
+    this.transform.reset(reversed);
+
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].reset(reversed);
+        }
+    }
+};
+
+module.exports = ImageLayer;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Transform = __webpack_require__(4);
+var Path = __webpack_require__(2);
+var AnimatedPath = __webpack_require__(3);
+
+function TextLayer(data, parentIn, parentOut, baseFont) {
+    this.index = data.index;
+    this.text = data.text;
+    this.leading = data.leading;
+    this.fontSize = data.fontSize;
+    this.font = data.font;
+    this.color = data.color;
+    this.justification = data.justification;
+    this.in = data.in ? data.in : parentIn;
+    this.out = data.out ? data.out : parentOut;
+    this.baseFont = baseFont;
+
+    if (data.parent) this.parent = data.parent;
+    this.transform = new Transform(data.transform);
+
+    if (data.masks) {
+        this.masks = [];
+        for (var k = 0; k < data.masks.length; k++) {
+            var mask = data.masks[k];
+            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));else this.masks.push(new Path(mask));
+        }
+    }
+}
+
+TextLayer.prototype.draw = function (ctx, time) {
+
+    ctx.save();
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
+
+    if (this.masks) {
+        ctx.beginPath();
+        for (var i = 0; i < this.masks.length; i++) {
+            this.masks[i].draw(ctx, time);
+        }
+        ctx.clip();
+    }
+
+    ctx.textAlign = this.justification;
+    ctx.font = this.fontSize + 'px ' + this.baseFont || this.font;
+    ctx.fillStyle = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')';
+    for (var j = 0; j < this.text.length; j++) {
+        ctx.fillText(this.text[j], 0, j * this.leading);
+    }
+
+    ctx.restore();
+};
+
+TextLayer.prototype.setParentTransform = function (ctx, time) {
+    if (this.parent) this.parent.setParentTransform(ctx, time);
+    this.transform.transform(ctx, time);
+};
+
+TextLayer.prototype.setKeyframes = function (time) {
+    this.transform.setKeyframes(time);
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].setKeyframes(time);
+        }
+    }
+};
+
+TextLayer.prototype.reset = function (reversed) {
+    this.transform.reset(reversed);
+
+    if (this.masks) {
+        for (var j = 0; j < this.masks.length; j++) {
+            this.masks[j].reset(reversed);
+        }
+    }
+};
+
+module.exports = TextLayer;
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -911,9 +1088,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "update", function() { return update; });
 
 
-var Group = __webpack_require__(8);
-var ImageLayer = __webpack_require__(18);
-var TextLayer = __webpack_require__(19);
+var Group = __webpack_require__(10);
+var ImageLayer = __webpack_require__(7);
+var TextLayer = __webpack_require__(8);
+var Comp = __webpack_require__(20);
 
 var _animations = [],
     _animationsLength = 0;
@@ -930,8 +1108,8 @@ function Animation(options) {
     this.baseWidth = options.data.width;
     this.baseHeight = options.data.height;
     this.ratio = options.data.width / options.data.height;
-
     this.markers = options.data.markers;
+    this.baseFont = options.baseFont;
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
@@ -960,7 +1138,9 @@ function Animation(options) {
         } else if (options.data.layers[i].type === 'image') {
             this.layers.push(new ImageLayer(options.data.layers[i], 0, this.duration, this.imageBasePath));
         } else if (options.data.layers[i].type === 'text') {
-            this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration));
+            this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration, this.baseFont));
+        } else if (options.data.layers[i].type === 'comp') {
+            this.layers.push(new Comp(options.data.layers[i], this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont));
         }
     }
     this.numLayers = this.layers.length;
@@ -1212,23 +1392,23 @@ const update = function (time) {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Stroke = __webpack_require__(9),
+var Stroke = __webpack_require__(11),
     Path = __webpack_require__(2),
-    Rect = __webpack_require__(10),
-    Ellipse = __webpack_require__(11),
-    Polystar = __webpack_require__(12),
+    Rect = __webpack_require__(12),
+    Ellipse = __webpack_require__(13),
+    Polystar = __webpack_require__(14),
     AnimatedPath = __webpack_require__(3),
-    Fill = __webpack_require__(13),
-    GradientFill = __webpack_require__(14),
+    Fill = __webpack_require__(15),
+    GradientFill = __webpack_require__(16),
     Transform = __webpack_require__(4),
-    Merge = __webpack_require__(16),
-    Trim = __webpack_require__(17);
+    Merge = __webpack_require__(18),
+    Trim = __webpack_require__(19);
 
 function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
@@ -1354,7 +1534,7 @@ Group.prototype.drawShapes = function (ctx, time, fill, stroke, trimValues) {
             this.shapes[i].draw(ctx, time, trimValues);
         }
         if (this.shapes[this.shapes.length - 1].closed) {
-            //ctx.closePath();
+            // ctx.closePath();
         }
     }
 };
@@ -1437,7 +1617,7 @@ Group.prototype.reset = function (reversed) {
 module.exports = Group;
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1529,7 +1709,7 @@ Stroke.prototype.reset = function (reversed) {
 module.exports = Stroke;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1589,7 +1769,7 @@ Rect.prototype.reset = function (reversed) {
 module.exports = Rect;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1687,7 +1867,7 @@ Ellipse.prototype.reset = function (reversed) {
 module.exports = Ellipse;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1809,7 +1989,7 @@ Polystar.prototype.reset = function (reversed) {
 module.exports = Polystar;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1847,7 +2027,7 @@ Fill.prototype.reset = function (reversed) {
 module.exports = Fill;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1906,7 +2086,7 @@ GradientFill.prototype.reset = function (reversed) {
 module.exports = GradientFill;
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1946,7 +2126,7 @@ Position.prototype.setMotionPath = function () {
 module.exports = Position;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1978,7 +2158,7 @@ Merge.prototype.setCompositeOperation = function (ctx) {
 module.exports = Merge;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2027,22 +2207,21 @@ Trim.prototype.reset = function (reversed) {
 module.exports = Trim;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Transform = __webpack_require__(4);
 var Path = __webpack_require__(2);
 var AnimatedPath = __webpack_require__(3);
+var Transform = __webpack_require__(4);
+var ImageLayer = __webpack_require__(7);
+var TextLayer = __webpack_require__(8);
+var Group = __webpack_require__(10);
 
-function ImageLayer(data, parentIn, parentOut, basePath) {
-
-    this.isLoaded = false;
-
+function Comp(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
     this.index = data.index;
-    this.source = basePath + data.source;
     this.in = data.in ? data.in : parentIn;
     this.out = data.out ? data.out : parentOut;
 
@@ -2057,150 +2236,72 @@ function ImageLayer(data, parentIn, parentOut, basePath) {
             if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));else this.masks.push(new Path(mask));
         }
     }
+
+    this.layers = [];
+    for (var i = 0; i < data.layers.length; i++) {
+        if (data.layers[i].type === 'vector') {
+            this.layers.push(new Group(data.layers[i], bufferCtx, 0, this.duration, gradients));
+        } else if (data.layers[i].type === 'image') {
+            this.layers.push(new ImageLayer(data.layers[i], 0, this.duration, imageBasePath));
+        } else if (data.layers[i].type === 'text') {
+            this.layers.push(new TextLayer(data.layers[i], 0, this.duration, baseFont));
+        } else if (data.layers[i].type === 'comp') {
+            this.layers.push(new Comp(data.layers[i], bufferCtx, 0, this.duration, this.baseFont, gradients, imageBasePath, baseFont));
+        }
+    }
+    this.numLayers = this.layers.length;
 }
 
-ImageLayer.prototype.preload = function (cb) {
-    this.img = new Image();
-    this.img.onload = function () {
-        this.isLoaded = true;
-        if (typeof cb === 'function') {
-            cb();
-        }
-    }.bind(this);
-
-    this.img.src = this.source;
-};
-
-ImageLayer.prototype.draw = function (ctx, time) {
-
-    if (!this.isLoaded) return;
+Comp.prototype.draw = function (ctx, time) {
 
     ctx.save();
+
+    var i;
+
     if (this.parent) this.parent.setParentTransform(ctx, time);
     this.transform.transform(ctx, time);
 
     if (this.masks) {
         ctx.beginPath();
-        for (var i = 0; i < this.masks.length; i++) {
+        for (i = 0; i < this.masks.length; i++) {
             this.masks[i].draw(ctx, time);
         }
         ctx.clip();
     }
 
-    ctx.drawImage(this.img, 0, 0);
-
-    ctx.restore();
-};
-
-ImageLayer.prototype.setParentTransform = function (ctx, time) {
-    if (this.parent) this.parent.setParentTransform(ctx, time);
-    this.transform.transform(ctx, time);
-};
-
-ImageLayer.prototype.setKeyframes = function (time) {
-    this.transform.setKeyframes(time);
-    if (this.masks) {
-        for (var j = 0; j < this.masks.length; j++) {
-            this.masks[j].setKeyframes(time);
+    var internalTime = time - this.in;
+    for (i = 0; i < this.numLayers; i++) {
+        if (internalTime >= this.layers[i].in && internalTime <= this.layers[i].out) {
+            this.layers[i].draw(ctx, internalTime);
         }
-    }
-};
-
-ImageLayer.prototype.reset = function (reversed) {
-    this.transform.reset(reversed);
-
-    if (this.masks) {
-        for (var j = 0; j < this.masks.length; j++) {
-            this.masks[j].reset(reversed);
-        }
-    }
-};
-
-module.exports = ImageLayer;
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Transform = __webpack_require__(4);
-var Path = __webpack_require__(2);
-var AnimatedPath = __webpack_require__(3);
-
-function TextLayer(data, parentIn, parentOut) {
-    this.index = data.index;
-    this.text = data.text;
-    this.leading = data.leading;
-    this.fontSize = data.fontSize;
-    this.font = data.font;
-    this.color = data.color;
-    this.justification = data.justification;
-    this.in = data.in ? data.in : parentIn;
-    this.out = data.out ? data.out : parentOut;
-
-    if (data.parent) this.parent = data.parent;
-    this.transform = new Transform(data.transform);
-
-    if (data.masks) {
-        this.masks = [];
-        for (var k = 0; k < data.masks.length; k++) {
-            var mask = data.masks[k];
-            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));else this.masks.push(new Path(mask));
-        }
-    }
-}
-
-TextLayer.prototype.draw = function (ctx, time) {
-
-    ctx.save();
-    if (this.parent) this.parent.setParentTransform(ctx, time);
-    this.transform.transform(ctx, time);
-
-    if (this.masks) {
-        ctx.beginPath();
-        for (var i = 0; i < this.masks.length; i++) {
-            this.masks[i].draw(ctx, time);
-        }
-        ctx.clip();
-    }
-
-    ctx.textAlign = this.justification;
-    ctx.font = this.fontSize + 'px ' + this.font;
-    ctx.fillStyle = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')';
-    for (var j = 0; j < this.text.length; j++) {
-        ctx.fillText(this.text[j], 0, j * this.leading);
     }
 
     ctx.restore();
 };
 
-TextLayer.prototype.setParentTransform = function (ctx, time) {
+Comp.prototype.setParentTransform = function (ctx, time) {
     if (this.parent) this.parent.setParentTransform(ctx, time);
     this.transform.transform(ctx, time);
+    for (var i = 0; i < this.numLayers; i++) {
+        this.layers[i].setParentTransform(ctx, time);
+    }
 };
 
-TextLayer.prototype.setKeyframes = function (time) {
+Comp.prototype.setKeyframes = function (time) {
     this.transform.setKeyframes(time);
-    if (this.masks) {
-        for (var j = 0; j < this.masks.length; j++) {
-            this.masks[j].setKeyframes(time);
-        }
+    for (var i = 0; i < this.numLayers; i++) {
+        this.layers[i].setKeyframes(time);
     }
 };
 
-TextLayer.prototype.reset = function (reversed) {
+Comp.prototype.reset = function (reversed) {
     this.transform.reset(reversed);
-
-    if (this.masks) {
-        for (var j = 0; j < this.masks.length; j++) {
-            this.masks[j].reset(reversed);
-        }
+    for (var i = 0; i < this.numLayers; i++) {
+        this.layers[i].reset(this.reversed);
     }
 };
 
-module.exports = TextLayer;
+module.exports = Comp;
 
 /***/ })
 /******/ ]);

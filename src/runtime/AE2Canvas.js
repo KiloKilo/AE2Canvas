@@ -3,6 +3,7 @@
 var Group = require('./Group');
 var ImageLayer = require('./ImageLayer');
 var TextLayer = require('./TextLayer');
+var Comp = require('./Comp');
 
 var _animations = [],
     _animationsLength = 0;
@@ -19,8 +20,8 @@ function Animation(options) {
     this.baseWidth = options.data.width;
     this.baseHeight = options.data.height;
     this.ratio = options.data.width / options.data.height;
-
     this.markers = options.data.markers;
+    this.baseFont = options.baseFont;
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
@@ -52,7 +53,9 @@ function Animation(options) {
         } else if (options.data.layers[i].type === 'image') {
             this.layers.push(new ImageLayer(options.data.layers[i], 0, this.duration, this.imageBasePath));
         } else if (options.data.layers[i].type === 'text') {
-            this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration));
+            this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration, this.baseFont));
+        } else if (options.data.layers[i].type === 'comp') {
+            this.layers.push(new Comp(options.data.layers[i], this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont));
         }
     }
     this.numLayers = this.layers.length;
@@ -302,4 +305,4 @@ const update = function (time) {
     }
 };
 
-export { Animation, update };
+export {Animation, update};

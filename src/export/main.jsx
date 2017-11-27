@@ -12,8 +12,12 @@
 #include 'transform/opacity.js'
 #include 'transform/skew.js'
 #include 'transform/skewAxis.js'
+
+
 #include 'element/shape.js'
 #include 'element/mask.js'
+#include 'element/layer.js'
+#include 'element/mainComp.js'
 #include 'element/comp.js'
 #include 'element/image.js'
 #include 'element/text.js'
@@ -38,7 +42,7 @@ function start() {
 
     clearConsole();
 
-    var data = getComp(app.project.activeItem);
+    var data = getMainComp(app.project.activeItem);
 
     var json = JSON.stringify(data);
 
