@@ -61,7 +61,7 @@ function loop(time) {
 }
 ```
 
-###Controls
+### Controls
 An animation instance has the following control functions:
 * `play()` play from the actual frame
 * `pause()` pause at the actual frame
@@ -70,23 +70,23 @@ An animation instance has the following control functions:
 * `gotoAndPlay(String or Number)` pass a in an identifier to jump to the marker and play the animation from there
 * `gotoAndStop(String or Number)` pass a in an identifier to jump to the marker, render this frame and stop the animation
 
-###Markers
+### Markers
 Markers can be set in After Effects as composition marker. You can add a text to the comments field to access this marker later via `gotoAndPlay()` or `gotoAndStop()`.
 If you pass a number to `gotoAndPlay()` or `gotoAndStop()` the marker at this index will be used.
 
-##Example
+# Examples
 
-#####Example 1
+##### Example 1
 [Html](http://kilokilo.github.io/ae2canvas/example1.html)
 
 [After Effects Project](https://github.com/kilokilo/ae2canvas/raw/master/examples/ae/example1.aep)
 
-#####Example 2
+##### Example 2
 [Html](http://kilokilo.github.io/ae2canvas/example2.html)
 
 [After Effects Project](https://github.com/kilokilo/ae2canvas/raw/master/examples/ae/example2.aep)
 
-#####Example 3
+##### Example 3
 [Html](http://kilokilo.github.io/ae2canvas/example3.html)
 
 [After Effects Project](https://github.com/kilokilo/ae2canvas/raw/master/examples/ae/example3.aep)
