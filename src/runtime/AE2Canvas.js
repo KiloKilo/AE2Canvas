@@ -1,5 +1,7 @@
 'use strict';
 
+import {requestAnimationFrame} from './shim'
+
 var Group = require('./Group');
 var ImageLayer = require('./ImageLayer');
 var TextLayer = require('./TextLayer');

@@ -558,7 +558,7 @@ module.exports = AnimatedPath;
 
 var Property = __webpack_require__(0),
     AnimatedProperty = __webpack_require__(1),
-    Position = __webpack_require__(17);
+    Position = __webpack_require__(19);
 
 function Transform(data) {
     if (!data) return;
@@ -673,17 +673,17 @@ module.exports = Transform;
 "use strict";
 
 
-var Stroke = __webpack_require__(11),
+var Stroke = __webpack_require__(13),
     Path = __webpack_require__(2),
-    Rect = __webpack_require__(12),
-    Ellipse = __webpack_require__(13),
-    Polystar = __webpack_require__(14),
+    Rect = __webpack_require__(14),
+    Ellipse = __webpack_require__(15),
+    Polystar = __webpack_require__(16),
     AnimatedPath = __webpack_require__(3),
-    Fill = __webpack_require__(15),
-    GradientFill = __webpack_require__(16),
+    Fill = __webpack_require__(17),
+    GradientFill = __webpack_require__(18),
     Transform = __webpack_require__(4),
-    Merge = __webpack_require__(18),
-    Trim = __webpack_require__(19);
+    Merge = __webpack_require__(20),
+    Trim = __webpack_require__(21);
 
 function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
@@ -1312,12 +1312,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Animation", function() { return Animation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "update", function() { return update; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autoPlay", function() { return autoPlay; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shim__ = __webpack_require__(11);
+
+
 
 
 var Group = __webpack_require__(5);
 var ImageLayer = __webpack_require__(8);
 var TextLayer = __webpack_require__(9);
-var Comp = __webpack_require__(20);
+var Comp = __webpack_require__(22);
 
 var _animations = [],
     _animationsLength = 0;
@@ -1612,7 +1615,7 @@ Animation.prototype = {
 
 const update = function (time) {
     if (_autoPlay) {
-        _rafId = requestAnimationFrame(update);
+        _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* requestAnimationFrame */])(update);
     }
     time = time !== undefined ? time : performance.now();
 
@@ -1623,13 +1626,60 @@ const update = function (time) {
 
 const autoPlay = function (auto) {
     _autoPlay = auto;
-    _autoPlay ? _rafId = requestAnimationFrame(update) : cancelAnimationFrame(_rafId);
+    _autoPlay ? _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* requestAnimationFrame */])(update) : cancelAnimationFrame(_rafId);
 };
 
 
 
 /***/ }),
 /* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {const root = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+
+const requestAnimationFrame = root.requestAnimationFrame || function (fn) {
+    return root.setTimeout(fn, 16);
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = requestAnimationFrame;
+
+
+const cancelAnimationFrame = root.cancelAnimationFrame || function (id) {
+    return root.clearTimeout(id);
+};
+/* unused harmony export cancelAnimationFrame */
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(12)))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1721,7 +1771,7 @@ Stroke.prototype.reset = function (reversed) {
 module.exports = Stroke;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1781,7 +1831,7 @@ Rect.prototype.reset = function (reversed) {
 module.exports = Rect;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1879,7 +1929,7 @@ Ellipse.prototype.reset = function (reversed) {
 module.exports = Ellipse;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2001,7 +2051,7 @@ Polystar.prototype.reset = function (reversed) {
 module.exports = Polystar;
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2039,7 +2089,7 @@ Fill.prototype.reset = function (reversed) {
 module.exports = Fill;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2098,7 +2148,7 @@ GradientFill.prototype.reset = function (reversed) {
 module.exports = GradientFill;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2138,7 +2188,7 @@ Position.prototype.setMotionPath = function () {
 module.exports = Position;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2170,7 +2220,7 @@ Merge.prototype.setCompositeOperation = function (ctx) {
 module.exports = Merge;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2219,7 +2269,7 @@ Trim.prototype.reset = function (reversed) {
 module.exports = Trim;
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
