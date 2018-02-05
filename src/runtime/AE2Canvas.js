@@ -1,6 +1,6 @@
 'use strict';
 
-import {requestAnimationFrame, cancelAnimationFrame} from './shim'
+import {requestAnimationFrame, cancelAnimationFrame, performance} from './shim'
 
 var Group = require('./Group');
 var ImageLayer = require('./ImageLayer');

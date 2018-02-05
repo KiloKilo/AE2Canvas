@@ -9,3 +9,11 @@ export const cancelAnimationFrame = root.cancelAnimationFrame ||
     (function (id) {
         return root.clearTimeout(id);
     });
+
+export const performance = (root.performance || {
+    offset: Date.now(),
+    now: function now(){
+        return Date.now() - this.offset;
+
+    }
+});
