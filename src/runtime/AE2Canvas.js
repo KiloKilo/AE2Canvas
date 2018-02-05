@@ -8,6 +8,9 @@ var Comp = require('./Comp');
 var _animations = [],
     _animationsLength = 0;
 
+var _autoPlay = false;
+var _rafId;
+
 function Animation(options) {
     if (!options.data) {
         console.error('no data');
@@ -298,6 +301,9 @@ Animation.prototype = {
 
 
 const update = function (time) {
+    if (_autoPlay) {
+        _rafId = requestAnimationFrame(update);
+    }
     time = time !== undefined ? time : performance.now();
 
     for (var i = 0; i < _animationsLength; i++) {
@@ -305,4 +311,9 @@ const update = function (time) {
     }
 };
 
-export {Animation, update};
+const autoPlay = function (auto) {
+    _autoPlay = auto;
+    _autoPlay ? _rafId = requestAnimationFrame(update) : cancelAnimationFrame(_rafId);
+};
+
+export {Animation, update, autoPlay};
