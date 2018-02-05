@@ -1615,7 +1615,7 @@ Animation.prototype = {
 
 const update = function (time) {
     if (_autoPlay) {
-        _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* requestAnimationFrame */])(update);
+        _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["b" /* requestAnimationFrame */])(update);
     }
     time = time !== undefined ? time : performance.now();
 
@@ -1626,7 +1626,7 @@ const update = function (time) {
 
 const autoPlay = function (auto) {
     _autoPlay = auto;
-    _autoPlay ? _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* requestAnimationFrame */])(update) : cancelAnimationFrame(_rafId);
+    _autoPlay ? _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["b" /* requestAnimationFrame */])(update) : Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* cancelAnimationFrame */])(_rafId);
 };
 
 
@@ -1641,13 +1641,13 @@ const autoPlay = function (auto) {
 const requestAnimationFrame = root.requestAnimationFrame || function (fn) {
     return root.setTimeout(fn, 16);
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = requestAnimationFrame;
+/* harmony export (immutable) */ __webpack_exports__["b"] = requestAnimationFrame;
 
 
 const cancelAnimationFrame = root.cancelAnimationFrame || function (id) {
     return root.clearTimeout(id);
 };
-/* unused harmony export cancelAnimationFrame */
+/* harmony export (immutable) */ __webpack_exports__["a"] = cancelAnimationFrame;
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(12)))
 
