@@ -94,13 +94,13 @@
 
             pauseButton.addEventListener('click', () => animation.pause());
 
-            slider.addEventListener('input', () => animation.setStep(slider.value));
+            slider.addEventListener('input', () => animation.step = slider.value);
 
             checkbox.addEventListener('change', () => animation.reversed = checkbox.checked);
 
-            gotoAndPlayButton.addEventListener('click', () => animation.gotoAndPlay('scene3'));
+            gotoAndPlayButton.addEventListener('click', () => animation.gotoAndPlay(0));
 
-            gotoAndStopButton.addEventListener('click', () => animation.gotoAndStop('example marker name'));
+            gotoAndStopButton.addEventListener('click', () => animation.gotoAndStop(1));
 
             animation.setGradients('sunGrad', [
                 {color: [253, 248, 213, 1], location: 0.65},
@@ -152,7 +152,7 @@
 
     function update(time) {
         requestAnimationFrame(update);
-        if (animation && animation.isPlaying) slider.value = animation.getStep();
+        if (animation && animation.isPlaying) slider.value = animation.step;
     }
 
     requestAnimationFrame(update);

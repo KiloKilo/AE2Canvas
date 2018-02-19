@@ -20,7 +20,7 @@ class Animation {
         this.loop = options.loop || false;
         this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
         this.fluid = options.fluid || true;
-        this.reversed = options.reversed || false;
+
         this.imageBasePath = options.imageBasePath || '';
         this.onUpdate = options.onUpdate || (() => {
         });
@@ -39,30 +39,28 @@ class Animation {
         this.buffer.height = this.baseHeight;
         this.bufferCtx = this.buffer.getContext('2d');
 
-        this.layers = [];
-        for (let i = 0; i < options.data.layers.length; i++) {
-            if (options.data.layers[i].type === 'vector') {
-                this.layers.push(new Group(options.data.layers[i], this.bufferCtx, 0, this.duration, this.gradients));
-            } else if (options.data.layers[i].type === 'image') {
-                this.layers.push(new ImageLayer(options.data.layers[i], 0, this.duration, this.imageBasePath));
-            } else if (options.data.layers[i].type === 'text') {
-                this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration, this.baseFont));
-            } else if (options.data.layers[i].type === 'comp') {
-                this.layers.push(new CompLayer(options.data.layers[i], this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont));
+        this.layers = options.data.layers.map(layer => {
+            if (layer.type === 'vector') {
+                return new Group(layer, this.bufferCtx, 0, this.duration, this.gradients);
+            } else if (layer.type === 'image') {
+                return new ImageLayer(layer, 0, this.duration, this.imageBasePath);
+            } else if (layer.type === 'text') {
+                return new TextLayer(layer, 0, this.duration, this.baseFont);
+            } else if (layer.type === 'comp') {
+                return new CompLayer(layer, this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont);
             }
-        }
+        });
+
+        this.reversed = options.reversed || false;
+
         this.numLayers = this.layers.length;
 
-        for (const layer of this.layers) {
+        this.layers.forEach(layer => {
             if (layer.parent) {
-                for (let k = 0; k < this.layers.length; k++) {
-                    //TODO stop loop
-                    if (layer.parent === this.layers[k].index) {
-                        layer.parent = this.layers[k];
-                    }
-                }
+                const parentIndex = layer.parent;
+                layer.parent = this.layers.find(layer => layer.index === parentIndex)
             }
-        }
+        });
 
         this.reset(this.reversed);
         this.resize();
@@ -110,36 +108,35 @@ class Animation {
     gotoAndStop(id) {
         const marker = this.getMarker(id);
         if (marker) {
-            this.isPlaying = false;
             this.compTime = marker.time;
             this.setKeyframes(this.compTime);
             this.drawFrame = true;
+            this.isPlaying = false;
         }
     }
 
     getMarker(id) {
+        let marker;
         if (typeof id === 'number') {
-            return this.markers[id];
+            marker = this.markers[id];
         } else if (typeof id === 'string') {
-            for (let i = 0; i < this.markers.length; i++) {
-                if (this.markers[i].comment === id) {
-                    return this.markers[i];
-                }
-            }
+            marker = this.markers.find(marker => marker.comment === id);
         }
+
+        if (marker) return marker;
         console.warn('Marker not found');
     }
 
     checkStopMarkers(from, to) {
-        for (let i = 0; i < this.markers.length; i++) {
-            if (this.markers[i].stop && this.markers[i].time > from && this.markers[i].time < to) {
-                return this.markers[i];
-            }
-        }
-        return false;
+        return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to);
     }
 
     setStep(step) {
+        console.warn('setStep is deprecated, use animation.step = value');
+        this.step = step;
+    }
+
+    set step(step) {
         this.isPlaying = false;
         this.compTime = step * this.duration;
         this.pausedTime = this.compTime;
@@ -148,6 +145,11 @@ class Animation {
     }
 
     getStep() {
+        console.warn('getStep is deprecated, use animation.step');
+        return this.step;
+    }
+
+    get step() {
         return this.compTime / this.duration;
     }
 
@@ -186,20 +188,22 @@ class Animation {
 
     draw(time) {
         this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
-        for (let i = 0; i < this.numLayers; i++) {
-            if (time >= this.layers[i].in && time <= this.layers[i].out) {
-                this.layers[i].draw(this.ctx, time);
+
+        this.layers.forEach(layer => {
+            if (time >= layer.in && time <= layer.out) {
+                layer.draw(this.ctx, time);
             }
-        }
+        });
     }
 
     preload(cb) {
+        //TODO use promise
         this.onloadCB = cb;
-        for (let i = 0; i < this.numLayers; i++) {
-            if (this.layers[i] instanceof ImageLayer) {
-                this.layers[i].preload(this.onload.bind(this));
+        this.layers.forEach(layer => {
+            if (layer instanceof ImageLayer) {
+                layer.preload(this.onload.bind(this));
             }
-        }
+        });
     }
 
     onload() {
@@ -219,15 +223,11 @@ class Animation {
     reset() {
         this.pausedTime = 0;
         this.compTime = this.reversed ? this.duration : 0;
-        for (let i = 0; i < this.numLayers; i++) {
-            this.layers[i].reset(this.reversed);
-        }
+        this.layers.forEach(layer => layer.reset(this.reversed));
     }
 
     setKeyframes(time) {
-        for (let i = 0; i < this.numLayers; i++) {
-            this.layers[i].setKeyframes(time);
-        }
+        this.layers.forEach(layer => layer.setKeyframes(time));
     }
 
     destroy() {

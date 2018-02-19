@@ -6,7 +6,6 @@ class ImageLayer {
     constructor(data, parentIn, parentOut, basePath) {
 
         this.isLoaded = false;
-
         this.index = data.index;
         this.source = basePath + data.source;
         this.in = data.in ? data.in : parentIn;
