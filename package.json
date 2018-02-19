@@ -2,7 +2,7 @@
   "name": "ae2canvas",
   "version": "1.0.0",
   "main": "build/index.js",
-  "author": "Lukas Zgraggen <lukas.zgraggen@gmail.com>",
+  "author": "Lukas Zgraggen <lukas.zgraggen@kilokilo.com>",
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
