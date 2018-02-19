@@ -2,7 +2,7 @@ import {add, remove} from './core'
 import Group from './objects/Group';
 import ImageLayer from './layers/ImageLayer';
 import TextLayer from './layers/TextLayer';
-import Comp from './layers/Comp';
+import CompLayer from './layers/CompLayer';
 
 class Animation {
 
@@ -48,7 +48,7 @@ class Animation {
             } else if (options.data.layers[i].type === 'text') {
                 this.layers.push(new TextLayer(options.data.layers[i], 0, this.duration, this.baseFont));
             } else if (options.data.layers[i].type === 'comp') {
-                this.layers.push(new Comp(options.data.layers[i], this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont));
+                this.layers.push(new CompLayer(options.data.layers[i], this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont));
             }
         }
         this.numLayers = this.layers.length;
