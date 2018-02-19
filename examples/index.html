@@ -60,10 +60,6 @@
 
 <script src="index.js"></script>
 <script>
-
-    console.log(AE2Canvas);
-    console.log(AE2Canvas.Animation);
-
     var animation;
     var slider = document.getElementById('slider');
     var canvasWrapper = document.getElementById('canvasWrapper');
@@ -98,7 +94,7 @@
 
             pauseButton.addEventListener('click', () => animation.pause());
 
-            slider.addEventListener('input', () => animation.setStep(this.value));
+            slider.addEventListener('input', () => animation.setStep(slider.value));
 
             checkbox.addEventListener('change', () => animation.reversed = checkbox.checked);
 
@@ -156,7 +152,7 @@
 
     function update(time) {
         requestAnimationFrame(update);
-        if (animation && animation.isPlaying) slider.value = animation.step;
+        if (animation && animation.isPlaying) slider.value = animation.getStep();
     }
 
     requestAnimationFrame(update);

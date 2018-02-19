@@ -1,96 +1,96 @@
-'use strict';
+import Path from '../objects/Path';
+import AnimatedPath from '../objects/AnimatedPath';
+import Transform from '../transform/Transform';
+import ImageLayer from './ImageLayer';
+import TextLayer from './TextLayer';
+import Group from '../objects/Group';
 
-var Path = require('../objects/Path');
-var AnimatedPath = require('../objects/AnimatedPath');
-var Transform = require('../transform/Transform');
-var ImageLayer = require('./ImageLayer');
-var TextLayer = require('./TextLayer');
-var Group = require('../objects/Group');
+class Comp {
+    constructor(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
+        this.index = data.index;
+        this.in = data.in ? data.in : parentIn;
+        this.out = data.out ? data.out : parentOut;
 
-function Comp(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
-    this.index = data.index;
-    this.in = data.in ? data.in : parentIn;
-    this.out = data.out ? data.out : parentOut;
+        if (data.parent) this.parent = data.parent;
 
-    if (data.parent) this.parent = data.parent;
+        this.transform = new Transform(data.transform);
 
-    this.transform = new Transform(data.transform);
+        if (data.masks) {
+            this.masks = [];
 
-    if (data.masks) {
-        this.masks = [];
-        for (var k = 0; k < data.masks.length; k++) {
-            var mask = data.masks[k];
-            if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));
-            else this.masks.push(new Path(mask));
+            for (const mask of data.masks) {
+                if (mask.isAnimated) this.masks.push(new AnimatedPath(mask));
+                else this.masks.push(new Path(mask));
+            }
+        }
+
+        this.layers = [];
+        for (let i = 0; i < data.layers.length; i++) {
+            if (data.layers[i].type === 'vector') {
+                this.layers.push(new Group(data.layers[i], bufferCtx, 0, this.duration, gradients));
+            } else if (data.layers[i].type === 'image') {
+                this.layers.push(new ImageLayer(data.layers[i], 0, this.duration, imageBasePath));
+            } else if (data.layers[i].type === 'text') {
+                this.layers.push(new TextLayer(data.layers[i], 0, this.duration, baseFont));
+            } else if (data.layers[i].type === 'comp') {
+                this.layers.push(new Comp(data.layers[i], bufferCtx, 0, this.duration, this.baseFont, gradients, imageBasePath, baseFont));
+            }
+        }
+        this.numLayers = this.layers.length;
+    }
+
+    draw(ctx, time) {
+
+        ctx.save();
+
+        let i;
+
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.transform(ctx, time);
+
+        if (this.masks) {
+            ctx.beginPath();
+            for (i = 0; i < this.masks.length; i++) {
+                this.masks[i].draw(ctx, time);
+            }
+            ctx.clip();
+        }
+
+        const internalTime = time - this.in;
+        for (i = 0; i < this.numLayers; i++) {
+            if (internalTime >= this.layers[i].in && internalTime <= this.layers[i].out) {
+                this.layers[i].draw(ctx, internalTime);
+            }
+        }
+
+        ctx.restore();
+
+    }
+
+    setParentTransform(ctx, time) {
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.transform(ctx, time);
+        for (let i = 0; i < this.numLayers; i++) {
+            this.layers[i].setParentTransform(ctx, time);
         }
     }
 
-    this.layers = [];
-    for (var i = 0; i < data.layers.length; i++) {
-        if (data.layers[i].type === 'vector') {
-            this.layers.push(new Group(data.layers[i], bufferCtx, 0, this.duration, gradients));
-        } else if (data.layers[i].type === 'image') {
-            this.layers.push(new ImageLayer(data.layers[i], 0, this.duration, imageBasePath));
-        } else if (data.layers[i].type === 'text') {
-            this.layers.push(new TextLayer(data.layers[i], 0, this.duration, baseFont));
-        } else if (data.layers[i].type === 'comp') {
-            this.layers.push(new Comp(data.layers[i], bufferCtx, 0, this.duration, this.baseFont, gradients, imageBasePath, baseFont));
+    setKeyframes(time) {
+        this.transform.setKeyframes(time);
+        for (let i = 0; i < this.numLayers; i++) {
+            this.layers[i].setKeyframes(time);
         }
     }
-    this.numLayers = this.layers.length;
+
+    reset(reversed) {
+        this.transform.reset(reversed);
+        for (let i = 0; i < this.numLayers; i++) {
+            this.layers[i].reset(this.reversed);
+        }
+    }
 }
 
-Comp.prototype.draw = function (ctx, time) {
-
-    ctx.save();
-
-    var i;
-
-    if (this.parent) this.parent.setParentTransform(ctx, time);
-    this.transform.transform(ctx, time);
-
-    if (this.masks) {
-        ctx.beginPath();
-        for (i = 0; i < this.masks.length; i++) {
-            this.masks[i].draw(ctx, time);
-        }
-        ctx.clip();
-    }
-
-    var internalTime = time - this.in;
-    for (i = 0; i < this.numLayers; i++) {
-        if (internalTime >= this.layers[i].in && internalTime <= this.layers[i].out) {
-            this.layers[i].draw(ctx, internalTime);
-        }
-    }
-
-    ctx.restore();
-
-};
-
-Comp.prototype.setParentTransform = function (ctx, time) {
-    if (this.parent) this.parent.setParentTransform(ctx, time);
-    this.transform.transform(ctx, time);
-    for (var i = 0; i < this.numLayers; i++) {
-        this.layers[i].setParentTransform(ctx, time);
-    }
-};
-
-Comp.prototype.setKeyframes = function (time) {
-    this.transform.setKeyframes(time);
-    for (var i = 0; i < this.numLayers; i++) {
-        this.layers[i].setKeyframes(time);
-    }
-};
-
-Comp.prototype.reset = function (reversed) {
-    this.transform.reset(reversed);
-    for (var i = 0; i < this.numLayers; i++) {
-        this.layers[i].reset(this.reversed);
-    }
-};
-
-module.exports = Comp;
+export default Comp;
 
 
 

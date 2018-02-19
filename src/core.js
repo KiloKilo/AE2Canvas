@@ -1,23 +1,23 @@
 import {requestAnimationFrame} from "./utils/shim";
 
-var _animations = [],
-    _animationsLength = 0;
+const _animations = [];
+let _animationsLength = 0;
 
-var _autoPlay = false;
-var _rafId;
+let _autoPlay = false;
+let _rafId;
 
-const update = function (time) {
+const update = time => {
     if (_autoPlay) {
         _rafId = requestAnimationFrame(update);
     }
     time = time !== undefined ? time : performance.now();
 
-    for (var i = 0; i < _animationsLength; i++) {
+    for (let i = 0; i < _animationsLength; i++) {
         _animations[i].update(time);
     }
 };
 
-const autoPlay = function (auto) {
+const autoPlay = auto => {
     _autoPlay = auto;
     _autoPlay ? _rafId = requestAnimationFrame(update) : cancelAnimationFrame(_rafId);
 };
@@ -28,7 +28,7 @@ function add(tween) {
 }
 
 function remove(tween) {
-    var i = _animations.indexOf(tween);
+    const i = _animations.indexOf(tween);
     if (i > -1) {
         _animations.splice(i, 1);
         _animationsLength = _animations.length;

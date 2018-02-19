@@ -1,18 +1,17 @@
-'use strict';
+class Property {
+    constructor(data) {
+        this.frames = data;
+    }
 
-function Property(data) {
-    if (!(data instanceof Array)) return null;
-    this.frames = data;
+    getValue() {
+        return this.frames[0].v;
+    }
+
+    setKeyframes(time) {
+    }
+
+    reset(reversed) {
+    }
 }
 
-Property.prototype.getValue = function () {
-    return this.frames[0].v;
-};
-
-Property.prototype.setKeyframes = function (time) {
-};
-
-Property.prototype.reset = function (reversed) {
-};
-
-module.exports = Property;
+export default Property;
