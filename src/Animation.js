@@ -1,6 +1,7 @@
 import { add, remove } from './core'
-import Group from './objects/Group';
 import ImageLayer from './layers/ImageLayer';
+import Layer from './layers/Layer';
+import NullLayer from './layers/NullLayer';
 import TextLayer from './layers/TextLayer';
 import CompLayer from './layers/CompLayer';
 import VectorLayer from './layers/VectorLayer';
@@ -36,14 +37,17 @@ class Animation {
         this.canvas.height = this.baseHeight;
 
         this.layers = options.data.layers.map(layer => {
-            if (layer.type === 'vector') {
-                return new VectorLayer(layer, 0, this.duration, this.gradients);
-            } else if (layer.type === 'image') {
-                return new ImageLayer(layer, 0, this.duration, this.imageBasePath);
-            } else if (layer.type === 'text') {
-                return new TextLayer(layer, 0, this.duration, this.baseFont);
-            } else if (layer.type === 'comp') {
-                return new CompLayer(layer, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont);
+            switch (layer.type) {
+                case 'vector':
+                    return new VectorLayer(layer, this.gradients);
+                case 'image':
+                    return new ImageLayer(layer, this.imageBasePath);
+                case 'text':
+                    return new TextLayer(layer, this.baseFont);
+                case 'comp':
+                    return new CompLayer(layer, this.baseFont, this.gradients, this.imageBasePath);
+                case 'null':
+                    return new NullLayer(layer);
             }
         });
 
@@ -66,6 +70,8 @@ class Animation {
         this.drawFrame = true;
 
         add(this);
+
+        console.log(this);
     }
 
     play() {
@@ -192,28 +198,14 @@ class Animation {
         });
     }
 
-    preload(cb) {
-        //TODO use promise
-        this.onloadCB = cb;
-        this.layers.forEach(layer => {
+    preload() {
+        const promises = this.layers.filter(layer => {
             if (layer instanceof ImageLayer) {
-                layer.preload(this.onload.bind(this));
+                return layer.preload();
             }
         });
-    }
 
-    onload() {
-        for (let i = 0; i < this.numLayers; i++) {
-            if (this.layers[i] instanceof ImageLayer) {
-                if (!this.layers[i].isLoaded) {
-                    return;
-                }
-            }
-        }
-        this.isLoaded = true;
-        if (typeof this.onloadCB === 'function') {
-            this.onloadCB();
-        }
+        return Promise.all(promises);
     }
 
     reset() {

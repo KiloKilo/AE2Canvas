@@ -1,30 +1,42 @@
 import ImageLayer from './ImageLayer';
+import NullLayer from './NullLayer';
 import TextLayer from './TextLayer';
 import Layer from './Layer';
 import VectorLayer from './VectorLayer';
 
 class CompLayer extends Layer {
 
-    constructor(data,  parentIn, parentOut, baseFont, gradients, imageBasePath) {
-        super(data, parentIn, parentOut);
+    constructor(data, baseFont, gradients, imageBasePath) {
+        super(data);
 
         if (data.layers) {
+
             this.layers = data.layers.map(layer => {
-                if (layer.type === 'vector') {
-                    return new VectorLayer(layer,  0, this.out, gradients);
-                } else if (layer.type === 'image') {
-                    return new ImageLayer(layer, 0, this.out, imageBasePath);
-                } else if (layer.type === 'text') {
-                    return new TextLayer(layer, 0, this.out, baseFont);
-                } else if (layer.type === 'comp') {
-                    return new CompLayer(layer,  0, this.out, baseFont, gradients, imageBasePath, baseFont);
+                switch (layer.type) {
+                    case 'vector':
+                        return new VectorLayer(layer, gradients);
+                    case 'image':
+                        return new ImageLayer(layer, imageBasePath);
+                    case 'text':
+                        return new TextLayer(layer, baseFont);
+                    case 'comp':
+                        return new CompLayer(layer, baseFont, gradients, imageBasePath);
+                    case 'null':
+                        return new NullLayer(layer);
+                }
+            });
+
+            this.layers.forEach(layer => {
+                if (layer.parent) {
+                    const parentIndex = layer.parent;
+                    layer.parent = this.layers.find(layer => layer.index === parentIndex)
                 }
             });
         }
     }
 
     draw(ctx, time) {
-        super.draw(ctx,time);
+        super.draw(ctx, time);
 
         if (this.layers) {
             const internalTime = time - this.in;

@@ -1,8 +1,8 @@
 import Layer from './Layer'
 
 class TextLayer extends Layer {
-    constructor(data, parentIn, parentOut, baseFont) {
-        super(data, parentIn, parentOut);
+    constructor(data, baseFont) {
+        super(data);
         this.text = data.text;
         this.leading = data.leading;
         this.fontSize = data.fontSize;

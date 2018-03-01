@@ -1,25 +1,25 @@
-import Layer from "./Layer";
+import Layer from './Layer';
 
 class ImageLayer extends Layer {
-    constructor(data, parentIn, parentOut) {
-        super(data, parentIn, parentOut);
+    constructor(data) {
+        super(data);
+        this.source = data.source;
         this.isLoaded = false;
     }
 
     preload(cb) {
-        this.img = new Image;
-        this.img.onload = () => {
-            this.isLoaded = true;
-            if (typeof cb === 'function') {
-                cb();
-            }
-        };
-
-        this.img.src = this.source;
+        return new Promise((resolve, reject) => {
+            this.img = new Image;
+            this.img.onload = () => {
+                this.isLoaded = true;
+                resolve();
+            };
+            this.img.src = this.source;
+        });
     }
 
     draw(ctx, time) {
-        super.draw(ctx,time);
+        super.draw(ctx, time);
 
         ctx.drawImage(this.img, 0, 0);
 

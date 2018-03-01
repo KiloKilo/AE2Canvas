@@ -24,7 +24,7 @@ class Transform {
         if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
     }
 
-    transform(ctx, time) {
+    update(ctx, time) {
         let positionX; // FIXME wrong transparency if nested
         let positionY;
         const anchor = this.anchor ? this.anchor.getValue(time) : [0, 0];

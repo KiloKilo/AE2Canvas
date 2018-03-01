@@ -14,7 +14,7 @@ class GradientFill {
         if (data.opacity) this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
     }
 
-    setColor(ctx, time) {
+    update(ctx, time) {
         const startPoint = this.startPoint.getValue(time);
         const endPoint = this.endPoint.getValue(time);
         let radius = 0;
