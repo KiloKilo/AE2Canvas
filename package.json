@@ -17,6 +17,7 @@
   "dependencies": {
     "find-key": "^2.0.1",
     "path": "^0.12.7",
+    "tiny-emitter": "^2.0.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.11.1"
   }

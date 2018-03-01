@@ -1,14 +1,16 @@
 import { add, remove } from './core'
+import Emitter from 'tiny-emitter'
 import ImageLayer from './layers/ImageLayer';
-import Layer from './layers/Layer';
 import NullLayer from './layers/NullLayer';
 import TextLayer from './layers/TextLayer';
 import CompLayer from './layers/CompLayer';
 import VectorLayer from './layers/VectorLayer';
 
-class Animation {
+class Animation extends Emitter {
 
     constructor(options) {
+        super();
+
         this.gradients = {};
         this.pausedTime = 0;
         this.duration = options.data.duration;
@@ -17,24 +19,19 @@ class Animation {
         this.ratio = options.data.width / options.data.height;
         this.markers = options.data.markers;
         this.baseFont = options.baseFont;
-
-        this.canvas = options.canvas || document.createElement('canvas');
         this.loop = options.loop || false;
         this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
         this.fluid = options.fluid || true;
-
         this.imageBasePath = options.imageBasePath || '';
-        this.onUpdate = options.onUpdate || (() => {
-        });
-        this.onComplete = options.onComplete || (() => {
-        });
-        this.onStop = options.onStop || (() => {
-        });
 
-        this.ctx = this.canvas.getContext('2d');
+        this.isPaused = false;
+        this.isPlaying = false;
+        this.drawFrame = true;
 
+        this.canvas = options.canvas || document.createElement('canvas');
         this.canvas.width = this.baseWidth;
         this.canvas.height = this.baseHeight;
+        this.ctx = this.canvas.getContext('2d');
 
         this.layers = options.data.layers.map(layer => {
             switch (layer.type) {
@@ -51,10 +48,6 @@ class Animation {
             }
         });
 
-        this.reversed = options.reversed || false;
-
-        this.numLayers = this.layers.length;
-
         this.layers.forEach(layer => {
             if (layer.parent) {
                 const parentIndex = layer.parent;
@@ -62,16 +55,11 @@ class Animation {
             }
         });
 
+        this.reversed = options.reversed || false;
         this.reset(this.reversed);
         this.resize();
 
-        this.isPaused = false;
-        this.isPlaying = false;
-        this.drawFrame = true;
-
         add(this);
-
-        console.log(this);
     }
 
     play() {
@@ -169,22 +157,22 @@ class Animation {
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
                 this.compTime = this.reversed ? 0 : this.duration - 1;
                 this.isPlaying = false;
-                this.onComplete();
+                this.emit('complete');
                 if (this.loop) {
                     this.play();
                 }
             } else if (stopMarker) {
                 this.compTime = stopMarker.time;
-                this.onStop(stopMarker);
+                this.emit('stop', stopMarker);
                 this.pause();
             } else {
                 this.draw(this.compTime);
             }
-            this.onUpdate();
+            this.emit('update');
         } else if (this.drawFrame) {
             this.drawFrame = false;
             this.draw(this.compTime);
-            this.onUpdate();
+            this.emit('update');
         }
     }
 
@@ -220,7 +208,6 @@ class Animation {
 
     destroy() {
         this.isPlaying = false;
-        this.onComplete = null;
         if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
         remove(this);
     }
