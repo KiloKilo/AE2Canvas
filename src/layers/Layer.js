@@ -23,10 +23,12 @@ class Layer {
 
     setKeyframes(time) {
         this.transform.setKeyframes(time);
+        if (this.masks) this.masks.forEach(mask => mask.setKeyframes(time));
     }
 
     reset(reversed) {
         this.transform.reset(reversed);
+        if (this.masks) this.masks.forEach(mask => mask.reset(reversed));
     }
 }
 

@@ -1,3 +1,5 @@
+import Layer from './Layer'
+
 class TextLayer extends Layer {
     constructor(data, parentIn, parentOut, baseFont) {
         super(data, parentIn, parentOut);

@@ -1,8 +1,9 @@
-import {add, remove} from './core'
+import { add, remove } from './core'
 import Group from './objects/Group';
 import ImageLayer from './layers/ImageLayer';
 import TextLayer from './layers/TextLayer';
 import CompLayer from './layers/CompLayer';
+import VectorLayer from './layers/VectorLayer';
 
 class Animation {
 
@@ -41,7 +42,7 @@ class Animation {
 
         this.layers = options.data.layers.map(layer => {
             if (layer.type === 'vector') {
-                return new Group(layer, this.bufferCtx, 0, this.duration, this.gradients);
+                return new VectorLayer(layer, this.bufferCtx, 0, this.duration, this.gradients);
             } else if (layer.type === 'image') {
                 return new ImageLayer(layer, 0, this.duration, this.imageBasePath);
             } else if (layer.type === 'text') {
