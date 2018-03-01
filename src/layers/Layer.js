@@ -16,6 +16,19 @@ class Layer {
         }
     }
 
+    draw(ctx, time) {
+        ctx.save();
+
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.transform(ctx, time);
+
+        if (this.masks) {
+            ctx.beginPath();
+            this.masks.forEach(mask => mask.draw(ctx, time));
+            ctx.clip();
+        }
+    }
+
     setParentTransform(ctx, time) {
         if (this.parent) this.parent.setParentTransform(ctx, time);
         this.transform.transform(ctx, time);

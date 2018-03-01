@@ -35,20 +35,15 @@ class Animation {
         this.canvas.width = this.baseWidth;
         this.canvas.height = this.baseHeight;
 
-        this.buffer = document.createElement('canvas');
-        this.buffer.width = this.baseWidth;
-        this.buffer.height = this.baseHeight;
-        this.bufferCtx = this.buffer.getContext('2d');
-
         this.layers = options.data.layers.map(layer => {
             if (layer.type === 'vector') {
-                return new VectorLayer(layer, this.bufferCtx, 0, this.duration, this.gradients);
+                return new VectorLayer(layer, 0, this.duration, this.gradients);
             } else if (layer.type === 'image') {
                 return new ImageLayer(layer, 0, this.duration, this.imageBasePath);
             } else if (layer.type === 'text') {
                 return new TextLayer(layer, 0, this.duration, this.baseFont);
             } else if (layer.type === 'comp') {
-                return new CompLayer(layer, this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont);
+                return new CompLayer(layer, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont);
             }
         });
 
@@ -244,12 +239,8 @@ class Animation {
             this.canvas.width = width * this.devicePixelRatio;
             this.canvas.height = width / this.ratio * this.devicePixelRatio;
 
-            this.buffer.width = width * this.devicePixelRatio;
-            this.buffer.height = width / this.ratio * this.devicePixelRatio;
-
             this.scale = width / this.baseWidth * this.devicePixelRatio;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
-            this.bufferCtx.transform(this.scale, 0, 0, this.scale, 0, 0);
             this.setKeyframes(this.compTime);
             this.drawFrame = true;
         }

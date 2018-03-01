@@ -19,20 +19,7 @@ class ImageLayer extends Layer {
     }
 
     draw(ctx, time) {
-
-        if (!this.isLoaded) return;
-
-        ctx.save();
-        if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
-
-        if (this.masks) {
-            ctx.beginPath();
-            for (let i = 0; i < this.masks.length; i++) {
-                this.masks[i].draw(ctx, time);
-            }
-            ctx.clip();
-        }
+        super.draw(ctx,time);
 
         ctx.drawImage(this.img, 0, 0);
 

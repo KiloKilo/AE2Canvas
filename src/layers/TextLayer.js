@@ -13,18 +13,7 @@ class TextLayer extends Layer {
     }
 
     draw(ctx, time) {
-
-        ctx.save();
-        if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
-
-        if (this.masks) {
-            ctx.beginPath();
-            for (let i = 0; i < this.masks.length; i++) {
-                this.masks[i].draw(ctx, time);
-            }
-            ctx.clip();
-        }
+        super.draw(ctx, time);
 
         ctx.textAlign = this.justification;
         ctx.font = `${this.fontSize}px ${this.baseFont}` || this.font;

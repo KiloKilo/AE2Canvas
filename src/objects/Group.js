@@ -7,11 +7,10 @@ import AnimatedPath from './AnimatedPath';
 import Fill from '../property/Fill';
 import GradientFill from '../property/GradientFill';
 import Transform from '../transform/Transform';
-import Merge from '../property/Merge';
 import Trim from '../property/Trim';
 
 class Group {
-    constructor(data, bufferCtx, parentIn, parentOut, gradients) {
+    constructor(data, parentIn, parentOut, gradients) {
 
         this.index = data.index;
         this.in = data.in ? data.in : parentIn;
@@ -22,15 +21,13 @@ class Group {
         if (data.gradientFill) this.fill = new GradientFill(data.gradientFill, gradients);
         if (data.stroke) this.stroke = new Stroke(data.stroke);
         if (data.trim) this.trim = new Trim(data.trim);
-        if (data.merge) this.merge = new Merge(data.merge);
 
         this.transform = new Transform(data.transform);
-        this.bufferCtx = bufferCtx;
 
         if (data.groups) {
             this.groups = [];
             for (let i = 0; i < data.groups.length; i++) {
-                this.groups.push(new Group(data.groups[i], this.bufferCtx, this.in, this.out, gradients));
+                this.groups.push(new Group(data.groups[i], this.in, this.out, gradients));
             }
         }
 
@@ -61,14 +58,13 @@ class Group {
         }
     }
 
-    draw(ctx, time, parentFill, parentStroke, parentTrim, isBuffer) {
+    draw(ctx, time, parentFill, parentStroke, parentTrim) {
 
         if (this.transform.opacity && this.transform.opacity.getValue(time) === 0) return;
 
         let i;
 
         ctx.save();
-        this.bufferCtx.save();
 
         //TODO check if color/stroke is changing over time
         const fill = this.fill || parentFill;
@@ -78,21 +74,8 @@ class Group {
         if (fill) fill.setColor(ctx, time);
         if (stroke) stroke.setStroke(ctx, time);
 
-        if (!isBuffer) {
-            if (this.parent) this.parent.setParentTransform(ctx, time);
-            this.transform.transform(ctx, time);
-        }
-        this.transform.transform(this.bufferCtx, time);
-
-        if (this.merge) {
-            this.bufferCtx.save();
-            this.bufferCtx.setTransform(1, 0, 0, 1, 0, 0);
-            this.bufferCtx.clearRect(0, 0, this.bufferCtx.canvas.width, this.bufferCtx.canvas.height);
-            this.bufferCtx.restore();
-
-            if (fill) fill.setColor(this.bufferCtx, time);
-            if (stroke) stroke.setStroke(this.bufferCtx, time);
-        }
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.transform(ctx, time);
 
         if (this.masks) {
             ctx.beginPath();
@@ -107,62 +90,28 @@ class Group {
 
         //TODO get order
         if (fill) ctx.fill();
-        if (!isBuffer && stroke) ctx.stroke();
+        if (stroke) ctx.stroke();
 
         if (this.groups) this.drawGroups(ctx, time, fill, stroke, trimValues);
 
         ctx.restore();
-        this.bufferCtx.restore();
     }
 
     drawShapes(ctx, time, fill, stroke, trimValues) {
         let i;
-        if (this.merge) {
-            for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(this.bufferCtx, time, trimValues);
-                this.bufferCtx.closePath();
-                if (fill) this.bufferCtx.fill();
-                if (stroke) this.bufferCtx.stroke();
-                this.bufferCtx.beginPath();
-                this.merge.setCompositeOperation(this.bufferCtx);
-            }
-
-            ctx.restore();
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
-            ctx.restore();
-
-        } else {
-            for (i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].draw(ctx, time, trimValues);
-            }
-            if (this.shapes[this.shapes.length - 1].closed) {
-                // ctx.closePath();
-            }
+        for (i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].draw(ctx, time, trimValues);
+        }
+        if (this.shapes[this.shapes.length - 1].closed) {
+            // ctx.closePath();
         }
     }
 
     drawGroups(ctx, time, fill, stroke, trimValues) {
         let i;
-        if (this.merge) {
-            for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time <= this.groups[i].out) {
-                    this.groups[i].draw(this.bufferCtx, time, fill, stroke, trimValues, true);
-                    this.merge.setCompositeOperation(this.bufferCtx);
-                }
-            }
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.drawImage(this.bufferCtx.canvas, 0, 0);
-            ctx.restore();
-            this.bufferCtx.restore();
-        }
-        else {
-            for (i = 0; i < this.groups.length; i++) {
-                if (time >= this.groups[i].in && time <= this.groups[i].out) {
-                    this.groups[i].draw(ctx, time, fill, stroke, trimValues, false);
-                }
+        for (i = 0; i < this.groups.length; i++) {
+            if (time >= this.groups[i].in && time <= this.groups[i].out) {
+                this.groups[i].draw(ctx, time, fill, stroke, trimValues, false);
             }
         }
     }
