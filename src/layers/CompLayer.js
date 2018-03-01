@@ -4,21 +4,12 @@ import Transform from '../transform/Transform';
 import ImageLayer from './ImageLayer';
 import TextLayer from './TextLayer';
 import Group from '../objects/Group';
+import Layer from "./Layer";
 
-class CompLayer {
+class CompLayer extends Layer {
 
     constructor(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
-        this.index = data.index;
-        this.in = data.in ? data.in : parentIn;
-        this.out = data.out ? data.out : parentOut;
-
-        if (data.parent) this.parent = data.parent;
-
-        this.transform = new Transform(data.transform);
-
-        if (data.masks) {
-            this.masks = data.masks.map(mask => mask.isAnimated ? new AnimatedPath(mask) : new Path(mask));
-        }
+        super(data, parentIn, parentOut);
 
         this.layers = data.layers.map(layer => {
             if (layer.type === 'vector') {
@@ -58,18 +49,17 @@ class CompLayer {
     }
 
     setParentTransform(ctx, time) {
-        if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
+        super.setParentTransform(ctx, time);
         this.layers.forEach(layer => layer.setParentTransform(ctx, time));
     }
 
     setKeyframes(time) {
-        this.transform.setKeyframes(time);
+        super.setParentTransform(time);
         this.layers.forEach(layer => layer.setKeyframes(ctx, time));
     }
 
     reset(reversed) {
-        this.transform.reset(reversed);
+        super.setParentTransform(reversed);
         this.layers.forEach(layer => layer.reset(reversed));
     }
 }

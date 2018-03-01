@@ -5,7 +5,7 @@ var config = {
     entry: __dirname + '/src/index.js',
     devtool: 'source-map',
     output: {
-        path: __dirname + '/build',
+        path: __dirname + '/dist',
         filename: 'index.js',
         library: 'AE2Canvas',
         libraryTarget: 'umd'
