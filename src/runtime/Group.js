@@ -10,7 +10,8 @@ var Stroke = require('./Stroke'),
     GradientFill = require('./GradientFill'),
     Transform = require('./Transform'),
     Merge = require('./Merge'),
-    Trim = require('./Trim');
+    Trim = require('./Trim'),
+    DropShadow = require('./DropShadow');
 
 function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
@@ -27,6 +28,12 @@ function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
     this.transform = new Transform(data.transform);
     this.bufferCtx = bufferCtx;
+
+    if (data.effects) {
+        if (data.effects.dropShadow) {
+            this.dropShadow = new DropShadow(data.effects.dropShadow);
+        }
+    }
 
     if (data.groups) {
         this.groups = [];
@@ -75,6 +82,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     var fill = this.fill || parentFill;
     var stroke = this.stroke || parentStroke;
     var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
+
+    if (this.dropShadow) {
+        this.dropShadow.setShadow(ctx, time);
+    }
 
     if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
@@ -196,6 +207,7 @@ Group.prototype.setKeyframes = function (time) {
     if (this.fill) this.fill.setKeyframes(time);
     if (this.stroke) this.stroke.setKeyframes(time);
     if (this.trim) this.trim.setKeyframes(time);
+    if (this.dropShadow) this.dropShadow.setKeyframes(time);
 };
 
 Group.prototype.reset = function (reversed) {
@@ -219,6 +231,7 @@ Group.prototype.reset = function (reversed) {
     if (this.fill) this.fill.reset(reversed);
     if (this.stroke) this.stroke.reset(reversed);
     if (this.trim) this.trim.reset(reversed);
+    if (this.dropShadow) this.dropShadow.reset(reversed);
 };
 
 module.exports = Group;

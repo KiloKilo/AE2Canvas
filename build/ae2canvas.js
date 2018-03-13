@@ -683,7 +683,8 @@ var Stroke = __webpack_require__(13),
     GradientFill = __webpack_require__(18),
     Transform = __webpack_require__(4),
     Merge = __webpack_require__(20),
-    Trim = __webpack_require__(21);
+    Trim = __webpack_require__(21),
+    DropShadow = __webpack_require__(22);
 
 function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
@@ -700,6 +701,12 @@ function Group(data, bufferCtx, parentIn, parentOut, gradients) {
 
     this.transform = new Transform(data.transform);
     this.bufferCtx = bufferCtx;
+
+    if (data.effects) {
+        if (data.effects.dropShadow) {
+            this.dropShadow = new DropShadow(data.effects.dropShadow);
+        }
+    }
 
     if (data.groups) {
         this.groups = [];
@@ -746,6 +753,10 @@ Group.prototype.draw = function (ctx, time, parentFill, parentStroke, parentTrim
     var fill = this.fill || parentFill;
     var stroke = this.stroke || parentStroke;
     var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
+
+    if (this.dropShadow) {
+        this.dropShadow.setShadow(ctx, time);
+    }
 
     if (fill) fill.setColor(ctx, time);
     if (stroke) stroke.setStroke(ctx, time);
@@ -864,6 +875,7 @@ Group.prototype.setKeyframes = function (time) {
     if (this.fill) this.fill.setKeyframes(time);
     if (this.stroke) this.stroke.setKeyframes(time);
     if (this.trim) this.trim.setKeyframes(time);
+    if (this.dropShadow) this.dropShadow.setKeyframes(time);
 };
 
 Group.prototype.reset = function (reversed) {
@@ -887,6 +899,7 @@ Group.prototype.reset = function (reversed) {
     if (this.fill) this.fill.reset(reversed);
     if (this.stroke) this.stroke.reset(reversed);
     if (this.trim) this.trim.reset(reversed);
+    if (this.dropShadow) this.dropShadow.reset(reversed);
 };
 
 module.exports = Group;
@@ -1320,7 +1333,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var Group = __webpack_require__(5);
 var ImageLayer = __webpack_require__(8);
 var TextLayer = __webpack_require__(9);
-var Comp = __webpack_require__(22);
+var Comp = __webpack_require__(23);
 
 var _animations = [],
     _animationsLength = 0;
@@ -2279,6 +2292,57 @@ module.exports = Trim;
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Property = __webpack_require__(0),
+    AnimatedProperty = __webpack_require__(1);
+
+function DropShadow(data) {
+    this.color = data.color.length > 1 ? new AnimatedProperty(data.color) : new Property(data.color);
+    this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity);
+    this.direction = data.direction.length > 1 ? new AnimatedProperty(data.direction) : new Property(data.direction);
+    this.distance = data.distance.length > 1 ? new AnimatedProperty(data.distance) : new Property(data.distance);
+    this.softness = data.softness.length > 1 ? new AnimatedProperty(data.softness) : new Property(data.softness);
+}
+
+DropShadow.prototype.getColor = function (time) {
+    var color = this.color.getValue(time);
+    var opacity = this.opacity.getValue(time);
+    return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
+};
+
+DropShadow.prototype.setShadow = function (ctx, time) {
+    var color = this.getColor(time);
+    var dist = this.distance.getValue(time);
+    ctx.shadowColor = color;
+    ctx.shadowOffsetX = dist;
+    ctx.shadowOffsetY = dist;
+    ctx.shadowBlur = this.softness.getValue(time);
+};
+
+DropShadow.prototype.setKeyframes = function (time) {
+    this.color.setKeyframes(time);
+    this.opacity.setKeyframes(time);
+    this.direction.setKeyframes(time);
+    this.distance.setKeyframes(time);
+    this.softness.setKeyframes(time);
+};
+
+DropShadow.prototype.reset = function (reversed) {
+    this.color.reset(reversed);
+    this.opacity.reset(reversed);
+    this.direction.reset(reversed);
+    this.distance.reset(reversed);
+    this.softness.reset(reversed);
+};
+
+module.exports = DropShadow;
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
