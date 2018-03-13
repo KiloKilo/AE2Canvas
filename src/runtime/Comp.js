@@ -38,6 +38,18 @@ function Comp(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBa
         }
     }
     this.numLayers = this.layers.length;
+
+    for (var j = 0; j < this.numLayers; j++) {
+        var layer = this.layers[j];
+        if (layer.parent) {
+            for (var k = 0; k < this.layers.length; k++) {
+                //TODO stop loop
+                if (layer.parent === this.layers[k].index) {
+                    layer.parent = this.layers[k];
+                }
+            }
+        }
+    }
 }
 
 Comp.prototype.draw = function (ctx, time) {
