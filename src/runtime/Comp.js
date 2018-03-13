@@ -83,15 +83,17 @@ Comp.prototype.draw = function (ctx, time) {
 Comp.prototype.setParentTransform = function (ctx, time) {
     if (this.parent) this.parent.setParentTransform(ctx, time);
     this.transform.transform(ctx, time);
+    var internalTime = time - this.in;
     for (var i = 0; i < this.numLayers; i++) {
-        this.layers[i].setParentTransform(ctx, time);
+        this.layers[i].setParentTransform(ctx, internalTime);
     }
 };
 
 Comp.prototype.setKeyframes = function (time) {
     this.transform.setKeyframes(time);
+    var internalTime = time - this.in;
     for (var i = 0; i < this.numLayers; i++) {
-        this.layers[i].setKeyframes(time);
+        this.layers[i].setKeyframes(internalTime);
     }
 };
 
