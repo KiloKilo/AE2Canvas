@@ -1358,7 +1358,7 @@ function Animation(options) {
 
     this.canvas = options.canvas || document.createElement('canvas');
     this.loop = options.loop || false;
-    this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
+    this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
     this.fluid = options.fluid || true;
     this.reversed = options.reversed || false;
     this.imageBasePath = options.imageBasePath || '';
