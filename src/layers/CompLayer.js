@@ -52,12 +52,14 @@ class CompLayer extends Layer {
 
     setParentTransform(ctx, time) {
         super.setParentTransform(ctx, time);
-        if (this.layers) this.layers.forEach(layer => layer.setParentTransform(ctx, time));
+        const internalTime = time - this.in;
+        if (this.layers) this.layers.forEach(layer => layer.setParentTransform(ctx, internalTime));
     }
 
     setKeyframes(time) {
         super.setKeyframes(time);
-        if (this.layers) this.layers.forEach(layer => layer.setKeyframes(time));
+        const internalTime = time - this.in;
+        if (this.layers) this.layers.forEach(layer => layer.setKeyframes(internalTime));
     }
 
     reset(reversed) {
