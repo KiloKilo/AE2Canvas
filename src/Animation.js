@@ -20,7 +20,7 @@ class Animation extends Emitter {
         this.markers = options.data.markers;
         this.baseFont = options.baseFont;
         this.loop = options.loop || false;
-        this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
+        this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
         this.fluid = options.fluid || true;
         this.imageBasePath = options.imageBasePath || '';
 
