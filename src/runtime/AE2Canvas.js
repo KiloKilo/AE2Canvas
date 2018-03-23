@@ -186,9 +186,9 @@ Animation.prototype = {
                     this.play();
                 }
             } else if (stopMarker) {
+                this.pause();
                 this.compTime = stopMarker.time;
                 this.onStop(stopMarker);
-                this.pause();
             } else {
                 this.draw(this.compTime);
             }
