@@ -11,11 +11,16 @@ var config = {
         libraryTarget: 'umd'
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /(\.jsx|\.js)$/,
-                loader: 'babel-loader',
-                exclude: /(node_modules|bower_components)/
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env']
+                    }
+                }
             }
         ]
     }

@@ -908,6 +908,11 @@ module.exports = Group;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * BezierEasing - use bezier curve for transition easing function
  * is based on Firefox's nsSMILKeySpline.cpp
@@ -917,7 +922,7 @@ module.exports = Group;
  *
  */
 (function (definition) {
-    if (true) {
+    if (( false ? "undefined" : _typeof(exports)) === "object") {
         module.exports = definition();
     } else if (typeof window.define === 'function' && window.define.amd) {
         window.define([], definition);
@@ -1032,7 +1037,7 @@ module.exports = Group;
 
         if (mX1 != mY1 || mX2 != mY2) calcSampleValues();
 
-        var f = function (aX) {
+        var f = function f(aX) {
             if (mX1 === mY1 && mX2 === mY2) return aX; // linear
             // Because JavaScript number are imprecise, we should guarantee the extremes are right.
             if (aX === 0) return 0;
@@ -1318,17 +1323,17 @@ module.exports = TextLayer;
 
 /***/ }),
 /* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Animation", function() { return Animation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "update", function() { return update; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autoPlay", function() { return autoPlay; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shim__ = __webpack_require__(11);
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.autoPlay = exports.update = exports.Animation = undefined;
 
+var _shim = __webpack_require__(11);
 
 var Group = __webpack_require__(5);
 var ImageLayer = __webpack_require__(8);
@@ -1415,7 +1420,7 @@ function Animation(options) {
 
 Animation.prototype = {
 
-    play: function () {
+    play: function play() {
         if (!this.isPlaying) {
             if (!this.isPaused) this.reset(this.reversed);
             this.isPaused = false;
@@ -1424,13 +1429,13 @@ Animation.prototype = {
         }
     },
 
-    stop: function () {
+    stop: function stop() {
         this.reset(this.reversed);
         this.isPlaying = false;
         this.drawFrame = true;
     },
 
-    pause: function () {
+    pause: function pause() {
         if (this.isPlaying) {
             this.isPaused = true;
             this.pausedTime = this.compTime;
@@ -1438,7 +1443,7 @@ Animation.prototype = {
         }
     },
 
-    gotoAndPlay: function (id) {
+    gotoAndPlay: function gotoAndPlay(id) {
         var marker = this.getMarker(id);
         if (marker) {
             this.compTime = marker.time;
@@ -1448,7 +1453,7 @@ Animation.prototype = {
         }
     },
 
-    gotoAndStop: function (id) {
+    gotoAndStop: function gotoAndStop(id) {
         var marker = this.getMarker(id);
         if (marker) {
             this.isPlaying = false;
@@ -1458,7 +1463,7 @@ Animation.prototype = {
         }
     },
 
-    getMarker: function (id) {
+    getMarker: function getMarker(id) {
         if (typeof id === 'number') {
             return this.markers[id];
         } else if (typeof id === 'string') {
@@ -1471,7 +1476,7 @@ Animation.prototype = {
         console.warn('Marker not found');
     },
 
-    checkStopMarkers: function (from, to) {
+    checkStopMarkers: function checkStopMarkers(from, to) {
         for (var i = 0; i < this.markers.length; i++) {
             if (this.markers[i].stop && this.markers[i].time > from && this.markers[i].time < to) {
                 return this.markers[i];
@@ -1480,7 +1485,7 @@ Animation.prototype = {
         return false;
     },
 
-    setStep: function (step) {
+    setStep: function setStep(step) {
         this.isPlaying = false;
         this.compTime = step * this.duration;
         this.pausedTime = this.compTime;
@@ -1488,11 +1493,11 @@ Animation.prototype = {
         this.drawFrame = true;
     },
 
-    getStep: function () {
+    getStep: function getStep() {
         return this.compTime / this.duration;
     },
 
-    update: function (time) {
+    update: function update(time) {
         if (!this.then) this.then = time;
 
         var delta = time - this.then;
@@ -1525,7 +1530,7 @@ Animation.prototype = {
         }
     },
 
-    draw: function (time) {
+    draw: function draw(time) {
         this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
         for (var i = 0; i < this.numLayers; i++) {
             if (time >= this.layers[i].in && time <= this.layers[i].out) {
@@ -1534,7 +1539,7 @@ Animation.prototype = {
         }
     },
 
-    preload: function (cb) {
+    preload: function preload(cb) {
         this.onloadCB = cb;
         for (var i = 0; i < this.numLayers; i++) {
             if (this.layers[i] instanceof ImageLayer) {
@@ -1543,7 +1548,7 @@ Animation.prototype = {
         }
     },
 
-    onload: function () {
+    onload: function onload() {
         for (var i = 0; i < this.numLayers; i++) {
             if (this.layers[i] instanceof ImageLayer) {
                 if (!this.layers[i].isLoaded) {
@@ -1557,7 +1562,7 @@ Animation.prototype = {
         }
     },
 
-    reset: function () {
+    reset: function reset() {
         this.pausedTime = 0;
         this.compTime = this.reversed ? this.duration : 0;
         for (var i = 0; i < this.numLayers; i++) {
@@ -1565,13 +1570,13 @@ Animation.prototype = {
         }
     },
 
-    setKeyframes: function (time) {
+    setKeyframes: function setKeyframes(time) {
         for (var i = 0; i < this.numLayers; i++) {
             this.layers[i].setKeyframes(time);
         }
     },
 
-    destroy: function () {
+    destroy: function destroy() {
         this.isPlaying = false;
         this.onComplete = null;
         var i = _animations.indexOf(this);
@@ -1582,7 +1587,7 @@ Animation.prototype = {
         if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
     },
 
-    resize: function (w) {
+    resize: function resize(w) {
         if (this.fluid) {
             var width = w || this.canvas.clientWidth || this.baseWidth;
             this.canvas.width = width * this.devicePixelRatio;
@@ -1599,7 +1604,7 @@ Animation.prototype = {
         }
     },
 
-    setGradients: function (name, stops) {
+    setGradients: function setGradients(name, stops) {
         if (!this.gradients[name]) {
             console.warn('Gradient with name: ' + name + ' not found.');
             return;
@@ -1626,52 +1631,53 @@ Animation.prototype = {
 
 };
 
-const update = function (time) {
+var update = function update(time) {
     if (_autoPlay) {
-        _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["c" /* requestAnimationFrame */])(update);
+        _rafId = (0, _shim.requestAnimationFrame)(update);
     }
-    time = time !== undefined ? time : __WEBPACK_IMPORTED_MODULE_0__shim__["b" /* performance */].now();
+    time = time !== undefined ? time : _shim.performance.now();
 
     for (var i = 0; i < _animationsLength; i++) {
         _animations[i].update(time);
     }
 };
 
-const autoPlay = function (auto) {
+var autoPlay = function autoPlay(auto) {
     _autoPlay = auto;
-    _autoPlay ? _rafId = Object(__WEBPACK_IMPORTED_MODULE_0__shim__["c" /* requestAnimationFrame */])(update) : Object(__WEBPACK_IMPORTED_MODULE_0__shim__["a" /* cancelAnimationFrame */])(_rafId);
+    _autoPlay ? _rafId = (0, _shim.requestAnimationFrame)(update) : (0, _shim.cancelAnimationFrame)(_rafId);
 };
 
-
+exports.Animation = Animation;
+exports.update = update;
+exports.autoPlay = autoPlay;
 
 /***/ }),
 /* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {const root = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+/* WEBPACK VAR INJECTION */(function(global) {
 
-const requestAnimationFrame = root.requestAnimationFrame || function (fn) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var root = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : undefined;
+
+var requestAnimationFrame = exports.requestAnimationFrame = root.requestAnimationFrame || function (fn) {
     return root.setTimeout(fn, 16);
 };
-/* harmony export (immutable) */ __webpack_exports__["c"] = requestAnimationFrame;
 
-
-const cancelAnimationFrame = root.cancelAnimationFrame || function (id) {
+var cancelAnimationFrame = exports.cancelAnimationFrame = root.cancelAnimationFrame || function (id) {
     return root.clearTimeout(id);
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = cancelAnimationFrame;
 
-
-const performance = root.performance || {
+var performance = exports.performance = root.performance || {
     offset: Date.now(),
     now: function now() {
         return Date.now() - this.offset;
     }
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = performance;
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(12)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
 /* 12 */
