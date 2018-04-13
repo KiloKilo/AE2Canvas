@@ -1,6 +1,6 @@
-import Layer from './Layer';
+import BaseLayer from './BaseLayer';
 
-class NullLayer extends Layer {
+class NullLayer extends BaseLayer {
     constructor(data) {
         super(data);
     }

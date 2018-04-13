@@ -1,10 +1,10 @@
 import ImageLayer from './ImageLayer';
 import NullLayer from './NullLayer';
 import TextLayer from './TextLayer';
-import Layer from './Layer';
+import BaseLayer from './BaseLayer';
 import VectorLayer from './VectorLayer';
 
-class CompLayer extends Layer {
+class CompLayer extends BaseLayer {
 
     constructor(data, baseFont, gradients, imageBasePath) {
         super(data);

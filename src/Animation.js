@@ -1,4 +1,4 @@
-import { add, remove } from './core'
+import {add, remove} from './core'
 import Emitter from 'tiny-emitter'
 import ImageLayer from './layers/ImageLayer';
 import NullLayer from './layers/NullLayer';
@@ -80,7 +80,7 @@ class Animation extends Emitter {
     pause() {
         if (this.isPlaying) {
             this.isPaused = true;
-            this.pausedTime = this.compTime;
+            this.pausedTime = this.time;
             this.isPlaying = false;
         }
     }
@@ -88,9 +88,9 @@ class Animation extends Emitter {
     gotoAndPlay(id) {
         const marker = this.getMarker(id);
         if (marker) {
-            this.compTime = marker.time;
+            this.time = marker.time;
             this.pausedTime = 0;
-            this.setKeyframes(this.compTime);
+            this.setKeyframes(this.time);
             this.isPlaying = true;
         }
     }
@@ -98,8 +98,8 @@ class Animation extends Emitter {
     gotoAndStop(id) {
         const marker = this.getMarker(id);
         if (marker) {
-            this.compTime = marker.time;
-            this.setKeyframes(this.compTime);
+            this.time = marker.time;
+            this.setKeyframes(this.time);
             this.drawFrame = true;
             this.isPlaying = false;
         }
@@ -121,60 +121,6 @@ class Animation extends Emitter {
         return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to);
     }
 
-    set step(step) {
-        this.isPlaying = false;
-        this.compTime = step * this.duration;
-        this.pausedTime = this.compTime;
-        this.setKeyframes(this.compTime);
-        this.drawFrame = true;
-    }
-
-    get step() {
-        return this.compTime / this.duration;
-    }
-
-    update(time) {
-        if (!this.then) this.then = time;
-
-        const delta = time - this.then;
-        this.then = time;
-
-        if (this.isPlaying) {
-            this.compTime = this.reversed ? this.compTime - delta : this.compTime + delta;
-
-            const stopMarker = this.checkStopMarkers(this.compTime - delta, this.compTime);
-
-            if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
-                this.compTime = this.reversed ? 0 : this.duration - 1;
-                this.isPlaying = false;
-                this.emit('complete');
-                if (this.loop) {
-                    this.play();
-                }
-            } else if (stopMarker) {
-                this.compTime = stopMarker.time;
-                this.pause();
-                this.emit('stop', stopMarker);
-            } else {
-                this.draw(this.compTime);
-            }
-            this.emit('update');
-        } else if (this.drawFrame) {
-            this.drawFrame = false;
-            this.draw(this.compTime);
-            this.emit('update');
-        }
-    }
-
-    draw(time) {
-        this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
-
-        this.layers.forEach(layer => {
-            if (time >= layer.in && time <= layer.out) {
-                layer.draw(this.ctx, time);
-            }
-        });
-    }
 
     preload() {
         const promises = this.layers.filter(layer => layer instanceof ImageLayer).map(layer => new layer.preload());
@@ -183,7 +129,7 @@ class Animation extends Emitter {
 
     reset() {
         this.pausedTime = 0;
-        this.compTime = this.reversed ? this.duration : 0;
+        this.time = this.reversed ? this.duration : 0;
         this.layers.forEach(layer => layer.reset(this.reversed));
     }
 
@@ -205,7 +151,7 @@ class Animation extends Emitter {
 
             this.scale = width / this.baseWidth * this.devicePixelRatio;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
-            this.setKeyframes(this.compTime);
+            this.setKeyframes(this.time);
             this.drawFrame = true;
         }
     }
@@ -221,6 +167,82 @@ class Animation extends Emitter {
         });
     }
 
+    getSpriteSheet(fps = 25, width = 50) {
+        const ratio = width / this.baseWidth;
+        const height = this.baseHeight * ratio;
+        const numFrames = Math.floor((this.duration / 1000) * fps);
+        const buffer = document.createElement('canvas');
+        const ctx = buffer.getContext('2d');
+
+        buffer.width = numFrames * width;
+        buffer.height = height;
+
+        this.resize(width);
+
+        for (let i = 0; i < numFrames; i++) {
+            this.step = i / numFrames;
+            this.draw(this.time);
+            ctx.drawImage(this.canvas, i * width, 0, width, height);
+        }
+
+        return buffer.toDataURL();
+    }
+
+    draw(time) {
+        this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
+
+        this.layers.forEach(layer => {
+            if (time >= layer.in && time <= layer.out) {
+                layer.draw(this.ctx, time);
+            }
+        });
+    }
+
+    update(time) {
+        if (!this.then) this.then = time;
+
+        const delta = time - this.then;
+        this.then = time;
+
+        if (this.isPlaying) {
+            this.time = this.reversed ? this.time - delta : this.time + delta;
+
+            const stopMarker = this.checkStopMarkers(this.time - delta, this.time);
+
+            if (this.time > this.duration || this.reversed && this.time < 0) {
+                this.time = this.reversed ? 0 : this.duration - 1;
+                this.isPlaying = false;
+                this.emit('complete');
+                if (this.loop) {
+                    this.play();
+                }
+            } else if (stopMarker) {
+                this.time = stopMarker.time;
+                this.pause();
+                this.emit('stop', stopMarker);
+            } else {
+                this.draw(this.time);
+            }
+            this.emit('update');
+        } else if (this.drawFrame) {
+            this.drawFrame = false;
+            this.draw(this.time);
+            this.emit('update');
+        }
+    }
+
+    set step(step) {
+        this.isPlaying = false;
+        this.time = step * this.duration;
+        this.pausedTime = this.time;
+        this.setKeyframes(this.time);
+        this.drawFrame = true;
+    }
+
+    get step() {
+        return this.time / this.duration;
+    }
+
     get reversed() {
         return this._reversed;
     }
@@ -228,11 +250,11 @@ class Animation extends Emitter {
     set reversed(bool) {
         this._reversed = bool;
         if (this.pausedTime) {
-            this.compTime = this.pausedTime;
+            this.time = this.pausedTime;
         } else if (!this.isPlaying) {
-            this.compTime = this.reversed ? this.duration : 0;
+            this.time = this.reversed ? this.duration : 0;
         }
-        this.setKeyframes(this.compTime);
+        this.setKeyframes(this.time);
     }
 }
 

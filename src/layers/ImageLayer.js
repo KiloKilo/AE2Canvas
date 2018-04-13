@@ -1,6 +1,6 @@
-import Layer from './Layer';
+import BaseLayer from './BaseLayer';
 
-class ImageLayer extends Layer {
+class ImageLayer extends BaseLayer {
     constructor(data) {
         super(data);
         this.source = data.source;

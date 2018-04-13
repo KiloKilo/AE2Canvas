@@ -1,6 +1,6 @@
-import Layer from './Layer'
+import BaseLayer from './BaseLayer'
 
-class TextLayer extends Layer {
+class TextLayer extends BaseLayer {
     constructor(data, baseFont) {
         super(data);
         this.text = data.text;

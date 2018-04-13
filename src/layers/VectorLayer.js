@@ -7,9 +7,9 @@ import Fill from '../property/Fill';
 import GradientFill from '../property/GradientFill';
 import Stroke from '../property/Stroke';
 import Trim from '../property/Trim';
-import Layer from './Layer';
+import BaseLayer from './BaseLayer';
 
-class VectorLayer extends Layer {
+class VectorLayer extends BaseLayer {
     constructor(data, gradients) {
         super(data);
 
