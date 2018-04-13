@@ -4,10 +4,10 @@ import Transform from '../transform/Transform';
 
 class BaseLayer {
 
-    constructor(data, parentIn, parentOut) {
+    constructor(data) {
         this.index = data.index;
-        this.in = data.in ? data.in : parentIn;
-        this.out = data.out ? data.out : parentOut;
+        this.in = data.in || 0;
+        this.out = data.out;
         if (data.parent) this.parent = data.parent;
         this.transform = new Transform(data.transform);
 
@@ -16,17 +16,32 @@ class BaseLayer {
         }
     }
 
+    draw(ctx, time) {
+        ctx.save();
+
+        if (this.parent) this.parent.setParentTransform(ctx, time);
+        this.transform.update(ctx, time);
+
+        if (this.masks) {
+            ctx.beginPath();
+            this.masks.forEach(mask => mask.draw(ctx, time));
+            ctx.clip();
+        }
+    }
+
     setParentTransform(ctx, time) {
         if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
+        this.transform.update(ctx, time);
     }
 
     setKeyframes(time) {
         this.transform.setKeyframes(time);
+        if (this.masks) this.masks.forEach(mask => mask.setKeyframes(time));
     }
 
     reset(reversed) {
         this.transform.reset(reversed);
+        if (this.masks) this.masks.forEach(mask => mask.reset(reversed));
     }
 }
 

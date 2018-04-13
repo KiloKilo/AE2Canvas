@@ -1,43 +1,25 @@
-import BaseLayer from './BaseLayer';
+import Layer from './Layer';
 
-class ImageLayer extends BaseLayer {
-    constructor(data, parentIn, parentOut) {
-        super(data, parentIn, parentOut);
+class ImageLayer extends Layer {
+    constructor(data) {
+        super(data);
+        this.source = data.source;
         this.isLoaded = false;
     }
 
-    preload() {
+    preload(cb) {
         return new Promise((resolve, reject) => {
-            const img = new Image;
-            img.onload = () => {
+            this.img = new Image;
+            this.img.onload = () => {
                 this.isLoaded = true;
-                if (typeof cb === 'function') {
-                    this.img = img;
-                    resolve(img);
-                }
+                resolve();
             };
-
-            img.onerror = () => reject();
-
-            img.src = this.source;
+            this.img.src = this.source;
         });
     }
 
     draw(ctx, time) {
-
-        if (!this.isLoaded) return;
-
-        ctx.save();
-        if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
-
-        if (this.masks) {
-            ctx.beginPath();
-            for (let i = 0; i < this.masks.length; i++) {
-                this.masks[i].draw(ctx, time);
-            }
-            ctx.clip();
-        }
+        super.draw(ctx, time);
 
         ctx.drawImage(this.img, 0, 0);
 

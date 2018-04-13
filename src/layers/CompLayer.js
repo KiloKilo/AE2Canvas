@@ -1,66 +1,70 @@
-import Path from '../objects/Path';
-import AnimatedPath from '../objects/AnimatedPath';
-import Transform from '../transform/Transform';
 import ImageLayer from './ImageLayer';
+import NullLayer from './NullLayer';
 import TextLayer from './TextLayer';
-import Group from '../objects/Group';
-import BaseLayer from './BaseLayer';
+import Layer from './Layer';
+import VectorLayer from './VectorLayer';
 
-class CompLayer extends BaseLayer {
+class CompLayer extends Layer {
 
-    constructor(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
-        super(data, parentIn, parentOut);
+    constructor(data, baseFont, gradients, imageBasePath) {
+        super(data);
 
-        this.layers = data.layers.map(layer => {
-            if (layer.type === 'vector') {
-                return new Group(layer, bufferCtx, 0, this.out, gradients);
-            } else if (layer.type === 'image') {
-                return new ImageLayer(layer, 0, this.out, imageBasePath);
-            } else if (layer.type === 'text') {
-                return new TextLayer(layer, 0, this.out, baseFont);
-            } else if (layer.type === 'comp') {
-                return new CompLayer(layer, bufferCtx, 0, this.out, baseFont, gradients, imageBasePath, baseFont);
-            }
-        });
+        if (data.layers) {
 
-        this.numLayers = this.layers.length;
+            this.layers = data.layers.map(layer => {
+                switch (layer.type) {
+                    case 'vector':
+                        return new VectorLayer(layer, gradients);
+                    case 'image':
+                        return new ImageLayer(layer, imageBasePath);
+                    case 'text':
+                        return new TextLayer(layer, baseFont);
+                    case 'comp':
+                        return new CompLayer(layer, baseFont, gradients, imageBasePath);
+                    case 'null':
+                        return new NullLayer(layer);
+                }
+            });
+
+            this.layers.forEach(layer => {
+                if (layer.parent) {
+                    const parentIndex = layer.parent;
+                    layer.parent = this.layers.find(layer => layer.index === parentIndex)
+                }
+            });
+        }
     }
 
     draw(ctx, time) {
-        ctx.save();
+        super.draw(ctx, time);
 
-        if (this.parent) this.parent.setParentTransform(ctx, time);
-        this.transform.transform(ctx, time);
-
-        if (this.masks) {
-            ctx.beginPath();
-            this.masks.forEach(mask => mask.draw(ctx, time));
-            ctx.clip();
+        if (this.layers) {
+            const internalTime = time - this.in;
+            this.layers.forEach(layer => {
+                if (internalTime >= layer.in && internalTime <= layer.out) {
+                    layer.draw(ctx, internalTime);
+                }
+            });
         }
-
-        const internalTime = time - this.in;
-        this.layers.forEach(layer => {
-            if (internalTime >= layer.in && internalTime <= layer.out) {
-                layer.draw(ctx, internalTime);
-            }
-        });
 
         ctx.restore();
     }
 
     setParentTransform(ctx, time) {
         super.setParentTransform(ctx, time);
-        this.layers.forEach(layer => layer.setParentTransform(ctx, time));
+        const internalTime = time - this.in;
+        if (this.layers) this.layers.forEach(layer => layer.setParentTransform(ctx, internalTime));
     }
 
     setKeyframes(time) {
-        super.setParentTransform(time);
-        this.layers.forEach(layer => layer.setKeyframes(ctx, time));
+        super.setKeyframes(time);
+        const internalTime = time - this.in;
+        if (this.layers) this.layers.forEach(layer => layer.setKeyframes(internalTime));
     }
 
     reset(reversed) {
-        super.setParentTransform(reversed);
-        this.layers.forEach(layer => layer.reset(reversed));
+        super.reset(reversed);
+        if (this.layers) this.layers.forEach(layer => layer.reset(reversed));
     }
 }
 

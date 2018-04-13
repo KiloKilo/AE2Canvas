@@ -48,7 +48,7 @@ class Stroke {
         return `rgba(${s}, ${opacity})`;
     }
 
-    setStroke(ctx, time) {
+    update(ctx, time) {
         const strokeColor = this.getValue(time);
         const strokeWidth = this.width.getValue(time);
         const strokeJoin = this.join;

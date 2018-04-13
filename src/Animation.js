@@ -1,15 +1,15 @@
-import {add, remove} from './core'
-import Group from './objects/Group';
+import { add, remove } from './core'
+import Emitter from 'tiny-emitter'
 import ImageLayer from './layers/ImageLayer';
+import NullLayer from './layers/NullLayer';
 import TextLayer from './layers/TextLayer';
 import CompLayer from './layers/CompLayer';
-import Emitter from 'tiny-emitter';
+import VectorLayer from './layers/VectorLayer';
 
 class Animation extends Emitter {
 
     constructor(options) {
         super();
-
 
         this.gradients = {};
         this.pausedTime = 0;
@@ -19,39 +19,34 @@ class Animation extends Emitter {
         this.ratio = options.data.width / options.data.height;
         this.markers = options.data.markers;
         this.baseFont = options.baseFont;
-
-        this.canvas = options.canvas || document.createElement('canvas');
         this.loop = options.loop || false;
-        this.devicePixelRatio = options.devicePixelRatio || window && window.devicePixelRatio ? window.devicePixelRatio : 1;
+        this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
         this.fluid = options.fluid || true;
-
         this.imageBasePath = options.imageBasePath || '';
 
-        this.ctx = this.canvas.getContext('2d');
+        this.isPaused = false;
+        this.isPlaying = false;
+        this.drawFrame = true;
 
+        this.canvas = options.canvas || document.createElement('canvas');
         this.canvas.width = this.baseWidth;
         this.canvas.height = this.baseHeight;
-
-        this.buffer = document.createElement('canvas');
-        this.buffer.width = this.baseWidth;
-        this.buffer.height = this.baseHeight;
-        this.bufferCtx = this.buffer.getContext('2d');
+        this.ctx = this.canvas.getContext('2d');
 
         this.layers = options.data.layers.map(layer => {
-            if (layer.type === 'vector') {
-                return new Group(layer, this.bufferCtx, 0, this.duration, this.gradients);
-            } else if (layer.type === 'image') {
-                return new ImageLayer(layer, 0, this.duration, this.imageBasePath);
-            } else if (layer.type === 'text') {
-                return new TextLayer(layer, 0, this.duration, this.baseFont);
-            } else if (layer.type === 'comp') {
-                return new CompLayer(layer, this.bufferCtx, 0, this.duration, this.baseFont, this.gradients, this.imageBasePath, this.baseFont);
+            switch (layer.type) {
+                case 'vector':
+                    return new VectorLayer(layer, this.gradients);
+                case 'image':
+                    return new ImageLayer(layer, this.imageBasePath);
+                case 'text':
+                    return new TextLayer(layer, this.baseFont);
+                case 'comp':
+                    return new CompLayer(layer, this.baseFont, this.gradients, this.imageBasePath);
+                case 'null':
+                    return new NullLayer(layer);
             }
         });
-
-        this.reversed = options.reversed || false;
-
-        this.numLayers = this.layers.length;
 
         this.layers.forEach(layer => {
             if (layer.parent) {
@@ -60,12 +55,9 @@ class Animation extends Emitter {
             }
         });
 
+        this.reversed = options.reversed || false;
         this.reset(this.reversed);
         this.resize();
-
-        this.isPaused = false;
-        this.isPlaying = false;
-        this.drawFrame = true;
 
         add(this);
     }
@@ -211,12 +203,8 @@ class Animation extends Emitter {
             this.canvas.width = width * this.devicePixelRatio;
             this.canvas.height = width / this.ratio * this.devicePixelRatio;
 
-            this.buffer.width = width * this.devicePixelRatio;
-            this.buffer.height = width / this.ratio * this.devicePixelRatio;
-
             this.scale = width / this.baseWidth * this.devicePixelRatio;
             this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
-            this.bufferCtx.transform(this.scale, 0, 0, this.scale, 0, 0);
             this.setKeyframes(this.compTime);
             this.drawFrame = true;
         }

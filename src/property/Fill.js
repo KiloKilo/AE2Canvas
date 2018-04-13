@@ -14,7 +14,7 @@ class Fill {
         return `rgba(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])}, ${opacity})`;
     }
 
-    setColor(ctx, time) {
+    update(ctx, time) {
         const color = this.getValue(time);
         ctx.fillStyle = color;
     }
