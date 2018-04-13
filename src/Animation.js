@@ -190,7 +190,7 @@ class Animation extends Emitter {
             width: buffer.width,
             height: height,
             frames: numFrames,
-            sprite: buffer.toDataURL()
+            canvas: buffer,
         }
     }
 

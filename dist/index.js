@@ -1381,7 +1381,7 @@ class Animation extends __WEBPACK_IMPORTED_MODULE_1_tiny_emitter___default.a {
             width: buffer.width,
             height: height,
             frames: numFrames,
-            sprite: buffer.toDataURL()
+            canvas: buffer
         };
     }
 
