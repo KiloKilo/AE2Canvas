@@ -1,4 +1,6 @@
-class TextLayer extends Layer {
+import BaseLayer from './BaseLayer'
+
+class TextLayer extends BaseLayer {
     constructor(data, parentIn, parentOut, baseFont) {
         super(data, parentIn, parentOut);
         this.text = data.text;
@@ -11,7 +13,6 @@ class TextLayer extends Layer {
     }
 
     draw(ctx, time) {
-
         ctx.save();
         if (this.parent) this.parent.setParentTransform(ctx, time);
         this.transform.transform(ctx, time);

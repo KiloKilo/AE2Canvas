@@ -1,21 +1,26 @@
-import Layer from "./Layer";
+import BaseLayer from './BaseLayer';
 
-class ImageLayer extends Layer {
+class ImageLayer extends BaseLayer {
     constructor(data, parentIn, parentOut) {
         super(data, parentIn, parentOut);
         this.isLoaded = false;
     }
 
-    preload(cb) {
-        this.img = new Image;
-        this.img.onload = () => {
-            this.isLoaded = true;
-            if (typeof cb === 'function') {
-                cb();
-            }
-        };
+    preload() {
+        return new Promise((resolve, reject) => {
+            const img = new Image;
+            img.onload = () => {
+                this.isLoaded = true;
+                if (typeof cb === 'function') {
+                    this.img = img;
+                    resolve(img);
+                }
+            };
 
-        this.img.src = this.source;
+            img.onerror = () => reject();
+
+            img.src = this.source;
+        });
     }
 
     draw(ctx, time) {

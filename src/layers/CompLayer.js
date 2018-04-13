@@ -4,9 +4,9 @@ import Transform from '../transform/Transform';
 import ImageLayer from './ImageLayer';
 import TextLayer from './TextLayer';
 import Group from '../objects/Group';
-import Layer from "./Layer";
+import BaseLayer from './BaseLayer';
 
-class CompLayer extends Layer {
+class CompLayer extends BaseLayer {
 
     constructor(data, bufferCtx, parentIn, parentOut, baseFont, gradients, imageBasePath) {
         super(data, parentIn, parentOut);

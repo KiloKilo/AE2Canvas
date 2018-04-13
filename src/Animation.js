@@ -3,10 +3,14 @@ import Group from './objects/Group';
 import ImageLayer from './layers/ImageLayer';
 import TextLayer from './layers/TextLayer';
 import CompLayer from './layers/CompLayer';
+import Emitter from 'tiny-emitter';
 
-class Animation {
+class Animation extends Emitter {
 
     constructor(options) {
+        super();
+
+
         this.gradients = {};
         this.pausedTime = 0;
         this.duration = options.data.duration;
@@ -22,12 +26,6 @@ class Animation {
         this.fluid = options.fluid || true;
 
         this.imageBasePath = options.imageBasePath || '';
-        this.onUpdate = options.onUpdate || (() => {
-        });
-        this.onComplete = options.onComplete || (() => {
-        });
-        this.onStop = options.onStop || (() => {
-        });
 
         this.ctx = this.canvas.getContext('2d');
 
@@ -131,22 +129,12 @@ class Animation {
         return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to);
     }
 
-    setStep(step) {
-        console.warn('setStep is deprecated, use animation.step = value');
-        this.step = step;
-    }
-
     set step(step) {
         this.isPlaying = false;
         this.compTime = step * this.duration;
         this.pausedTime = this.compTime;
         this.setKeyframes(this.compTime);
         this.drawFrame = true;
-    }
-
-    getStep() {
-        console.warn('getStep is deprecated, use animation.step');
-        return this.step;
     }
 
     get step() {
@@ -167,22 +155,22 @@ class Animation {
             if (this.compTime > this.duration || this.reversed && this.compTime < 0) {
                 this.compTime = this.reversed ? 0 : this.duration - 1;
                 this.isPlaying = false;
-                this.onComplete();
+                this.emit('complete');
                 if (this.loop) {
                     this.play();
                 }
             } else if (stopMarker) {
                 this.compTime = stopMarker.time;
                 this.pause();
-                this.onStop(stopMarker);
+                this.emit('stop', stopMarker);
             } else {
                 this.draw(this.compTime);
             }
-            this.onUpdate();
+            this.emit('update');
         } else if (this.drawFrame) {
             this.drawFrame = false;
             this.draw(this.compTime);
-            this.onUpdate();
+            this.emit('update');
         }
     }
 
@@ -196,28 +184,9 @@ class Animation {
         });
     }
 
-    preload(cb) {
-        //TODO use promise
-        this.onloadCB = cb;
-        this.layers.forEach(layer => {
-            if (layer instanceof ImageLayer) {
-                layer.preload(this.onload.bind(this));
-            }
-        });
-    }
-
-    onload() {
-        for (let i = 0; i < this.numLayers; i++) {
-            if (this.layers[i] instanceof ImageLayer) {
-                if (!this.layers[i].isLoaded) {
-                    return;
-                }
-            }
-        }
-        this.isLoaded = true;
-        if (typeof this.onloadCB === 'function') {
-            this.onloadCB();
-        }
+    preload() {
+        const promises = this.layers.filter(layer => layer instanceof ImageLayer).map(layer => new layer.preload());
+        return Promise.all(promises).catch(error => console.error(error));
     }
 
     reset() {
@@ -232,7 +201,6 @@ class Animation {
 
     destroy() {
         this.isPlaying = false;
-        this.onComplete = null;
         if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
         remove(this);
     }

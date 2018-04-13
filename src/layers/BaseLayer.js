@@ -2,7 +2,7 @@ import Path from '../objects/Path';
 import AnimatedPath from '../objects/AnimatedPath';
 import Transform from '../transform/Transform';
 
-class Layer {
+class BaseLayer {
 
     constructor(data, parentIn, parentOut) {
         this.index = data.index;
@@ -30,7 +30,7 @@ class Layer {
     }
 }
 
-export default Layer;
+export default BaseLayer;
 
 
 
