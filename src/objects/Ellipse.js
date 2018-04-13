@@ -5,7 +5,7 @@ import Path from './Path'
 class Ellipse extends Path {
 
     constructor(data) {
-        super();
+        super(data);
         this.closed = true;
 
         this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);
