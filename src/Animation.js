@@ -173,8 +173,8 @@ class Animation {
                 }
             } else if (stopMarker) {
                 this.compTime = stopMarker.time;
-                this.onStop(stopMarker);
                 this.pause();
+                this.onStop(stopMarker);
             } else {
                 this.draw(this.compTime);
             }
