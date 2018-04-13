@@ -174,23 +174,43 @@ class Animation extends Emitter {
         const buffer = document.createElement('canvas');
         const ctx = buffer.getContext('2d');
 
-        buffer.width = numFrames * width;
-        buffer.height = height;
+        const rowsX = Math.floor(4096 / width);
+        const rowsY = Math.ceil(numFrames / rowsX);
+
+        let indexX = 0;
+        let indexY = 0;
+
+        buffer.width = rowsX * width;
+        buffer.height = rowsY * height;
 
         this.resize(width);
 
         for (let i = 0; i < numFrames; i++) {
             this.step = i / numFrames;
             this.draw(this.time);
-            ctx.drawImage(this.canvas, i * width, 0, width, height);
+
+            const x = indexX * width;
+            const y = indexY * height;
+
+            if ((indexX + 1) > rowsX) {
+                indexX = 0;
+                indexY++;
+            } else {
+                indexX++;
+            }
+
+            ctx.drawImage(this.canvas, x, y, width, height);
         }
 
+        document.body.appendChild(buffer);
+
         return {
-            offset: width,
-            width: buffer.width,
-            height: height,
             frames: numFrames,
             canvas: buffer,
+            offsetX: width,
+            offsetY: height,
+            rowsX,
+            rowsY,
         }
     }
 
