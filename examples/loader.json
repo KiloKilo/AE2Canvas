@@ -1,0 +1,15 @@
+{"name":"Loader","layers":[{"name":"Group 12 Outlines","index":2,"type":"vector","out":4040,"effects":{
+
+},"groups":[{"name":"bg","type":"vector","effects":{
+
+},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[205,205]}]}],"fill":{"color":[{"t":0,"v":[0,55,100]}]},"transform":{"position":[{"t":0,"v":[130,130]}]}},{"name":"ring","type":"vector","effects":{
+
+},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[250,250]}]}],"stroke":{"index":2,"join":"round","cap":"round","color":[{"t":0,"v":[0,55,100]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":1.5}],"dashes":{"dash":[{"t":0,"v":1}],"gap":[{"t":0,"v":4}],"offset":[{"t":0,"v":0}]}},"transform":{"position":[{"t":0,"v":[130,130]}]}},{"name":"dot","type":"vector","effects":{
+
+},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[10,10]}]}],"fill":{"color":[{"t":0,"v":[255,255,255]}]},"transform":{"anchor":[{"t":0,"v":[-125,0]}],"position":[{"t":0,"v":[130,130]}],"rotation":[{"t":0,"v":0},{"t":4000,"v":360}]}}],"transform":{"anchor":[{"t":0,"v":[130,130]}],"position":[{"t":0,"v":[133,133]}]}},{"name":"progress","index":1,"type":"vector","out":4040,"effects":{
+
+},"groups":[{"name":"progress","type":"vector","effects":{
+
+},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[250,250]}]}],"trim":{"type":1,"end":[{"t":0,"v":0},{"t":4000,"v":1}]},"stroke":{"index":3,"join":"round","cap":"round","color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":2}]},"transform":{"position":[{"t":0,"v":[130,130]}],"rotation":[{"t":0,"v":90}]}}],"transform":{"anchor":[{"t":0,"v":[130,130]}],"position":[{"t":0,"v":[133,133]}]}}],"duration":4040,"width":265,"height":265,"markers":[
+
+]}

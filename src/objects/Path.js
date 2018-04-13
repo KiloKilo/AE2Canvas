@@ -3,10 +3,8 @@ import Bezier from '../utils/Bezier';
 class Path {
 
     constructor(data) {
-        //this.name = data.name;
         this.closed = data.closed;
         this.frames = data.frames;
-        this.verticesCount = this.frames[0].v.length;
     }
 
     draw(ctx, time, trim) {

@@ -21,7 +21,7 @@
 
         #canvasWrapper {
             width: 100%;
-            max-width: 1600px;
+            max-width: 300px;
             margin: 0 auto 30px auto;
             /*background: url(test.jpg);*/
             background-size: contain;
@@ -76,7 +76,7 @@
 
     AE2Canvas.autoPlay(true);
 
-    fetch('data.json')
+    fetch('loader.json')
         .then(result => result.json())
         .then(data => {
 
@@ -154,7 +154,7 @@
                     ]);
 
 
-                    img.src = animation.getSpriteSheet(1, 50);
+                    // img.src = animation.getSpriteSheet(1, 50);
                 });
         });
 
