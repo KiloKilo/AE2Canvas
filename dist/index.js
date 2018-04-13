@@ -1767,12 +1767,15 @@ class CompLayer extends __WEBPACK_IMPORTED_MODULE_3__BaseLayer__["a" /* default 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__property_Property__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__property_AnimatedProperty__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Path__ = __webpack_require__(3);
 
 
 
-class Ellipse {
+
+class Ellipse extends __WEBPACK_IMPORTED_MODULE_2__Path__["a" /* default */] {
 
     constructor(data) {
+        super();
         this.closed = true;
 
         this.size = data.size.length > 1 ? new __WEBPACK_IMPORTED_MODULE_1__property_AnimatedProperty__["a" /* default */](data.size) : new __WEBPACK_IMPORTED_MODULE_0__property_Property__["a" /* default */](data.size);
