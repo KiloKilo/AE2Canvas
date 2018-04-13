@@ -186,6 +186,9 @@ class Animation extends Emitter {
         }
 
         return {
+            offset: width,
+            width: buffer.width,
+            height: height,
             frames: numFrames,
             sprite: buffer.toDataURL()
         }
