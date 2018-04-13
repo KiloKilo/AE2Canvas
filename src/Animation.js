@@ -185,7 +185,10 @@ class Animation extends Emitter {
             ctx.drawImage(this.canvas, i * width, 0, width, height);
         }
 
-        return buffer.toDataURL();
+        return {
+            frames: numFrames,
+            sprite: buffer.toDataURL()
+        }
     }
 
     draw(time) {

@@ -1376,7 +1376,10 @@ class Animation extends __WEBPACK_IMPORTED_MODULE_1_tiny_emitter___default.a {
             ctx.drawImage(this.canvas, i * width, 0, width, height);
         }
 
-        return buffer.toDataURL();
+        return {
+            frames: numFrames,
+            sprite: buffer.toDataURL()
+        };
     }
 
     draw(time) {
