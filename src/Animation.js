@@ -167,14 +167,14 @@ class Animation extends Emitter {
         });
     }
 
-    getSpriteSheet(fps = 25, width = 50) {
+    getSpriteSheet(fps = 25, width = 50, maxWidth = 4096) {
         const ratio = width / this.baseWidth;
         const height = this.baseHeight * ratio;
         const numFrames = Math.floor((this.duration / 1000) * fps);
         const buffer = document.createElement('canvas');
         const ctx = buffer.getContext('2d');
 
-        const rowsX = Math.floor(4096 / width);
+        const rowsX = Math.floor(maxWidth / width);
         const rowsY = Math.ceil(numFrames / rowsX);
 
         let indexX = 0;
