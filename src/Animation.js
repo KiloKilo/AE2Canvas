@@ -192,7 +192,7 @@ class Animation extends Emitter {
             const x = indexX * width;
             const y = indexY * height;
 
-            if ((indexX + 1) > rowsX) {
+            if ((indexX + 1) >= rowsX) {
                 indexX = 0;
                 indexY++;
             } else {
@@ -201,8 +201,6 @@ class Animation extends Emitter {
 
             ctx.drawImage(this.canvas, x, y, width, height);
         }
-
-        document.body.appendChild(buffer);
 
         return {
             frames: numFrames,

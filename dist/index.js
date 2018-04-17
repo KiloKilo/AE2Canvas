@@ -1383,7 +1383,7 @@ class Animation extends __WEBPACK_IMPORTED_MODULE_1_tiny_emitter___default.a {
             const x = indexX * width;
             const y = indexY * height;
 
-            if (indexX + 1 > rowsX) {
+            if (indexX + 1 >= rowsX) {
                 indexX = 0;
                 indexY++;
             } else {
@@ -1392,8 +1392,6 @@ class Animation extends __WEBPACK_IMPORTED_MODULE_1_tiny_emitter___default.a {
 
             ctx.drawImage(this.canvas, x, y, width, height);
         }
-
-        document.body.appendChild(buffer);
 
         return {
             frames: numFrames,
