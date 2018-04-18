@@ -154,9 +154,9 @@
                     ]);
 
 
-                    const {sprite} = animation.getSpriteSheet(20, 150);
-                    img.src = sprite;
-                    document.body.appendChild(img);
+                    const sheet = animation.getSpriteSheet(20, 150, 2048);
+                    // img.src = sprite;
+                    document.body.appendChild(sheet.canvas);
                 });
         });
 
