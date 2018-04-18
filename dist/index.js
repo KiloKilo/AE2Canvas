@@ -301,6 +301,10 @@ var _Transform = __webpack_require__(17);
 
 var _Transform2 = _interopRequireDefault(_Transform);
 
+var _DropShadow = __webpack_require__(19);
+
+var _DropShadow2 = _interopRequireDefault(_DropShadow);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -314,6 +318,12 @@ var BaseLayer = function () {
         this.out = data.out;
         if (data.parent) this.parent = data.parent;
         this.transform = new _Transform2.default(data.transform);
+
+        if (data.effects) {
+            if (data.effects.dropShadow) {
+                this.dropShadow = new _DropShadow2.default(data.effects.dropShadow);
+            }
+        }
 
         if (data.masks) {
             this.masks = data.masks.map(function (mask) {
@@ -329,6 +339,10 @@ var BaseLayer = function () {
 
             if (this.parent) this.parent.setParentTransform(ctx, time);
             this.transform.update(ctx, time);
+
+            if (this.dropShadow) {
+                this.dropShadow.setShadow(ctx, time);
+            }
 
             if (this.masks) {
                 ctx.beginPath();
@@ -1287,7 +1301,7 @@ var _AnimatedPath = __webpack_require__(7);
 
 var _AnimatedPath2 = _interopRequireDefault(_AnimatedPath);
 
-var _Ellipse = __webpack_require__(20);
+var _Ellipse = __webpack_require__(21);
 
 var _Ellipse2 = _interopRequireDefault(_Ellipse);
 
@@ -1295,27 +1309,27 @@ var _Path = __webpack_require__(3);
 
 var _Path2 = _interopRequireDefault(_Path);
 
-var _Polystar = __webpack_require__(21);
+var _Polystar = __webpack_require__(22);
 
 var _Polystar2 = _interopRequireDefault(_Polystar);
 
-var _Rect = __webpack_require__(22);
+var _Rect = __webpack_require__(23);
 
 var _Rect2 = _interopRequireDefault(_Rect);
 
-var _Fill = __webpack_require__(23);
+var _Fill = __webpack_require__(24);
 
 var _Fill2 = _interopRequireDefault(_Fill);
 
-var _GradientFill = __webpack_require__(24);
+var _GradientFill = __webpack_require__(25);
 
 var _GradientFill2 = _interopRequireDefault(_GradientFill);
 
-var _Stroke = __webpack_require__(25);
+var _Stroke = __webpack_require__(26);
 
 var _Stroke2 = _interopRequireDefault(_Stroke);
 
-var _Trim = __webpack_require__(26);
+var _Trim = __webpack_require__(27);
 
 var _Trim2 = _interopRequireDefault(_Trim);
 
@@ -1547,7 +1561,7 @@ var _TextLayer = __webpack_require__(10);
 
 var _TextLayer2 = _interopRequireDefault(_TextLayer);
 
-var _CompLayer = __webpack_require__(19);
+var _CompLayer = __webpack_require__(20);
 
 var _CompLayer2 = _interopRequireDefault(_CompLayer);
 
@@ -2188,6 +2202,84 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Property = __webpack_require__(0);
+
+var _Property2 = _interopRequireDefault(_Property);
+
+var _AnimatedProperty = __webpack_require__(1);
+
+var _AnimatedProperty2 = _interopRequireDefault(_AnimatedProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DropShadow = function () {
+    function DropShadow(data) {
+        _classCallCheck(this, DropShadow);
+
+        this.color = data.color.length > 1 ? new _AnimatedProperty2.default(data.color) : new _Property2.default(data.color);
+        this.opacity = data.opacity.length > 1 ? new _AnimatedProperty2.default(data.opacity) : new _Property2.default(data.opacity);
+        this.direction = data.direction.length > 1 ? new _AnimatedProperty2.default(data.direction) : new _Property2.default(data.direction);
+        this.distance = data.distance.length > 1 ? new _AnimatedProperty2.default(data.distance) : new _Property2.default(data.distance);
+        this.softness = data.softness.length > 1 ? new _AnimatedProperty2.default(data.softness) : new _Property2.default(data.softness);
+    }
+
+    _createClass(DropShadow, [{
+        key: 'getColor',
+        value: function getColor(time) {
+            var color = this.color.getValue(time);
+            var opacity = this.opacity.getValue(time);
+            return 'rgba(' + Math.round(color[0]) + ', ' + Math.round(color[1]) + ', ' + Math.round(color[2]) + ', ' + opacity + ')';
+        }
+    }, {
+        key: 'setShadow',
+        value: function setShadow(ctx, time) {
+            var color = this.getColor(time);
+            var dist = this.distance.getValue(time);
+            ctx.shadowColor = color;
+            ctx.shadowOffsetX = dist;
+            ctx.shadowOffsetY = dist;
+            ctx.shadowBlur = this.softness.getValue(time);
+        }
+    }, {
+        key: 'setKeyframes',
+        value: function setKeyframes(time) {
+            this.color.setKeyframes(time);
+            this.opacity.setKeyframes(time);
+            this.direction.setKeyframes(time);
+            this.distance.setKeyframes(time);
+            this.softness.setKeyframes(time);
+        }
+    }, {
+        key: 'reset',
+        value: function reset(reversed) {
+            this.color.reset(reversed);
+            this.opacity.reset(reversed);
+            this.direction.reset(reversed);
+            this.distance.reset(reversed);
+            this.softness.reset(reversed);
+        }
+    }]);
+
+    return DropShadow;
+}();
+
+exports.default = DropShadow;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _ImageLayer = __webpack_require__(5);
@@ -2305,7 +2397,7 @@ var CompLayer = function (_BaseLayer) {
 exports.default = CompLayer;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2438,7 +2530,7 @@ var Ellipse = function (_Path) {
 exports.default = Ellipse;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2592,7 +2684,7 @@ var Polystar = function () {
 exports.default = Polystar;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2677,7 +2769,7 @@ var Rect = function () {
 exports.default = Rect;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2742,7 +2834,7 @@ var Fill = function () {
 exports.default = Fill;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2847,7 +2939,7 @@ var GradientFill = function () {
 exports.default = GradientFill;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2967,7 +3059,7 @@ var Stroke = function () {
 exports.default = Stroke;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

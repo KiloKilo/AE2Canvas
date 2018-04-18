@@ -1,6 +1,7 @@
 import Path from '../objects/Path';
 import AnimatedPath from '../objects/AnimatedPath';
 import Transform from '../transform/Transform';
+import DropShadow from '../effects/DropShadow';
 
 class BaseLayer {
 
@@ -10,6 +11,12 @@ class BaseLayer {
         this.out = data.out;
         if (data.parent) this.parent = data.parent;
         this.transform = new Transform(data.transform);
+
+        if (data.effects) {
+            if (data.effects.dropShadow) {
+                this.dropShadow = new DropShadow(data.effects.dropShadow);
+            }
+        }
 
         if (data.masks) {
             this.masks = data.masks.map(mask => mask.isAnimated ? new AnimatedPath(mask) : new Path(mask));
@@ -21,6 +28,10 @@ class BaseLayer {
 
         if (this.parent) this.parent.setParentTransform(ctx, time);
         this.transform.update(ctx, time);
+
+        if (this.dropShadow) {
+            this.dropShadow.setShadow(ctx, time);
+        }
 
         if (this.masks) {
             ctx.beginPath();
