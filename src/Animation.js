@@ -186,8 +186,10 @@ class Animation extends Emitter {
         this.resize(width);
 
         for (let i = 0; i < numFrames; i++) {
-            this.step = i / numFrames;
-            this.draw(this.time);
+            const step = i / numFrames;
+            const time = step * this.duration;
+            this.setKeyframes(time);
+            this.draw(time);
 
             const x = indexX * width;
             const y = indexY * height;

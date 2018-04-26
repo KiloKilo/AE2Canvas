@@ -1797,8 +1797,10 @@ var Animation = function (_Emitter) {
             this.resize(width);
 
             for (var i = 0; i < numFrames; i++) {
-                this.step = i / numFrames;
-                this.draw(this.time);
+                var step = i / numFrames;
+                var time = step * this.duration;
+                this.setKeyframes(time);
+                this.draw(time);
 
                 var x = indexX * width;
                 var y = indexY * height;
@@ -2237,10 +2239,11 @@ var DropShadow = function () {
         value: function setShadow(ctx, time) {
             var color = this.getColor(time);
             var dist = this.distance.getValue(time);
+            var blur = this.softness.getValue(time);
             ctx.shadowColor = color;
             ctx.shadowOffsetX = dist;
             ctx.shadowOffsetY = dist;
-            ctx.shadowBlur = this.softness.getValue(time);
+            ctx.shadowBlur = blur;
         }
     }, {
         key: 'setKeyframes',

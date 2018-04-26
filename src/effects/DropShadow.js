@@ -19,10 +19,11 @@ class DropShadow {
     setShadow(ctx, time) {
         const color = this.getColor(time);
         const dist = this.distance.getValue(time);
+        const blur = this.softness.getValue(time);
         ctx.shadowColor = color;
         ctx.shadowOffsetX = dist;
         ctx.shadowOffsetY = dist;
-        ctx.shadowBlur = this.softness.getValue(time);
+        ctx.shadowBlur = blur;
     }
 
     setKeyframes(time) {
