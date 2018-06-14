@@ -408,6 +408,7 @@ var Path = function () {
 
         this.closed = data.closed;
         this.frames = data.frames;
+        this.verticesCount = this.frames[0].v.length;
     }
 
     _createClass(Path, [{
@@ -415,6 +416,8 @@ var Path = function () {
         value: function draw(ctx, time, trim) {
             var frame = this.getValue(time);
             var vertices = frame.v;
+            var nextVertex = void 0;
+            var lastVertex = void 0;
 
             if (trim) {
                 if (trim.start === 0 && trim.end === 0 || trim.start === 1 && trim.end === 1) {
@@ -425,8 +428,8 @@ var Path = function () {
             }
 
             for (var j = 1; j < vertices.length; j++) {
-                var nextVertex = vertices[j];
-                var lastVertex = vertices[j - 1];
+                nextVertex = vertices[j];
+                lastVertex = vertices[j - 1];
 
                 if (trim) {
                     var tv = void 0;
@@ -475,10 +478,9 @@ var Path = function () {
                 endIndex: 0,
                 start: 0,
                 end: 0
-            };
 
-            // TODO clean up
-            if (trim.start === 0) {
+                // TODO clean up
+            };if (trim.start === 0) {
                 if (trim.end === 0) {
                     return actualTrim;
                 } else if (trim.end === 1) {
@@ -1597,6 +1599,7 @@ var Animation = function (_Emitter) {
         _this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
         _this.fluid = options.fluid || true;
         _this.imageBasePath = options.imageBasePath || '';
+        var comps = options.data.comps;
 
         _this.isPaused = false;
         _this.isPlaying = false;
@@ -1616,7 +1619,7 @@ var Animation = function (_Emitter) {
                 case 'text':
                     return new _TextLayer2.default(layer, _this.baseFont);
                 case 'comp':
-                    return new _CompLayer2.default(layer, _this.baseFont, _this.gradients, _this.imageBasePath);
+                    return new _CompLayer2.default(layer, comps, _this.baseFont, _this.gradients, _this.imageBasePath);
                 case 'null':
                     return new _NullLayer2.default(layer);
             }
@@ -1636,6 +1639,8 @@ var Animation = function (_Emitter) {
         _this.resize();
 
         (0, _core.add)(_this);
+
+        console.log(_this);
         return _this;
     }
 
@@ -2305,6 +2310,14 @@ var _VectorLayer = __webpack_require__(11);
 
 var _VectorLayer2 = _interopRequireDefault(_VectorLayer);
 
+var _Property = __webpack_require__(0);
+
+var _Property2 = _interopRequireDefault(_Property);
+
+var _AnimatedProperty = __webpack_require__(1);
+
+var _AnimatedProperty2 = _interopRequireDefault(_AnimatedProperty);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2316,14 +2329,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var CompLayer = function (_BaseLayer) {
     _inherits(CompLayer, _BaseLayer);
 
-    function CompLayer(data, baseFont, gradients, imageBasePath) {
+    function CompLayer(data, comps, baseFont, gradients, imageBasePath) {
         _classCallCheck(this, CompLayer);
 
         var _this = _possibleConstructorReturn(this, (CompLayer.__proto__ || Object.getPrototypeOf(CompLayer)).call(this, data));
 
-        if (data.layers) {
+        var sourceID = data.sourceID;
+        var layers = comps && comps[sourceID] ? comps[sourceID].layers : null;
 
-            _this.layers = data.layers.map(function (layer) {
+        if (layers) {
+
+            _this.layers = layers.map(function (layer) {
                 switch (layer.type) {
                     case 'vector':
                         return new _VectorLayer2.default(layer, gradients);
@@ -2347,6 +2363,10 @@ var CompLayer = function (_BaseLayer) {
                 }
             });
         }
+
+        if (data.timeRemapping) {
+            _this.timeRemapping = data.timeRemapping.length > 1 ? new _AnimatedProperty2.default(data.timeRemapping) : new _Property2.default(data.timeRemapping);
+        }
         return _this;
     }
 
@@ -2357,6 +2377,7 @@ var CompLayer = function (_BaseLayer) {
 
             if (this.layers) {
                 var internalTime = time - this.in;
+                if (this.timeRemapping) internalTime = this.timeRemapping.getValue(internalTime);
                 this.layers.forEach(function (layer) {
                     if (internalTime >= layer.in && internalTime <= layer.out) {
                         layer.draw(ctx, internalTime);
@@ -2380,6 +2401,7 @@ var CompLayer = function (_BaseLayer) {
         value: function setKeyframes(time) {
             _get(CompLayer.prototype.__proto__ || Object.getPrototypeOf(CompLayer.prototype), 'setKeyframes', this).call(this, time);
             var internalTime = time - this.in;
+            if (this.timeRemapping) this.timeRemapping.setKeyframes(internalTime);
             if (this.layers) this.layers.forEach(function (layer) {
                 return layer.setKeyframes(internalTime);
             });
@@ -2388,6 +2410,7 @@ var CompLayer = function (_BaseLayer) {
         key: 'reset',
         value: function reset(reversed) {
             _get(CompLayer.prototype.__proto__ || Object.getPrototypeOf(CompLayer.prototype), 'reset', this).call(this, reversed);
+            if (this.timeRemapping) this.timeRemapping.reset(reversed);
             if (this.layers) this.layers.forEach(function (layer) {
                 return layer.reset(reversed);
             });
