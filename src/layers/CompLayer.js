@@ -8,12 +8,15 @@ import AnimatedProperty from '../property/AnimatedProperty'
 
 class CompLayer extends BaseLayer {
 
-    constructor(data, baseFont, gradients, imageBasePath) {
+    constructor(data, comps, baseFont, gradients, imageBasePath) {
         super(data)
 
-        if (data.layers) {
+        const sourceID = data.sourceID
+        const layers = (comps && comps[sourceID]) ? comps[sourceID].layers : null
 
-            this.layers = data.layers.map(layer => {
+        if (layers) {
+
+            this.layers = layers.map(layer => {
                 switch (layer.type) {
                     case 'vector':
                         return new VectorLayer(layer, gradients)
@@ -46,7 +49,7 @@ class CompLayer extends BaseLayer {
 
         if (this.layers) {
             let internalTime = time - this.in
-            if (this.timeRemapping) internalTime = this.timeRemapping.getValueAtTime(internalTime)
+            if (this.timeRemapping) internalTime = this.timeRemapping.getValue(internalTime)
             this.layers.forEach(layer => {
                 if (internalTime >= layer.in && internalTime <= layer.out) {
                     layer.draw(ctx, internalTime)
@@ -66,11 +69,13 @@ class CompLayer extends BaseLayer {
     setKeyframes(time) {
         super.setKeyframes(time)
         const internalTime = time - this.in
+        if (this.timeRemapping) this.timeRemapping.setKeyframes(internalTime)
         if (this.layers) this.layers.forEach(layer => layer.setKeyframes(internalTime))
     }
 
     reset(reversed) {
         super.reset(reversed)
+        if (this.timeRemapping) this.timeRemapping.reset(reversed)
         if (this.layers) this.layers.forEach(layer => layer.reset(reversed))
     }
 }

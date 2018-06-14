@@ -23,6 +23,7 @@ class Animation extends Emitter {
         this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
         this.fluid = options.fluid || true;
         this.imageBasePath = options.imageBasePath || '';
+        const comps = options.data.comps;
 
         this.isPaused = false;
         this.isPlaying = false;
@@ -42,7 +43,7 @@ class Animation extends Emitter {
                 case 'text':
                     return new TextLayer(layer, this.baseFont);
                 case 'comp':
-                    return new CompLayer(layer, this.baseFont, this.gradients, this.imageBasePath);
+                    return new CompLayer(layer, comps, this.baseFont, this.gradients, this.imageBasePath);
                 case 'null':
                     return new NullLayer(layer);
             }
