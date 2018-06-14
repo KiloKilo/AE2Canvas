@@ -61,8 +61,6 @@ class Animation extends Emitter {
         this.resize();
 
         add(this);
-
-        console.log(this);
     }
 
     play() {

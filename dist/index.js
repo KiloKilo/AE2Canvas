@@ -1639,8 +1639,6 @@ var Animation = function (_Emitter) {
         _this.resize();
 
         (0, _core.add)(_this);
-
-        console.log(_this);
         return _this;
     }
 
