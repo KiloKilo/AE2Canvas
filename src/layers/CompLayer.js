@@ -1,74 +1,81 @@
-import ImageLayer from './ImageLayer';
-import NullLayer from './NullLayer';
-import TextLayer from './TextLayer';
-import BaseLayer from './BaseLayer';
-import VectorLayer from './VectorLayer';
+import ImageLayer from './ImageLayer'
+import NullLayer from './NullLayer'
+import TextLayer from './TextLayer'
+import BaseLayer from './BaseLayer'
+import VectorLayer from './VectorLayer'
+import Property from '../property/Property'
+import AnimatedProperty from '../property/AnimatedProperty'
 
 class CompLayer extends BaseLayer {
 
     constructor(data, baseFont, gradients, imageBasePath) {
-        super(data);
+        super(data)
 
         if (data.layers) {
 
             this.layers = data.layers.map(layer => {
                 switch (layer.type) {
                     case 'vector':
-                        return new VectorLayer(layer, gradients);
+                        return new VectorLayer(layer, gradients)
                     case 'image':
-                        return new ImageLayer(layer, imageBasePath);
+                        return new ImageLayer(layer, imageBasePath)
                     case 'text':
-                        return new TextLayer(layer, baseFont);
+                        return new TextLayer(layer, baseFont)
                     case 'comp':
-                        return new CompLayer(layer, baseFont, gradients, imageBasePath);
+                        return new CompLayer(layer, baseFont, gradients, imageBasePath)
                     case 'null':
-                        return new NullLayer(layer);
+                        return new NullLayer(layer)
                 }
-            });
+            })
 
             this.layers.forEach(layer => {
                 if (layer.parent) {
-                    const parentIndex = layer.parent;
+                    const parentIndex = layer.parent
                     layer.parent = this.layers.find(layer => layer.index === parentIndex)
                 }
-            });
+            })
+        }
+
+        if (data.timeRemapping) {
+            this.timeRemapping = data.timeRemapping.length > 1 ? new AnimatedProperty(data.timeRemapping) : new Property(data.timeRemapping)
         }
     }
 
     draw(ctx, time) {
-        super.draw(ctx, time);
+        super.draw(ctx, time)
 
         if (this.layers) {
-            const internalTime = time - this.in;
+            let internalTime = time - this.in
+            if (this.timeRemapping) internalTime = this.timeRemapping.getValueAtTime(internalTime)
             this.layers.forEach(layer => {
                 if (internalTime >= layer.in && internalTime <= layer.out) {
-                    layer.draw(ctx, internalTime);
+                    layer.draw(ctx, internalTime)
                 }
-            });
+            })
         }
 
-        ctx.restore();
+        ctx.restore()
     }
 
     setParentTransform(ctx, time) {
-        super.setParentTransform(ctx, time);
-        const internalTime = time - this.in;
-        if (this.layers) this.layers.forEach(layer => layer.setParentTransform(ctx, internalTime));
+        super.setParentTransform(ctx, time)
+        const internalTime = time - this.in
+        if (this.layers) this.layers.forEach(layer => layer.setParentTransform(ctx, internalTime))
     }
 
     setKeyframes(time) {
-        super.setKeyframes(time);
-        const internalTime = time - this.in;
-        if (this.layers) this.layers.forEach(layer => layer.setKeyframes(internalTime));
+        super.setKeyframes(time)
+        const internalTime = time - this.in
+        if (this.layers) this.layers.forEach(layer => layer.setKeyframes(internalTime))
     }
 
     reset(reversed) {
-        super.reset(reversed);
-        if (this.layers) this.layers.forEach(layer => layer.reset(reversed));
+        super.reset(reversed)
+        if (this.layers) this.layers.forEach(layer => layer.reset(reversed))
     }
 }
 
-export default CompLayer;
+export default CompLayer
 
 
 
