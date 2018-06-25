@@ -2441,32 +2441,21 @@ var _AnimatedProperty = __webpack_require__(1);
 
 var _AnimatedProperty2 = _interopRequireDefault(_AnimatedProperty);
 
-var _Path2 = __webpack_require__(3);
+var _Path = __webpack_require__(3);
 
-var _Path3 = _interopRequireDefault(_Path2);
+var _Path2 = _interopRequireDefault(_Path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Ellipse = function (_Path) {
-    _inherits(Ellipse, _Path);
-
+var Ellipse = function () {
     function Ellipse(data) {
         _classCallCheck(this, Ellipse);
 
-        var _this = _possibleConstructorReturn(this, (Ellipse.__proto__ || Object.getPrototypeOf(Ellipse)).call(this, data));
-
-        _this.closed = true;
-
-        _this.size = data.size.length > 1 ? new _AnimatedProperty2.default(data.size) : new _Property2.default(data.size);
-        //optional
-        if (data.position) _this.position = data.position.length > 1 ? new _AnimatedProperty2.default(data.position) : new _Property2.default(data.position);
-        return _this;
+        this.closed = true;
+        this.size = data.size.length > 1 ? new _AnimatedProperty2.default(data.size) : new _Property2.default(data.size);
+        if (data.position) this.position = data.position.length > 1 ? new _AnimatedProperty2.default(data.position) : new _Property2.default(data.position);
     }
 
     _createClass(Ellipse, [{
@@ -2549,7 +2538,7 @@ var Ellipse = function (_Path) {
     }]);
 
     return Ellipse;
-}(_Path3.default);
+}();
 
 exports.default = Ellipse;
 
