@@ -415,52 +415,119 @@ var Path = function () {
         key: 'draw',
         value: function draw(ctx, time, trim) {
             var frame = this.getValue(time);
+            trim && (trim.start !== 0 || trim.end !== 1) ? this.drawTrimmed(frame, ctx, trim) : this.drawNormal(frame, ctx);
+        }
+    }, {
+        key: 'drawNormal',
+        value: function drawNormal(frame, ctx) {
             var vertices = frame.v;
+            var numVertices = this.closed ? vertices.length : vertices.length - 1;
+            var lastVertex = null;
+            var nextVertex = null;
+
+            for (var i = 1; i <= numVertices; i++) {
+                lastVertex = vertices[i - 1];
+                nextVertex = vertices[i] ? vertices[i] : vertices[0];
+                if (i === 1) ctx.moveTo(lastVertex[4], lastVertex[5]);
+                ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+            }
+
+            if (this.closed) {
+                if (!nextVertex) debugger;
+                ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
+                ctx.closePath();
+            }
+        }
+    }, {
+        key: 'drawTrimmed',
+        value: function drawTrimmed(frame, ctx, trim) {
+            if (trim.start === trim.end) return;
+
+            var vertices = frame.v;
+            var numVertices = this.closed ? vertices.length : vertices.length - 1;
+
             var nextVertex = void 0;
             var lastVertex = void 0;
 
-            if (trim) {
-                if (trim.start === 0 && trim.end === 0 || trim.start === 1 && trim.end === 1) {
-                    return;
-                } else {
-                    trim = this.getTrimValues(trim, frame);
-                }
-            }
+            var _getTrimValues = this.getTrimValues(trim, frame),
+                start = _getTrimValues.start,
+                end = _getTrimValues.end,
+                endIndex = _getTrimValues.endIndex,
+                startIndex = _getTrimValues.startIndex,
+                looped = _getTrimValues.looped;
 
-            for (var j = 1; j < vertices.length; j++) {
-                nextVertex = vertices[j];
-                lastVertex = vertices[j - 1];
+            if (looped && this.closed) {
+                var index = startIndex;
+                var firstRound = true;
 
-                if (trim) {
-                    var tv = void 0;
+                for (var i = 1; i <= numVertices + 1; i++) {
+                    lastVertex = vertices[index];
+                    nextVertex = vertices[index + 1] ? vertices[index + 1] : vertices[0];
+                    var _length = frame.len[index];
 
-                    if (j === 1 && trim.startIndex !== 0) {
-                        ctx.moveTo(lastVertex[4], lastVertex[5]);
-                    } else if (j === trim.startIndex + 1 && j === trim.endIndex + 1) {
-                        tv = this.trim(lastVertex, nextVertex, trim.start, trim.end, frame.len[j - 1]);
+                    if (index === startIndex && firstRound) {
+                        firstRound = false;
+                        var tv = this.trim(lastVertex, nextVertex, start, 1, _length);
                         ctx.moveTo(tv.start[4], tv.start[5]);
                         ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
-                    } else if (j === trim.startIndex + 1) {
-                        tv = this.trim(lastVertex, nextVertex, trim.start, 1, frame.len[j - 1]);
-                        ctx.moveTo(tv.start[4], tv.start[5]);
-                        ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
-                    } else if (j === trim.endIndex + 1) {
-                        tv = this.trim(lastVertex, nextVertex, 0, trim.end, frame.len[j - 1]);
-                        ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
-                    } else if (j > trim.startIndex + 1 && j < trim.endIndex + 1) {
+                    } else if (index === startIndex && index === endIndex) {
+                        var _tv = this.trim(lastVertex, nextVertex, 0, end, _length);
+                        ctx.bezierCurveTo(_tv.start[0], _tv.start[1], _tv.end[2], _tv.end[3], _tv.end[4], _tv.end[5]);
+                    } else if (index === endIndex) {
+                        var _tv2 = this.trim(lastVertex, nextVertex, 0, end, _length);
+                        ctx.bezierCurveTo(_tv2.start[0], _tv2.start[1], _tv2.end[2], _tv2.end[3], _tv2.end[4], _tv2.end[5]);
+                    } else if (index < endIndex || index > startIndex) {
                         ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
                     }
-                } else {
-                    if (j === 1) {
-                        ctx.moveTo(lastVertex[4], lastVertex[5]);
-                    }
-                    ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
-                }
-            }
 
-            if (!trim && this.closed) {
-                if (!nextVertex) debugger;
-                ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
+                    index + 1 < numVertices ? index++ : index = 0;
+                }
+            } else if (looped && !this.closed) {
+
+                for (var _i = 1; _i <= numVertices; _i++) {
+                    var _index = _i - 1;
+                    lastVertex = vertices[_index];
+                    nextVertex = vertices[_index + 1] ? vertices[_index + 1] : vertices[0];
+                    var _length2 = frame.len[_index];
+
+                    if (_index === startIndex && _index === endIndex) {
+                        var tv1 = this.trim(lastVertex, nextVertex, 0, end, _length2);
+                        ctx.bezierCurveTo(tv1.start[0], tv1.start[1], tv1.end[2], tv1.end[3], tv1.end[4], tv1.end[5]);
+
+                        var tv2 = this.trim(lastVertex, nextVertex, start, 1, _length2);
+                        ctx.moveTo(tv2.start[4], tv2.start[5]);
+                        ctx.bezierCurveTo(tv2.start[0], tv2.start[1], tv2.end[2], tv2.end[3], tv2.end[4], tv2.end[5]);
+                    } else if (_index === startIndex) {
+                        var _tv3 = this.trim(lastVertex, nextVertex, start, 1, _length2);
+                        ctx.moveTo(_tv3.start[4], _tv3.start[5]);
+                        ctx.bezierCurveTo(_tv3.start[0], _tv3.start[1], _tv3.end[2], _tv3.end[3], _tv3.end[4], _tv3.end[5]);
+                    } else if (_index === endIndex) {
+                        var _tv4 = this.trim(lastVertex, nextVertex, 0, end, _length2);
+                        ctx.bezierCurveTo(_tv4.start[0], _tv4.start[1], _tv4.end[2], _tv4.end[3], _tv4.end[4], _tv4.end[5]);
+                    } else if (_index < endIndex || _index > startIndex) {
+                        ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+                    }
+                }
+            } else {
+                for (var _i2 = 1; _i2 <= numVertices; _i2++) {
+                    var _index2 = _i2 - 1;
+                    lastVertex = vertices[_i2 - 1];
+                    nextVertex = vertices[_i2] ? vertices[_i2] : vertices[0];
+                    if (_index2 === startIndex && _index2 === endIndex) {
+                        var _tv5 = this.trim(lastVertex, nextVertex, start, end, length);
+                        ctx.moveTo(_tv5.start[4], _tv5.start[5]);
+                        ctx.bezierCurveTo(_tv5.start[0], _tv5.start[1], _tv5.end[2], _tv5.end[3], _tv5.end[4], _tv5.end[5]);
+                    } else if (_index2 === startIndex) {
+                        var _tv6 = this.trim(lastVertex, nextVertex, start, 1, length);
+                        ctx.moveTo(_tv6.start[4], _tv6.start[5]);
+                        ctx.bezierCurveTo(_tv6.start[0], _tv6.start[1], _tv6.end[2], _tv6.end[3], _tv6.end[4], _tv6.end[5]);
+                    } else if (_index2 === endIndex) {
+                        var _tv7 = this.trim(lastVertex, nextVertex, 0, end, length);
+                        ctx.bezierCurveTo(_tv7.start[0], _tv7.start[1], _tv7.end[2], _tv7.end[3], _tv7.end[4], _tv7.end[5]);
+                    } else if (_index2 > startIndex && _index2 < endIndex) {
+                        ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+                    }
+                }
             }
         }
     }, {
@@ -471,71 +538,69 @@ var Path = function () {
     }, {
         key: 'getTrimValues',
         value: function getTrimValues(trim, frame) {
-            var i = void 0;
-
             var actualTrim = {
                 startIndex: 0,
                 endIndex: 0,
                 start: 0,
-                end: 0
+                end: 0,
+                looped: false
+            };
 
-                // TODO clean up
-            };if (trim.start === 0) {
-                if (trim.end === 0) {
-                    return actualTrim;
-                } else if (trim.end === 1) {
-                    actualTrim.endIndex = frame.len.length;
-                    actualTrim.end = 1;
-                    return actualTrim;
-                }
+            if (trim.start === 0 && trim.end === 1) {
+                return null;
             }
 
             var totalLen = this.sumArray(frame.len);
-            var trimAtLen = void 0;
+            var trimStartAtLength = totalLen * trim.start;
 
-            trimAtLen = totalLen * trim.start;
-
-            for (i = 0; i < frame.len.length; i++) {
-                if (trimAtLen > 0 && trimAtLen < frame.len[i]) {
+            for (var i = 0; i < frame.len.length; i++) {
+                if (trimStartAtLength === 0 || trimStartAtLength < frame.len[i]) {
                     actualTrim.startIndex = i;
-                    actualTrim.start = trimAtLen / frame.len[i];
+                    actualTrim.start = trimStartAtLength / frame.len[i];
+                    break;
                 }
-                trimAtLen -= frame.len[i];
+                trimStartAtLength -= frame.len[i];
             }
+
+            var trimEndAtLength = totalLen * trim.end;
 
             if (trim.end === 1) {
                 actualTrim.endIndex = frame.len.length;
                 actualTrim.end = 1;
                 return actualTrim;
-            } else {
-                trimAtLen = totalLen * trim.end;
-
-                for (i = 0; i < frame.len.length; i++) {
-                    if (trimAtLen > 0 && trimAtLen < frame.len[i]) {
-                        actualTrim.endIndex = i;
-                        actualTrim.end = trimAtLen / frame.len[i];
-                    }
-                    trimAtLen -= frame.len[i];
-                }
             }
+
+            for (var _i3 = 0; _i3 < frame.len.length; _i3++) {
+                if (trimEndAtLength === 0 || trimEndAtLength < frame.len[_i3]) {
+                    actualTrim.endIndex = _i3;
+                    actualTrim.end = trimEndAtLength / frame.len[_i3];
+                    break;
+                }
+                trimEndAtLength -= frame.len[_i3];
+            }
+
+            actualTrim.looped = actualTrim.startIndex > actualTrim.endIndex || actualTrim.startIndex === actualTrim.endIndex && actualTrim.start >= actualTrim.end;
 
             return actualTrim;
         }
     }, {
         key: 'trim',
         value: function trim(lastVertex, nextVertex, from, to, len) {
+            var values = {
+                start: lastVertex,
+                end: nextVertex
+            };
 
             if (from === 0 && to === 1) {
-                return {
-                    start: lastVertex,
-                    end: nextVertex
-                };
+                return values;
             }
 
             if (this.isStraight(lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5])) {
-                startVertex = [this.lerp(lastVertex[0], nextVertex[0], from), this.lerp(lastVertex[1], nextVertex[1], from), this.lerp(lastVertex[2], nextVertex[2], from), this.lerp(lastVertex[3], nextVertex[3], from), this.lerp(lastVertex[4], nextVertex[4], from), this.lerp(lastVertex[5], nextVertex[5], from)];
+                values.start = [this.lerp(lastVertex[0], nextVertex[0], from), this.lerp(lastVertex[1], nextVertex[1], from), this.lerp(lastVertex[2], nextVertex[2], from), this.lerp(lastVertex[3], nextVertex[3], from), this.lerp(lastVertex[4], nextVertex[4], from), this.lerp(lastVertex[5], nextVertex[5], from)];
 
-                endVertex = [this.lerp(lastVertex[0], nextVertex[0], to), this.lerp(lastVertex[1], nextVertex[1], to), this.lerp(lastVertex[2], nextVertex[2], to), this.lerp(lastVertex[3], nextVertex[3], to), this.lerp(lastVertex[4], nextVertex[4], to), this.lerp(lastVertex[5], nextVertex[5], to)];
+                values.end = [this.lerp(lastVertex[0], nextVertex[0], to), this.lerp(lastVertex[1], nextVertex[1], to), this.lerp(lastVertex[2], nextVertex[2], to), this.lerp(lastVertex[3], nextVertex[3], to), this.lerp(lastVertex[4], nextVertex[4], to), this.lerp(lastVertex[5], nextVertex[5], to)];
+
+                return values;
             } else {
                 this.bezier = new _Bezier2.default([lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]]);
                 this.bezier.getLength(len);
@@ -543,47 +608,29 @@ var Path = function () {
                 to = this.bezier.map(to);
                 to = (to - from) / (1 - from);
 
-                var e1 = void 0;
-                var f1 = void 0;
-                var g1 = void 0;
-                var h1 = void 0;
-                var j1 = void 0;
-                var k1 = void 0;
-                var e2 = void 0;
-                var f2 = void 0;
-                var g2 = void 0;
-                var h2 = void 0;
-                var j2 = void 0;
-                var k2 = void 0;
-                var startVertex;
-                var endVertex;
+                var e1 = [this.lerp(lastVertex[4], lastVertex[0], from), this.lerp(lastVertex[5], lastVertex[1], from)];
+                var f1 = [this.lerp(lastVertex[0], nextVertex[2], from), this.lerp(lastVertex[1], nextVertex[3], from)];
+                var g1 = [this.lerp(nextVertex[2], nextVertex[4], from), this.lerp(nextVertex[3], nextVertex[5], from)];
+                var h1 = [this.lerp(e1[0], f1[0], from), this.lerp(e1[1], f1[1], from)];
+                var j1 = [this.lerp(f1[0], g1[0], from), this.lerp(f1[1], g1[1], from)];
+                var k1 = [this.lerp(h1[0], j1[0], from), this.lerp(h1[1], j1[1], from)];
 
-                e1 = [this.lerp(lastVertex[4], lastVertex[0], from), this.lerp(lastVertex[5], lastVertex[1], from)];
-                f1 = [this.lerp(lastVertex[0], nextVertex[2], from), this.lerp(lastVertex[1], nextVertex[3], from)];
-                g1 = [this.lerp(nextVertex[2], nextVertex[4], from), this.lerp(nextVertex[3], nextVertex[5], from)];
-                h1 = [this.lerp(e1[0], f1[0], from), this.lerp(e1[1], f1[1], from)];
-                j1 = [this.lerp(f1[0], g1[0], from), this.lerp(f1[1], g1[1], from)];
-                k1 = [this.lerp(h1[0], j1[0], from), this.lerp(h1[1], j1[1], from)];
+                var startVertex = [j1[0], j1[1], h1[0], h1[1], k1[0], k1[1]];
+                var endVertex = [nextVertex[0], nextVertex[1], g1[0], g1[1], nextVertex[4], nextVertex[5]];
 
-                startVertex = [j1[0], j1[1], h1[0], h1[1], k1[0], k1[1]];
-                endVertex = [nextVertex[0], nextVertex[1], g1[0], g1[1], nextVertex[4], nextVertex[5]];
+                var e2 = [this.lerp(startVertex[4], startVertex[0], to), this.lerp(startVertex[5], startVertex[1], to)];
+                var f2 = [this.lerp(startVertex[0], endVertex[2], to), this.lerp(startVertex[1], endVertex[3], to)];
+                var g2 = [this.lerp(endVertex[2], endVertex[4], to), this.lerp(endVertex[3], endVertex[5], to)];
 
-                e2 = [this.lerp(startVertex[4], startVertex[0], to), this.lerp(startVertex[5], startVertex[1], to)];
-                f2 = [this.lerp(startVertex[0], endVertex[2], to), this.lerp(startVertex[1], endVertex[3], to)];
-                g2 = [this.lerp(endVertex[2], endVertex[4], to), this.lerp(endVertex[3], endVertex[5], to)];
+                var h2 = [this.lerp(e2[0], f2[0], to), this.lerp(e2[1], f2[1], to)];
+                var j2 = [this.lerp(f2[0], g2[0], to), this.lerp(f2[1], g2[1], to)];
+                var k2 = [this.lerp(h2[0], j2[0], to), this.lerp(h2[1], j2[1], to)];
 
-                h2 = [this.lerp(e2[0], f2[0], to), this.lerp(e2[1], f2[1], to)];
-                j2 = [this.lerp(f2[0], g2[0], to), this.lerp(f2[1], g2[1], to)];
-                k2 = [this.lerp(h2[0], j2[0], to), this.lerp(h2[1], j2[1], to)];
+                values.start = [e2[0], e2[1], startVertex[2], startVertex[3], startVertex[4], startVertex[5]];
+                values.end = [j2[0], j2[1], h2[0], h2[1], k2[0], k2[1]];
 
-                startVertex = [e2[0], e2[1], startVertex[2], startVertex[3], startVertex[4], startVertex[5]];
-                endVertex = [j2[0], j2[1], h2[0], h2[1], k2[0], k2[1]];
+                return values;
             }
-
-            return {
-                start: startVertex,
-                end: endVertex
-            };
         }
     }, {
         key: 'lerp',
@@ -3104,24 +3151,35 @@ var Trim = function () {
 
         if (data.start) this.start = data.start.length > 1 ? new _AnimatedProperty2.default(data.start) : new _Property2.default(data.start);
         if (data.end) this.end = data.end.length > 1 ? new _AnimatedProperty2.default(data.end) : new _Property2.default(data.end);
-        //if (data.offset) this.offset = data.offset.length > 1 ? new AnimatedProperty(data.offset) : new Property(data.offset);
+        if (data.offset) this.offset = data.offset.length > 1 ? new _AnimatedProperty2.default(data.offset) : new _Property2.default(data.offset);
     }
 
     _createClass(Trim, [{
         key: 'getTrim',
         value: function getTrim(time) {
-            var start = this.start ? this.start.getValue(time) : 0;
-            var end = this.end ? this.end.getValue(time) : 1;
+            var startValue = this.start ? this.start.getValue(time) : 0;
+            var endValue = this.end ? this.end.getValue(time) : 1;
 
-            var trim = {
-                start: Math.min(start, end),
-                end: Math.max(start, end)
-            };
+            var start = Math.min(startValue, endValue);
+            var end = Math.max(startValue, endValue);
 
-            if (trim.start === 0 && trim.end === 1) {
+            if (this.offset) {
+                var offset = this.offset.getValue(time) % 1;
+                if (offset > 0 && offset < 1 || offset > -1 && offset < 0) {
+
+                    start += offset;
+                    end += offset;
+                    start = start > 1 ? start - 1 : start;
+                    start = start < 0 ? 1 + start : start;
+                    end = end > 1 ? end - 1 : end;
+                    end = end < 0 ? 1 + end : end;
+                }
+            }
+
+            if (start === 0 && end === 1) {
                 return null;
             } else {
-                return trim;
+                return { start: start, end: end };
             }
         }
     }, {
@@ -3129,14 +3187,14 @@ var Trim = function () {
         value: function setKeyframes(time) {
             if (this.start) this.start.setKeyframes(time);
             if (this.end) this.end.setKeyframes(time);
-            //if (this.offset) this.offset.reset();
+            if (this.offset) this.offset.reset();
         }
     }, {
         key: 'reset',
         value: function reset(reversed) {
             if (this.start) this.start.reset(reversed);
             if (this.end) this.end.reset(reversed);
-            //if (this.offset) this.offset.reset();
+            if (this.offset) this.offset.reset();
         }
     }]);
 
