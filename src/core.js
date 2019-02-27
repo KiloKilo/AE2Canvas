@@ -8,6 +8,7 @@ const update = time => {
     if (_autoPlay) {
         _rafId = requestAnimationFrame(update);
     }
+    time = time !== undefined ? time : performance.now();
 
     for (let i = 0; i < _animationsLength; i++) {
         _animations[i].update(time);
