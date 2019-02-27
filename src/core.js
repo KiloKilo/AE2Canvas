@@ -1,5 +1,3 @@
-import {requestAnimationFrame} from "./utils/shim";
-
 const _animations = [];
 let _animationsLength = 0;
 
