@@ -7,7 +7,8 @@ var config = {
         path: path.join(__dirname, 'dist'),
         filename: 'index.js',
         library: 'AE2Canvas',
-        libraryTarget: 'var'
+        libraryTarget: 'umd',
+        globalObject: '(self || this)'
     },
     module: {
         rules: [
