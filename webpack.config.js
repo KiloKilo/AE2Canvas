@@ -9,7 +9,7 @@ var config = {
         library: 'AE2Canvas',
         libraryTarget: 'umd',
         umdNamedDefine: true,
-        globalObject: '(self || this)'
+        globalObject: `(typeof self !== 'undefined' ? self : this)`
     },
     module: {
         rules: [
