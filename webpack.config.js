@@ -8,6 +8,7 @@ var config = {
         filename: 'index.js',
         library: 'AE2Canvas',
         libraryTarget: 'umd',
+        umdNamedDefine: true,
         globalObject: '(self || this)'
     },
     module: {
