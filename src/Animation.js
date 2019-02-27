@@ -1,10 +1,10 @@
 import {add, remove} from './core'
 import Emitter from 'tiny-emitter'
-import ImageLayer from './layers/ImageLayer';
-import NullLayer from './layers/NullLayer';
-import TextLayer from './layers/TextLayer';
-import CompLayer from './layers/CompLayer';
-import VectorLayer from './layers/VectorLayer';
+import ImageLayer from './layers/ImageLayer'
+import NullLayer from './layers/NullLayer'
+import TextLayer from './layers/TextLayer'
+import CompLayer from './layers/CompLayer'
+import VectorLayer from './layers/VectorLayer'
 
 class Animation extends Emitter {
 
@@ -20,7 +20,7 @@ class Animation extends Emitter {
         this.markers = options.data.markers;
         this.baseFont = options.baseFont;
         this.loop = options.loop || false;
-        this.devicePixelRatio = options.devicePixelRatio || (window && window.devicePixelRatio ? window.devicePixelRatio : 1);
+        this.devicePixelRatio = options.devicePixelRatio || (typeof window !== 'undefined' && window.devicePixelRatio ? window.devicePixelRatio : 1)
         this.fluid = options.fluid || true;
         this.imageBasePath = options.imageBasePath || '';
         const comps = options.data.comps;
