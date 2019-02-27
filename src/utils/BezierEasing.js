@@ -6,16 +6,6 @@
  * spline(x) => returns the easing value | x must be in [0, 1] range
  *
  */
-(function (definition) {
-    if (typeof exports === "object") {
-        module.exports = definition();
-    }
-    else if (typeof window.define === 'function' && window.define.amd) {
-        window.define([], definition);
-    } else {
-        window.BezierEasing = definition();
-    }
-}(function () {
 
     // These values are established by empiricism with tests (tradeoff: performance VS precision)
     var NEWTON_ITERATIONS = 4;
@@ -138,5 +128,4 @@
         "ease-in-out": BezierEasing(0.42, 0.0, 0.58, 1.0)
     };
 
-    return BezierEasing;
-}));
+export default BezierEasing
