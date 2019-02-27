@@ -1,23 +1,13 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
-        "targets": {
-          "browsers": [
-            "last 3 versions",
-            "ie >= 10"
-          ]
-        }
+        "useBuiltIns": "entry"
       }
     ]
   ],
   "plugins": [
-    [
-      "transform-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ]
+    "@babel/plugin-transform-spread"
   ]
 }
