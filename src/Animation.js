@@ -45,6 +45,7 @@ class Animation extends Emitter {
                 case 'comp':
                     return new CompLayer(layer, comps, this.baseFont, this.gradients, this.imageBasePath);
                 case 'null':
+                default :
                     return new NullLayer(layer);
             }
         });

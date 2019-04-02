@@ -1,10 +1,11 @@
-import Property from '../property/Property';
-import AnimatedProperty from '../property/AnimatedProperty';
+import Property from '../property/Property'
+import AnimatedProperty from '../property/AnimatedProperty'
 import Path from './Path'
 
-class Ellipse  {
+class Ellipse extends Path {
 
     constructor(data) {
+        super(data)
         this.closed = true;
         this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size);
         if (data.position) this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position);

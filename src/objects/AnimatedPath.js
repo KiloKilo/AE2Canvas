@@ -6,6 +6,7 @@ class AnimatedPath extends Path {
     constructor(data) {
         super(data)
         this.frameCount = this.frames.length
+        this.verticesCount = this.frames[0].v.length
     }
 
     getValue(time) {
