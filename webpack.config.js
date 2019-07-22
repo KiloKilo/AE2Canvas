@@ -3,7 +3,6 @@ var path = require('path');
 
 var config = {
     entry: path.join(__dirname, 'src/index.js'),
-    devtool: 'source-map',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'index.js',
@@ -16,6 +15,9 @@ var config = {
         rules: [
             {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"}
         ]
+    },
+    optimization: {
+        minimize: false,
     },
     devServer: {
         contentBase: path.join(__dirname, 'examples'),

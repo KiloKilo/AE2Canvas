@@ -1,2 +1,2890 @@
-!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define("AE2Canvas",[],e):"object"==typeof exports?exports.AE2Canvas=e():t.AE2Canvas=e()}("undefined"!=typeof self?self:this,function(){return function(t){var e={};function n(i){if(e[i])return e[i].exports;var r=e[i]={i:i,l:!1,exports:{}};return t[i].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var r in t)n.d(i,r,function(e){return t[e]}.bind(null,r));return i},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=1)}([function(t,e){function n(){}n.prototype={on:function(t,e,n){var i=this.e||(this.e={});return(i[t]||(i[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){var i=this;function r(){i.off(t,r),e.apply(n,arguments)}return r._=e,this.on(t,r,n)},emit:function(t){for(var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),i=0,r=n.length;i<r;i++)n[i].fn.apply(n[i].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),i=n[t],r=[];if(i&&e)for(var s=0,o=i.length;s<o;s++)i[s].fn!==e&&i[s].fn._!==e&&r.push(i[s]);return r.length?n[t]=r:delete n[t],this}},t.exports=n},function(t,e,n){"use strict";n.r(e);var i,r=[],s=0,o=!1,a=function t(e){o&&(i=requestAnimationFrame(t)),e=void 0!==e?e:performance.now();for(var n=0;n<s;n++)r[n].update(e)},h=function(t){(o=t)?i=requestAnimationFrame(a):cancelAnimationFrame(i)};function u(t){r.push(t),s=r.length}function f(t){var e=r.indexOf(t);e>-1&&(r.splice(e,1),s=r.length)}var c=n(0),l=n.n(c);function p(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var y=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.path=e}var e,n,i;return e=t,(n=[{key:"getLength",value:function(t){this.steps=Math.max(Math.floor(t/10),1),this.arcLengths=new Array(this.steps+1),this.arcLengths[0]=0;for(var e=this.cubicN(0,this.path[0],this.path[2],this.path[4],this.path[6]),n=this.cubicN(0,this.path[1],this.path[3],this.path[5],this.path[7]),i=0,r=1/this.steps,s=1;s<=this.steps;s+=1){var o=this.cubicN(s*r,this.path[0],this.path[2],this.path[4],this.path[6]),a=this.cubicN(s*r,this.path[1],this.path[3],this.path[5],this.path[7]),h=e-o,u=n-a;i+=Math.sqrt(h*h+u*u),this.arcLengths[s]=i,e=o,n=a}this.length=i}},{key:"map",value:function(t){for(var e=t*this.arcLengths[this.steps],n=0,i=this.steps,r=0;n<i;)r=n+((i-n)/2|0),this.arcLengths[r]<e?n=r+1:i=r;this.arcLengths[r]>e&&r--;var s=this.arcLengths[r];return s===e?r/this.steps:(r+(e-s)/(this.arcLengths[r+1]-s))/this.steps}},{key:"getValues",value:function(t){var e=this.map(t);return[this.cubicN(e,this.path[0],this.path[2],this.path[4],this.path[6]),this.cubicN(e,this.path[1],this.path[3],this.path[5],this.path[7])]}},{key:"cubicN",value:function(t,e,n,i,r){var s=t*t;return e+(3*-e+t*(3*e-e*t))*t+(3*n+t*(-6*n+3*n*t))*t+(3*i-3*i*t)*s+r*(s*t)}}])&&p(e.prototype,n),i&&p(e,i),t}();function m(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var d=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.closed=e.closed,this.frames=e.frames}var e,n,i;return e=t,(n=[{key:"draw",value:function(t,e,n){var i=this.getValue(e);!n||0===n.start&&1===n.end?this.drawNormal(i,t):this.drawTrimmed(i,t,n)}},{key:"drawNormal",value:function(t,e){for(var n=t.v,i=this.closed?n.length:n.length-1,r=null,s=null,o=1;o<=i;o++)r=n[o-1],s=n[o]?n[o]:n[0],1===o&&e.moveTo(r[4],r[5]),e.bezierCurveTo(r[0],r[1],s[2],s[3],s[4],s[5]);this.closed&&(e.bezierCurveTo(s[0],s[1],n[0][2],n[0][3],n[0][4],n[0][5]),e.closePath())}},{key:"drawTrimmed",value:function(t,e,n){if(n.start!==n.end){var i,r,s=t.v,o=this.closed?s.length:s.length-1,a=this.getTrimValues(n,t),h=a.start,u=a.end,f=a.endIndex,c=a.startIndex,l=a.looped;if(l&&this.closed)for(var p=c,y=!0,m=1;m<=o+1;m++){r=s[p],i=s[p+1]?s[p+1]:s[0];var d=t.len[p];if(p===c&&y){y=!1;var v=this.trim(r,i,h,1,d);e.moveTo(v.start[4],v.start[5]),e.bezierCurveTo(v.start[0],v.start[1],v.end[2],v.end[3],v.end[4],v.end[5])}else if(p===c&&p===f){var g=this.trim(r,i,0,u,d);e.bezierCurveTo(g.start[0],g.start[1],g.end[2],g.end[3],g.end[4],g.end[5])}else if(p===f){var b=this.trim(r,i,0,u,d);e.bezierCurveTo(b.start[0],b.start[1],b.end[2],b.end[3],b.end[4],b.end[5])}else(p<f||p>c)&&e.bezierCurveTo(r[0],r[1],i[2],i[3],i[4],i[5]);p+1<o?p++:p=0}else if(l&&!this.closed)for(var w=1;w<=o;w++){var k=w-1;r=s[k],i=s[k+1]?s[k+1]:s[0];var O=t.len[k];if(k===c&&k===f){var P=this.trim(r,i,0,u,O);e.bezierCurveTo(P.start[0],P.start[1],P.end[2],P.end[3],P.end[4],P.end[5]);var x=this.trim(r,i,h,1,O);e.moveTo(x.start[4],x.start[5]),e.bezierCurveTo(x.start[0],x.start[1],x.end[2],x.end[3],x.end[4],x.end[5])}else if(k===c){var j=this.trim(r,i,h,1,O);e.moveTo(j.start[4],j.start[5]),e.bezierCurveTo(j.start[0],j.start[1],j.end[2],j.end[3],j.end[4],j.end[5])}else if(k===f){var T=this.trim(r,i,0,u,O);e.bezierCurveTo(T.start[0],T.start[1],T.end[2],T.end[3],T.end[4],T.end[5])}else(k<f||k>c)&&e.bezierCurveTo(r[0],r[1],i[2],i[3],i[4],i[5])}else for(var F=1;F<=o;F++){var K=F-1;if(r=s[F-1],i=s[F]?s[F]:s[0],K===c&&K===f){var S=this.trim(r,i,h,u,length);e.moveTo(S.start[4],S.start[5]),e.bezierCurveTo(S.start[0],S.start[1],S.end[2],S.end[3],S.end[4],S.end[5])}else if(K===c){var _=this.trim(r,i,h,1,length);e.moveTo(_.start[4],_.start[5]),e.bezierCurveTo(_.start[0],_.start[1],_.end[2],_.end[3],_.end[4],_.end[5])}else if(K===f){var C=this.trim(r,i,0,u,length);e.bezierCurveTo(C.start[0],C.start[1],C.end[2],C.end[3],C.end[4],C.end[5])}else K>c&&K<f&&e.bezierCurveTo(r[0],r[1],i[2],i[3],i[4],i[5])}}}},{key:"getValue",value:function(){return this.frames[0]}},{key:"getTrimValues",value:function(t,e){var n={startIndex:0,endIndex:0,start:0,end:0,looped:!1};if(0===t.start&&1===t.end)return null;for(var i=this.sumArray(e.len),r=i*t.start,s=0;s<e.len.length;s++){if(0===r||r<e.len[s]){n.startIndex=s,n.start=r/e.len[s];break}r-=e.len[s]}var o=i*t.end;if(1===t.end)return n.endIndex=e.len.length,n.end=1,n;for(var a=0;a<e.len.length;a++){if(0===o||o<e.len[a]){n.endIndex=a,n.end=o/e.len[a];break}o-=e.len[a]}return n.looped=n.startIndex>n.endIndex||n.startIndex===n.endIndex&&n.start>=n.end,n}},{key:"trim",value:function(t,e,n,i,r){var s={start:t,end:e};if(0===n&&1===i)return s;if(this.isStraight(t[4],t[5],t[0],t[1],e[2],e[3],e[4],e[5]))return s.start=[this.lerp(t[0],e[0],n),this.lerp(t[1],e[1],n),this.lerp(t[2],e[2],n),this.lerp(t[3],e[3],n),this.lerp(t[4],e[4],n),this.lerp(t[5],e[5],n)],s.end=[this.lerp(t[0],e[0],i),this.lerp(t[1],e[1],i),this.lerp(t[2],e[2],i),this.lerp(t[3],e[3],i),this.lerp(t[4],e[4],i),this.lerp(t[5],e[5],i)],s;this.bezier=new y([t[4],t[5],t[0],t[1],e[2],e[3],e[4],e[5]]),this.bezier.getLength(r),n=this.bezier.map(n),i=((i=this.bezier.map(i))-n)/(1-n);var o=[this.lerp(t[4],t[0],n),this.lerp(t[5],t[1],n)],a=[this.lerp(t[0],e[2],n),this.lerp(t[1],e[3],n)],h=[this.lerp(e[2],e[4],n),this.lerp(e[3],e[5],n)],u=[this.lerp(o[0],a[0],n),this.lerp(o[1],a[1],n)],f=[this.lerp(a[0],h[0],n),this.lerp(a[1],h[1],n)],c=[this.lerp(u[0],f[0],n),this.lerp(u[1],f[1],n)],l=[f[0],f[1],u[0],u[1],c[0],c[1]],p=[e[0],e[1],h[0],h[1],e[4],e[5]],m=[this.lerp(l[4],l[0],i),this.lerp(l[5],l[1],i)],d=[this.lerp(l[0],p[2],i),this.lerp(l[1],p[3],i)],v=[this.lerp(p[2],p[4],i),this.lerp(p[3],p[5],i)],g=[this.lerp(m[0],d[0],i),this.lerp(m[1],d[1],i)],b=[this.lerp(d[0],v[0],i),this.lerp(d[1],v[1],i)],w=[this.lerp(g[0],b[0],i),this.lerp(g[1],b[1],i)];return s.start=[m[0],m[1],l[2],l[3],l[4],l[5]],s.end=[b[0],b[1],g[0],g[1],w[0],w[1]],s}},{key:"lerp",value:function(t,e,n){return t*(1-n)+e*n}},{key:"sumArray",value:function(t){return t.reduce(function(t,e){return t+e})}},{key:"isStraight",value:function(t,e,n,i,r,s,o,a){return t===n&&e===i&&o===r&&a===s}},{key:"setKeyframes",value:function(t){}},{key:"reset",value:function(t){}}])&&m(e.prototype,n),i&&m(e,i),t}(),v=4,g=.001,b=1e-7,w=10,k=11,O=1/(k-1),P="function"==typeof Float32Array;function x(t,e,n,i){if(4!==arguments.length)throw new Error("BezierEasing requires 4 arguments.");for(var r=0;r<4;++r)if("number"!=typeof arguments[r]||isNaN(arguments[r])||!isFinite(arguments[r]))throw new Error("BezierEasing arguments should be integers.");if(t<0||t>1||n<0||n>1)throw new Error("BezierEasing x values must be in [0, 1] range.");var s=P?new Float32Array(k):new Array(k);function o(t,e){return 1-3*e+3*t}function a(t,e){return 3*e-6*t}function h(t){return 3*t}function u(t,e,n){return((o(e,n)*t+a(e,n))*t+h(e))*t}function f(t,e,n){return 3*o(e,n)*t*t+2*a(e,n)*t+h(e)}function c(e){for(var i=0,r=1,o=k-1;r!=o&&s[r]<=e;++r)i+=O;var a=i+(e-s[--r])/(s[r+1]-s[r])*O,h=f(a,t,n);return h>=g?function(e,i){for(var r=0;r<v;++r){var s=f(i,t,n);if(0===s)return i;i-=(u(i,t,n)-e)/s}return i}(e,a):0==h?a:function(e,i,r){var s,o,a=0;do{(s=u(o=i+(r-i)/2,t,n)-e)>0?r=o:i=o}while(Math.abs(s)>b&&++a<w);return o}(e,i,i+O)}t==e&&n==i||function(){for(var e=0;e<k;++e)s[e]=u(e*O,t,n)}();var l=function(r){return t===e&&n===i?r:0===r?0:1===r?1:u(c(r),e,i)},p="BezierEasing("+[t,e,n,i]+")";return l.toString=function(){return p},l}x.css={ease:x(.25,.1,.25,1),linear:x(0,0,1,1),"ease-in":x(.42,0,1,1),"ease-out":x(0,0,.58,1),"ease-in-out":x(.42,0,.58,1)};var j=x;function T(t){return(T="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function F(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function K(t,e){return!e||"object"!==T(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function S(t){return(S=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function _(t,e){return(_=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var C=function(t){function e(t){var n;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),(n=K(this,S(e).call(this,t))).frameCount=n.frames.length,n.verticesCount=n.frames[0].v.length,n}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&_(t,e)}(e,d),n=e,(i=[{key:"getValue",value:function(t){return this.finished&&t>=this.nextFrame.t?this.nextFrame:!this.started&&t<=this.lastFrame.t?this.lastFrame:(this.started=!0,this.finished=!1,t>this.nextFrame.t?this.pointer+1===this.frameCount?this.finished=!0:(this.pointer++,this.lastFrame=this.frames[this.pointer-1],this.nextFrame=this.frames[this.pointer],this.onKeyframeChange()):t<this.lastFrame.t&&(this.pointer<2?this.started=!1:(this.pointer--,this.lastFrame=this.frames[this.pointer-1],this.nextFrame=this.frames[this.pointer],this.onKeyframeChange())),this.getValueAtTime(t))}},{key:"setKeyframes",value:function(t){if(t<this.frames[0].t)return this.pointer=1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],void this.onKeyframeChange();if(t>this.frames[this.frameCount-1].t)return this.pointer=this.frameCount-1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],void this.onKeyframeChange();for(var e=1;e<this.frameCount;e++)if(t>=this.frames[e-1].t&&t<=this.frames[e])return this.pointer=e,this.lastFrame=this.frames[e-1],this.nextFrame=this.frames[e],void this.onKeyframeChange()}},{key:"onKeyframeChange",value:function(){this.setEasing()}},{key:"lerp",value:function(t,e,n){return t+n*(e-t)}},{key:"setEasing",value:function(){this.lastFrame.easeOut&&this.nextFrame.easeIn?this.easing=new j(this.lastFrame.easeOut[0],this.lastFrame.easeOut[1],this.nextFrame.easeIn[0],this.nextFrame.easeIn[1]):this.easing=null}},{key:"getValueAtTime",value:function(t){var e=(t-this.lastFrame.t)/(this.nextFrame.t-this.lastFrame.t);e>1?e=1:e<0?e=0:this.easing&&(e=this.easing(e));for(var n=[],i=[],r=0;r<this.verticesCount;r++){var s=this.lerp(this.lastFrame.v[r][0],this.nextFrame.v[r][0],e),o=this.lerp(this.lastFrame.v[r][1],this.nextFrame.v[r][1],e),a=this.lerp(this.lastFrame.v[r][2],this.nextFrame.v[r][2],e),h=this.lerp(this.lastFrame.v[r][3],this.nextFrame.v[r][3],e),u=this.lerp(this.lastFrame.v[r][4],this.nextFrame.v[r][4],e),f=this.lerp(this.lastFrame.v[r][5],this.nextFrame.v[r][5],e);n.push([s,o,a,h,u,f])}for(var c=0;c<this.verticesCount-1;c++)i.push(this.lerp(this.lastFrame.len[c],this.nextFrame.len[c],e));return{v:n,len:i}}},{key:"reset",value:function(t){this.finished=!1,this.started=!1,this.pointer=t?this.frameCount-1:1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],this.onKeyframeChange()}}])&&F(n.prototype,i),r&&F(n,r),e}();function R(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var E=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.frames=e}var e,n,i;return e=t,(n=[{key:"getValue",value:function(){return this.frames[0].v}},{key:"setKeyframes",value:function(t){}},{key:"reset",value:function(t){}}])&&R(e.prototype,n),i&&R(e,i),t}();function V(t){return(V="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function z(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function M(t,e){return!e||"object"!==V(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function A(t){return(A=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function I(t,e){return(I=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var L=function(t){function e(t){var n;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),(n=M(this,A(e).call(this,t))).frameCount=n.frames.length,n}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&I(t,e)}(e,E),n=e,(i=[{key:"lerp",value:function(t,e,n){if(t instanceof Array){for(var i=[],r=0;r<t.length;r++)i[r]=t[r]+n*(e[r]-t[r]);return i}return t+n*(e-t)}},{key:"setEasing",value:function(){this.nextFrame.easeIn?this.easing=new j(this.lastFrame.easeOut[0],this.lastFrame.easeOut[1],this.nextFrame.easeIn[0],this.nextFrame.easeIn[1]):this.easing=null}},{key:"getValue",value:function(t){return this.finished&&t>=this.nextFrame.t?this.nextFrame.v:!this.started&&t<=this.lastFrame.t?this.lastFrame.v:(this.started=!0,this.finished=!1,t>this.nextFrame.t?this.pointer+1===this.frameCount?this.finished=!0:(this.pointer++,this.lastFrame=this.frames[this.pointer-1],this.nextFrame=this.frames[this.pointer],this.onKeyframeChange()):t<this.lastFrame.t&&(this.pointer<2?this.started=!1:(this.pointer--,this.lastFrame=this.frames[this.pointer-1],this.nextFrame=this.frames[this.pointer],this.onKeyframeChange())),this.getValueAtTime(t))}},{key:"setKeyframes",value:function(t){if(t<this.frames[0].t)return this.pointer=1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],void this.onKeyframeChange();if(t>this.frames[this.frameCount-1].t)return this.pointer=this.frameCount-1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],void this.onKeyframeChange();for(var e=1;e<this.frameCount;e++)if(t>=this.frames[e-1].t&&t<=this.frames[e].t)return this.pointer=e,this.lastFrame=this.frames[e-1],this.nextFrame=this.frames[e],void this.onKeyframeChange()}},{key:"onKeyframeChange",value:function(){this.setEasing()}},{key:"getElapsed",value:function(t){var e=(t-this.lastFrame.t)/(this.nextFrame.t-this.lastFrame.t);return e>1?e=1:e<0?e=0:this.easing&&(e=this.easing(e)),e}},{key:"getValueAtTime",value:function(t){return this.lerp(this.lastFrame.v,this.nextFrame.v,this.getElapsed(t))}},{key:"reset",value:function(t){this.finished=!1,this.started=!1,this.pointer=t?this.frameCount-1:1,this.nextFrame=this.frames[this.pointer],this.lastFrame=this.frames[this.pointer-1],this.onKeyframeChange()}}])&&z(n.prototype,i),r&&z(n,r),e}();function X(t){return(X="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function Y(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function N(t,e){return!e||"object"!==X(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function B(t){return(B=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function D(t,e){return(D=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var W=function(t){function e(){return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),N(this,B(e).apply(this,arguments))}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&D(t,e)}(e,L),n=e,(i=[{key:"onKeyframeChange",value:function(){this.setEasing(),this.setMotionPath()}},{key:"getValueAtTime",value:function(t){return this.motionpath?this.motionpath.getValues(this.getElapsed(t)):this.lerp(this.lastFrame.v,this.nextFrame.v,this.getElapsed(t))}},{key:"setMotionPath",value:function(){this.lastFrame.motionpath?(this.motionpath=new y(this.lastFrame.motionpath),this.motionpath.getLength(this.lastFrame.len)):this.motionpath=null}}])&&Y(n.prototype,i),r&&Y(n,r),e}();function q(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var G=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e.position&&(e.position.length>1?this.position=new W(e.position):this.position=new E(e.position)),e.positionX&&(this.positionX=e.positionX.length>1?new L(e.positionX):new E(e.positionX)),e.positionY&&(this.positionY=e.positionY.length>1?new L(e.positionY):new E(e.positionY)),e.anchor&&(this.anchor=e.anchor.length>1?new L(e.anchor):new E(e.anchor)),e.scaleX&&(this.scaleX=e.scaleX.length>1?new L(e.scaleX):new E(e.scaleX)),e.scaleY&&(this.scaleY=e.scaleY.length>1?new L(e.scaleY):new E(e.scaleY)),e.skew&&(this.skew=e.skew.length>1?new L(e.skew):new E(e.skew)),e.skewAxis&&(this.skewAxis=e.skewAxis.length>1?new L(e.skewAxis):new E(e.skewAxis)),e.rotation&&(this.rotation=e.rotation.length>1?new L(e.rotation):new E(e.rotation)),e.opacity&&(this.opacity=e.opacity.length>1?new L(e.opacity):new E(e.opacity))}var e,n,i;return e=t,(n=[{key:"update",value:function(t,e){var n,i,r=this.anchor?this.anchor.getValue(e):[0,0],s=this.rotation?this.deg2rad(this.rotation.getValue(e)):0,o=this.skew?this.deg2rad(this.skew.getValue(e)):0,a=this.skewAxis?this.deg2rad(this.skewAxis.getValue(e)):0,h=this.scaleX?this.scaleX.getValue(e):1,u=this.scaleY?this.scaleY.getValue(e):1,f=this.opacity?this.opacity.getValue(e)*t.globalAlpha:t.globalAlpha;if(this.position){var c=this.position.getValue(e,t);n=c[0],i=c[1]}else n=this.positionX?this.positionX.getValue(e):0,i=this.positionY?this.positionY.getValue(e):0;t.transform(1,0,0,1,n-r[0],i-r[1]),this.setRotation(t,s,r[0],r[1]),this.setSkew(t,o,a,r[0],r[1]),this.setScale(t,h,u,r[0],r[1]),t.globalAlpha=f}},{key:"setRotation",value:function(t,e,n,i){var r=Math.cos(e),s=Math.sin(e),o=n-r*n+s*i,a=i-s*n-r*i;t.transform(r,s,-s,r,o,a)}},{key:"setScale",value:function(t,e,n,i,r){t.transform(e,0,0,n,-i*e+i,-r*n+r)}},{key:"setSkew",value:function(t,e,n,i,r){var s=Math.tan(-e);this.setRotation(t,-n,i,r),t.transform(1,0,s,1,-r*s,0),this.setRotation(t,n,i,r)}},{key:"deg2rad",value:function(t){return t*(Math.PI/180)}},{key:"setKeyframes",value:function(t){this.anchor&&this.anchor.setKeyframes(t),this.rotation&&this.rotation.setKeyframes(t),this.skew&&this.skew.setKeyframes(t),this.skewAxis&&this.skewAxis.setKeyframes(t),this.position&&this.position.setKeyframes(t),this.positionX&&this.positionX.setKeyframes(t),this.positionY&&this.positionY.setKeyframes(t),this.scaleX&&this.scaleX.setKeyframes(t),this.scaleY&&this.scaleY.setKeyframes(t),this.opacity&&this.opacity.setKeyframes(t)}},{key:"reset",value:function(t){this.anchor&&this.anchor.reset(t),this.rotation&&this.rotation.reset(t),this.skew&&this.skew.reset(t),this.skewAxis&&this.skewAxis.reset(t),this.position&&this.position.reset(t),this.positionX&&this.positionX.reset(t),this.positionY&&this.positionY.reset(t),this.scaleX&&this.scaleX.reset(t),this.scaleY&&this.scaleY.reset(t),this.opacity&&this.opacity.reset(t)}}])&&q(e.prototype,n),i&&q(e,i),t}();function H(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var J=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.color=e.color.length>1?new L(e.color):new E(e.color),this.opacity=e.opacity.length>1?new L(e.opacity):new E(e.opacity),this.direction=e.direction.length>1?new L(e.direction):new E(e.direction),this.distance=e.distance.length>1?new L(e.distance):new E(e.distance),this.softness=e.softness.length>1?new L(e.softness):new E(e.softness)}var e,n,i;return e=t,(n=[{key:"getColor",value:function(t){var e=this.color.getValue(t),n=this.opacity.getValue(t);return"rgba(".concat(Math.round(e[0]),", ").concat(Math.round(e[1]),", ").concat(Math.round(e[2]),", ").concat(n,")")}},{key:"setShadow",value:function(t,e){var n=this.getColor(e),i=this.distance.getValue(e),r=this.softness.getValue(e);t.shadowColor=n,t.shadowOffsetX=i,t.shadowOffsetY=i,t.shadowBlur=r}},{key:"setKeyframes",value:function(t){this.color.setKeyframes(t),this.opacity.setKeyframes(t),this.direction.setKeyframes(t),this.distance.setKeyframes(t),this.softness.setKeyframes(t)}},{key:"reset",value:function(t){this.color.reset(t),this.opacity.reset(t),this.direction.reset(t),this.distance.reset(t),this.softness.reset(t)}}])&&H(e.prototype,n),i&&H(e,i),t}();function Q(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var U=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.index=e.index,this.in=e.in||0,this.out=e.out,e.parent&&(this.parent=e.parent),this.transform=new G(e.transform),e.effects&&e.effects.dropShadow&&(this.dropShadow=new J(e.effects.dropShadow)),e.masks&&(this.masks=e.masks.map(function(t){return t.isAnimated?new C(t):new d(t)}))}var e,n,i;return e=t,(n=[{key:"draw",value:function(t,e){t.save(),this.parent&&this.parent.setParentTransform(t,e),this.transform.update(t,e),this.dropShadow&&this.dropShadow.setShadow(t,e),this.masks&&(t.beginPath(),this.masks.forEach(function(n){return n.draw(t,e)}),t.clip())}},{key:"setParentTransform",value:function(t,e){this.parent&&this.parent.setParentTransform(t,e),this.transform.update(t,e)}},{key:"setKeyframes",value:function(t){this.transform.setKeyframes(t),this.masks&&this.masks.forEach(function(e){return e.setKeyframes(t)})}},{key:"reset",value:function(t){this.transform.reset(t),this.masks&&this.masks.forEach(function(e){return e.reset(t)})}}])&&Q(e.prototype,n),i&&Q(e,i),t}();function Z(t){return(Z="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function $(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function tt(t,e){return!e||"object"!==Z(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function et(t,e,n){return(et="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(t,e,n){var i=function(t,e){for(;!Object.prototype.hasOwnProperty.call(t,e)&&null!==(t=nt(t)););return t}(t,e);if(i){var r=Object.getOwnPropertyDescriptor(i,e);return r.get?r.get.call(n):r.value}})(t,e,n||t)}function nt(t){return(nt=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function it(t,e){return(it=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var rt=function(t){function e(t){var n;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),(n=tt(this,nt(e).call(this,t))).source=t.source,n.isLoaded=!1,n}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&it(t,e)}(e,U),n=e,(i=[{key:"preload",value:function(t){var e=this;return new Promise(function(t,n){e.img=new Image,e.img.onload=function(){e.isLoaded=!0,t()},e.img.src=e.source})}},{key:"draw",value:function(t,n){et(nt(e.prototype),"draw",this).call(this,t,n),t.drawImage(this.img,0,0),t.restore()}}])&&$(n.prototype,i),r&&$(n,r),e}();function st(t){return(st="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function ot(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function at(t,e){return!e||"object"!==st(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function ht(t,e,n){return(ht="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(t,e,n){var i=function(t,e){for(;!Object.prototype.hasOwnProperty.call(t,e)&&null!==(t=ut(t)););return t}(t,e);if(i){var r=Object.getOwnPropertyDescriptor(i,e);return r.get?r.get.call(n):r.value}})(t,e,n||t)}function ut(t){return(ut=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function ft(t,e){return(ft=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var ct=function(t){function e(t){return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),at(this,ut(e).call(this,t))}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&ft(t,e)}(e,U),n=e,(i=[{key:"draw",value:function(t,n){ht(ut(e.prototype),"draw",this).call(this,t,n),t.restore()}}])&&ot(n.prototype,i),r&&ot(n,r),e}();function lt(t){return(lt="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function pt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function yt(t,e){return!e||"object"!==lt(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function mt(t,e,n){return(mt="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(t,e,n){var i=function(t,e){for(;!Object.prototype.hasOwnProperty.call(t,e)&&null!==(t=dt(t)););return t}(t,e);if(i){var r=Object.getOwnPropertyDescriptor(i,e);return r.get?r.get.call(n):r.value}})(t,e,n||t)}function dt(t){return(dt=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function vt(t,e){return(vt=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var gt=function(t){function e(t,n){var i;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),(i=yt(this,dt(e).call(this,t))).text=t.text,i.leading=t.leading,i.fontSize=t.fontSize,i.font=t.font,i.color=t.color,i.justification=t.justification,i.baseFont=n,i}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&vt(t,e)}(e,U),n=e,(i=[{key:"draw",value:function(t,n){mt(dt(e.prototype),"draw",this).call(this,t,n),t.textAlign=this.justification,t.font="".concat(this.fontSize,"px ").concat(this.baseFont)||this.font,t.fillStyle="rgb(".concat(this.color[0],", ").concat(this.color[1],", ").concat(this.color[2],")");for(var i=0;i<this.text.length;i++)t.fillText(this.text[i],0,i*this.leading);t.restore()}}])&&pt(n.prototype,i),r&&pt(n,r),e}();function bt(t){return(bt="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function wt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function kt(t,e){return!e||"object"!==bt(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function Ot(t){return(Ot=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function Pt(t,e){return(Pt=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var xt=function(t){function e(t){var n;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),(n=kt(this,Ot(e).call(this,t))).closed=!0,n.size=t.size.length>1?new L(t.size):new E(t.size),t.position&&(n.position=t.position.length>1?new L(t.position):new E(t.position)),n}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&Pt(t,e)}(e,d),n=e,(i=[{key:"draw",value:function(t,e,n){var i,r,s=this.size.getValue(e),o=this.position?this.position.getValue(e):[0,0],a=s[0]/2,h=s[1]/2,u=o[0]-a,f=o[1]-h,c=.5522848*a,l=.5522848*h,p=[[u+a+c,f,u+a-c,f,u+a,f],[u+a+a,f+h+l,u+a+a,f+h-l,u+a+a,f+h],[u+a-c,f+h+h,u+a+c,f+h+h,u+a,f+h+h],[u,f+h-l,u,f+h+l,u,f+h]];if(n){var y,m=a+h;for(n=this.getTrimValues(n),i=0;i<4;i++)(r=i+1)>3&&(r=0),i>n.startIndex&&i<n.endIndex?t.bezierCurveTo(p[i][0],p[i][1],p[r][2],p[r][3],p[r][4],p[r][5]):i===n.startIndex&&i===n.endIndex?(y=this.trim(p[i],p[r],n.start,n.end,m),t.moveTo(y.start[4],y.start[5]),t.bezierCurveTo(y.start[0],y.start[1],y.end[2],y.end[3],y.end[4],y.end[5])):i===n.startIndex?(y=this.trim(p[i],p[r],n.start,1,m),t.moveTo(y.start[4],y.start[5]),t.bezierCurveTo(y.start[0],y.start[1],y.end[2],y.end[3],y.end[4],y.end[5])):i===n.endIndex&&(y=this.trim(p[i],p[r],0,n.end,m),t.bezierCurveTo(y.start[0],y.start[1],y.end[2],y.end[3],y.end[4],y.end[5]))}else for(t.moveTo(p[0][4],p[0][5]),i=0;i<4;i++)(r=i+1)>3&&(r=0),t.bezierCurveTo(p[i][0],p[i][1],p[r][2],p[r][3],p[r][4],p[r][5])}},{key:"getTrimValues",value:function(t){var e=Math.floor(4*t.start),n=Math.floor(4*t.end);return{startIndex:e,endIndex:n,start:4*(t.start-.25*e),end:4*(t.end-.25*n)}}},{key:"setKeyframes",value:function(t){this.size.setKeyframes(t),this.position&&this.position.setKeyframes(t)}},{key:"reset",value:function(t){this.size.reset(t),this.position&&this.position.reset(t)}}])&&wt(n.prototype,i),r&&wt(n,r),e}();function jt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var Tt=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.closed=!0,this.starType=e.starType,this.points=e.points.length>1?new L(e.points):new E(e.points),this.innerRadius=e.innerRadius.length>1?new L(e.innerRadius):new E(e.innerRadius),this.outerRadius=e.outerRadius.length>1?new L(e.outerRadius):new E(e.outerRadius),e.position&&(this.position=e.position.length>1?new L(e.position):new E(e.position)),e.rotation&&(this.rotation=e.rotation.length>1?new L(e.rotation):new E(e.rotation)),e.innerRoundness&&(this.innerRoundness=e.innerRoundness.length>1?new L(e.innerRoundness):new E(e.innerRoundness)),e.outerRoundness&&(this.outerRoundness=e.outerRoundness.length>1?new L(e.outerRoundness):new E(e.outerRoundness))}var e,n,i;return e=t,(n=[{key:"draw",value:function(t,e){var n=this.points.getValue(e),i=this.innerRadius.getValue(e),r=this.outerRadius.getValue(e),s=this.position?this.position.getValue(e):[0,0],o=this.rotation?this.rotation.getValue(e):0,a=this.innerRoundness?this.innerRoundness.getValue(e):0,h=this.outerRoundness?this.outerRoundness.getValue(e):0;o=this.deg2rad(o);var u=this.rotatePoint(0,0,0,0-r,o);t.save(),t.beginPath(),t.translate(s[0],s[1]),t.moveTo(u[0],u[1]);for(var f=0;f<n;f++){var c,l,p,y,m,d,v,g=void 0,b=void 0;v=Math.PI/n*2,c=this.rotatePoint(0,0,0,0-i,v*(f+1)-v/2+o),l=this.rotatePoint(0,0,0,0-r,v*(f+1)+o),g||(g=(u[0]+c[0])*h/100*.5522848),b||(b=(u[0]+c[0])*a/100*.5522848),p=this.rotatePoint(0,0,g,0-r,v*f+o),m=this.rotatePoint(0,0,-1*b,0-i,v*(f+1)-v/2+o),d=this.rotatePoint(0,0,b,0-i,v*(f+1)-v/2+o),y=this.rotatePoint(0,0,-1*g,0-r,v*(f+1)+o),1===this.starType?(t.bezierCurveTo(p[0],p[1],m[0],m[1],c[0],c[1]),t.bezierCurveTo(d[0],d[1],y[0],y[1],l[0],l[1])):t.bezierCurveTo(p[0],p[1],y[0],y[1],l[0],l[1])}t.restore()}},{key:"rotatePoint",value:function(t,e,n,i,r){var s=Math.cos(r),o=Math.sin(r);return[s*(n-t)-o*(i-e)+t,o*(n-t)+s*(i-e)+e]}},{key:"deg2rad",value:function(t){return t*(Math.PI/180)}},{key:"setKeyframes",value:function(t){this.points.setKeyframes(t),this.innerRadius.setKeyframes(t),this.outerRadius.setKeyframes(t),this.position&&this.position.setKeyframes(t),this.rotation&&this.rotation.setKeyframes(t),this.innerRoundness&&this.innerRoundness.setKeyframes(t),this.outerRoundness&&this.outerRoundness.setKeyframes(t)}},{key:"reset",value:function(t){this.points.reset(t),this.innerRadius.reset(t),this.outerRadius.reset(t),this.position&&this.position.reset(t),this.rotation&&this.rotation.reset(t),this.innerRoundness&&this.innerRoundness.reset(t),this.outerRoundness&&this.outerRoundness.reset(t)}}])&&jt(e.prototype,n),i&&jt(e,i),t}();function Ft(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var Kt=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.closed=!0,this.size=e.size.length>1?new L(e.size):new E(e.size),e.position&&(this.position=e.position.length>1?new L(e.position):new E(e.position)),e.roundness&&(this.roundness=e.roundness.length>1?new L(e.roundness):new E(e.roundness))}var e,n,i;return e=t,(n=[{key:"draw",value:function(t,e,n){var i=this.size.getValue(e),r=this.position?this.position.getValue(e):[0,0],s=this.roundness?this.roundness.getValue(e):0;i[0]<2*s&&(s=i[0]/2),i[1]<2*s&&(s=i[1]/2);var o=r[0]-i[0]/2,a=r[1]-i[1]/2;n||(t.moveTo(o+s,a),t.arcTo(o+i[0],a,o+i[0],a+i[1],s),t.arcTo(o+i[0],a+i[1],o,a+i[1],s),t.arcTo(o,a+i[1],o,a,s),t.arcTo(o,a,o+i[0],a,s))}},{key:"setKeyframes",value:function(t){this.size.setKeyframes(t),this.position&&this.position.setKeyframes(t),this.roundness&&this.roundness.setKeyframes(t)}},{key:"reset",value:function(t){this.size.reset(t),this.position&&this.position.reset(t),this.roundness&&this.roundness.reset(t)}}])&&Ft(e.prototype,n),i&&Ft(e,i),t}();function St(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var _t=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.color=e.color.length>1?new L(e.color):new E(e.color),e.opacity&&(this.opacity=e.opacity.length>1?new L(e.opacity):new E(e.opacity))}var e,n,i;return e=t,(n=[{key:"getValue",value:function(t){var e=this.color.getValue(t),n=this.opacity?this.opacity.getValue(t):1;return"rgba(".concat(Math.round(e[0]),", ").concat(Math.round(e[1]),", ").concat(Math.round(e[2]),", ").concat(n,")")}},{key:"update",value:function(t,e){var n=this.getValue(e);t.fillStyle=n}},{key:"setKeyframes",value:function(t){this.color.setKeyframes(t),this.opacity&&this.opacity.setKeyframes(t)}},{key:"reset",value:function(t){this.color.reset(t),this.opacity&&this.opacity.reset(t)}}])&&St(e.prototype,n),i&&St(e,i),t}();function Ct(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var Rt=function(){function t(e,n){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),n[e.name]||(n[e.name]=[]),n[e.name].push(this),this.stops=e.stops,this.type=e.type,this.startPoint=e.startPoint.length>1?new L(e.startPoint):new E(e.startPoint),this.endPoint=e.endPoint.length>1?new L(e.endPoint):new E(e.endPoint),e.opacity&&(this.opacity=e.opacity.length>1?new L(e.opacity):new E(e.opacity))}var e,n,i;return e=t,(n=[{key:"update",value:function(t,e){var n=this.startPoint.getValue(e),i=this.endPoint.getValue(e),r=0;if("radial"===this.type){var s=n[0]-i[0],o=n[1]-i[1];r=Math.sqrt(s*s+o*o)}var a="radial"===this.type?t.createRadialGradient(n[0],n[1],0,n[0],n[1],r):t.createLinearGradient(n[0],n[1],i[0],i[1]),h=this.opacity?this.opacity.getValue(e):1,u=!0,f=!1,c=void 0;try{for(var l,p=this.stops[Symbol.iterator]();!(u=(l=p.next()).done);u=!0){var y=l.value,m=y.color;a.addColorStop(y.location,"rgba(".concat(m[0],", ").concat(m[1],", ").concat(m[2],", ").concat(m[3]*h,")"))}}catch(t){f=!0,c=t}finally{try{u||null==p.return||p.return()}finally{if(f)throw c}}t.fillStyle=a}},{key:"setKeyframes",value:function(t){this.opacity&&this.opacity.setKeyframes(t),this.startPoint.setKeyframes(t),this.endPoint.setKeyframes(t)}},{key:"reset",value:function(t){this.opacity&&this.opacity.setKeyframes(t),this.startPoint.setKeyframes(t),this.endPoint.setKeyframes(t)}}])&&Ct(e.prototype,n),i&&Ct(e,i),t}();function Et(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var Vt=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e&&(this.join=e.join,this.cap=e.cap,e.miterLimit&&(e.miterLimit.length>1?this.miterLimit=new L(e.miterLimit):this.miterLimit=new E(e.miterLimit)),e.color.length>1?this.color=new L(e.color):this.color=new E(e.color),e.opacity.length>1?this.opacity=new L(e.opacity):this.opacity=new E(e.opacity),e.width.length>1?this.width=new L(e.width):this.width=new E(e.width),e.dashes&&(this.dashes={},e.dashes.dash.length>1?this.dashes.dash=new L(e.dashes.dash):this.dashes.dash=new E(e.dashes.dash),e.dashes.gap.length>1?this.dashes.gap=new L(e.dashes.gap):this.dashes.gap=new E(e.dashes.gap),e.dashes.offset.length>1?this.dashes.offset=new L(e.dashes.offset):this.dashes.offset=new E(e.dashes.offset)))}var e,n,i;return e=t,(n=[{key:"getValue",value:function(t){var e=this.color.getValue(t),n=this.opacity.getValue(t);e[0]=Math.round(e[0]),e[1]=Math.round(e[1]),e[2]=Math.round(e[2]);var i=e.join(", ");return"rgba(".concat(i,", ").concat(n,")")}},{key:"update",value:function(t,e){var n,i=this.getValue(e),r=this.width.getValue(e),s=this.join;"miter"===s&&(n=this.miterLimit.getValue(e)),t.lineWidth=r,t.lineJoin=s,n&&(t.miterLimit=n),t.lineCap=this.cap,t.strokeStyle=i,this.dashes&&(t.setLineDash([this.dashes.dash.getValue(e),this.dashes.gap.getValue(e)]),t.lineDashOffset=this.dashes.offset.getValue(e))}},{key:"setKeyframes",value:function(t){this.color.setKeyframes(t),this.opacity.setKeyframes(t),this.width.setKeyframes(t),this.miterLimit&&this.miterLimit.setKeyframes(t),this.dashes&&(this.dashes.dash.setKeyframes(t),this.dashes.gap.setKeyframes(t),this.dashes.offset.setKeyframes(t))}},{key:"reset",value:function(t){this.color.reset(t),this.opacity.reset(t),this.width.reset(t),this.miterLimit&&this.miterLimit.reset(t),this.dashes&&(this.dashes.dash.reset(t),this.dashes.gap.reset(t),this.dashes.offset.reset(t))}}])&&Et(e.prototype,n),i&&Et(e,i),t}();function zt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var Mt=function(){function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.type=e.type,e.start&&(this.start=e.start.length>1?new L(e.start):new E(e.start)),e.end&&(this.end=e.end.length>1?new L(e.end):new E(e.end)),e.offset&&(this.offset=e.offset.length>1?new L(e.offset):new E(e.offset))}var e,n,i;return e=t,(n=[{key:"getTrim",value:function(t){var e=this.start?this.start.getValue(t):0,n=this.end?this.end.getValue(t):1,i=Math.min(e,n),r=Math.max(e,n);if(this.offset){var s=this.offset.getValue(t)%1;(s>0&&s<1||s>-1&&s<0)&&(i=(i=(i+=s)>1?i-1:i)<0?1+i:i,r=(r=(r+=s)>1?r-1:r)<0?1+r:r)}return 0===i&&1===r?null:{start:i,end:r}}},{key:"setKeyframes",value:function(t){this.start&&this.start.setKeyframes(t),this.end&&this.end.setKeyframes(t),this.offset&&this.offset.reset()}},{key:"reset",value:function(t){this.start&&this.start.reset(t),this.end&&this.end.reset(t),this.offset&&this.offset.reset()}}])&&zt(e.prototype,n),i&&zt(e,i),t}();function At(t){return(At="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function It(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function Lt(t,e){return!e||"object"!==At(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function Xt(t,e,n){return(Xt="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(t,e,n){var i=function(t,e){for(;!Object.prototype.hasOwnProperty.call(t,e)&&null!==(t=Yt(t)););return t}(t,e);if(i){var r=Object.getOwnPropertyDescriptor(i,e);return r.get?r.get.call(n):r.value}})(t,e,n||t)}function Yt(t){return(Yt=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function Nt(t,e){return(Nt=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var Bt=function(t){function e(t,n){var i;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),i=Lt(this,Yt(e).call(this,t)),t.fill&&(i.fill=new _t(t.fill)),t.gradientFill&&(i.fill=new Rt(t.gradientFill,n)),t.stroke&&(i.stroke=new Vt(t.stroke)),t.trim&&(i.trim=new Mt(t.trim)),t.groups&&(i.groups=t.groups.map(function(t){return new e(t,n)})),t.shapes&&(i.shapes=t.shapes.map(function(t){return"path"===t.type?t.isAnimated?new C(t):new d(t):"rect"===t.type?new Kt(t):"ellipse"===t.type?new xt(t):"polystar"===t.type?new Tt(t):void 0})),i}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&Nt(t,e)}(e,U),n=e,(i=[{key:"draw",value:function(t,n,i,r,s){Xt(Yt(e.prototype),"draw",this).call(this,t,n);var o=this.fill||i,a=this.stroke||r,h=this.trim?this.trim.getTrim(n):s;o&&o.update(t,n),a&&a.update(t,n),t.beginPath(),this.shapes&&(this.shapes.forEach(function(e){return e.draw(t,n,h)}),this.shapes[this.shapes.length-1].closed),o&&t.fill(),a&&t.stroke(),this.groups&&this.groups.forEach(function(e){return e.draw(t,n,o,a,h)}),t.restore()}},{key:"setKeyframes",value:function(t){Xt(Yt(e.prototype),"setKeyframes",this).call(this,t),this.shapes&&this.shapes.forEach(function(e){return e.setKeyframes(t)}),this.groups&&this.groups.forEach(function(e){return e.setKeyframes(t)}),this.fill&&this.fill.setKeyframes(t),this.stroke&&this.stroke.setKeyframes(t),this.trim&&this.trim.setKeyframes(t)}},{key:"reset",value:function(t){Xt(Yt(e.prototype),"reset",this).call(this,t),this.shapes&&this.shapes.forEach(function(e){return e.reset(t)}),this.groups&&this.groups.forEach(function(e){return e.reset(t)}),this.fill&&this.fill.reset(t),this.stroke&&this.stroke.reset(t),this.trim&&this.trim.reset(t)}}])&&It(n.prototype,i),r&&It(n,r),e}();function Dt(t){return(Dt="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function Wt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function qt(t,e){return!e||"object"!==Dt(e)&&"function"!=typeof e?function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t):e}function Gt(t,e,n){return(Gt="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(t,e,n){var i=function(t,e){for(;!Object.prototype.hasOwnProperty.call(t,e)&&null!==(t=Ht(t)););return t}(t,e);if(i){var r=Object.getOwnPropertyDescriptor(i,e);return r.get?r.get.call(n):r.value}})(t,e,n||t)}function Ht(t){return(Ht=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function Jt(t,e){return(Jt=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var Qt=function(t){function e(t,n,i,r,s){var o;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),o=qt(this,Ht(e).call(this,t));var a=t.sourceID,h=n&&n[a]?n[a].layers:null;return h&&(o.layers=h.map(function(t){switch(t.type){case"vector":return new Bt(t,r);case"image":return new rt(t,s);case"text":return new gt(t,i);case"comp":return new e(t,i,r,s);case"null":return new ct(t)}}),o.layers.forEach(function(t){if(t.parent){var e=t.parent;t.parent=o.layers.find(function(t){return t.index===e})}})),t.timeRemapping&&(o.timeRemapping=t.timeRemapping.length>1?new L(t.timeRemapping):new E(t.timeRemapping)),o}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&Jt(t,e)}(e,U),n=e,(i=[{key:"draw",value:function(t,n){if(Gt(Ht(e.prototype),"draw",this).call(this,t,n),this.layers){var i=n-this.in;this.timeRemapping&&(i=this.timeRemapping.getValue(i)),this.layers.forEach(function(e){i>=e.in&&i<=e.out&&e.draw(t,i)})}t.restore()}},{key:"setParentTransform",value:function(t,n){Gt(Ht(e.prototype),"setParentTransform",this).call(this,t,n);var i=n-this.in;this.layers&&this.layers.forEach(function(e){return e.setParentTransform(t,i)})}},{key:"setKeyframes",value:function(t){Gt(Ht(e.prototype),"setKeyframes",this).call(this,t);var n=t-this.in;this.timeRemapping&&this.timeRemapping.setKeyframes(n),this.layers&&this.layers.forEach(function(t){return t.setKeyframes(n)})}},{key:"reset",value:function(t){Gt(Ht(e.prototype),"reset",this).call(this,t),this.timeRemapping&&this.timeRemapping.reset(t),this.layers&&this.layers.forEach(function(e){return e.reset(t)})}}])&&Wt(n.prototype,i),r&&Wt(n,r),e}();function Ut(t){return(Ut="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function Zt(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function $t(t){return($t=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function te(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}function ee(t,e){return(ee=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}var ne=function(t){function e(t){var n,i,r;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),i=this,r=$t(e).call(this),(n=!r||"object"!==Ut(r)&&"function"!=typeof r?te(i):r).gradients={},n.pausedTime=0,n.duration=t.data.duration,n.baseWidth=t.data.width,n.baseHeight=t.data.height,n.ratio=t.data.width/t.data.height,n.markers=t.data.markers,n.baseFont=t.baseFont,n.loop=t.loop||!1,n.devicePixelRatio=t.devicePixelRatio||("undefined"!=typeof window&&window.devicePixelRatio?window.devicePixelRatio:1),n.fluid=t.fluid||!0,n.imageBasePath=t.imageBasePath||"";var s=t.data.comps;return n.isPaused=!1,n.isPlaying=!1,n.drawFrame=!0,n.canvas=t.canvas||document.createElement("canvas"),n.canvas.width=n.baseWidth,n.canvas.height=n.baseHeight,n.ctx=n.canvas.getContext("2d"),n.layers=t.data.layers.map(function(t){switch(t.type){case"vector":return new Bt(t,n.gradients);case"image":return new rt(t,n.imageBasePath);case"text":return new gt(t,n.baseFont);case"comp":return new Qt(t,s,n.baseFont,n.gradients,n.imageBasePath);case"null":default:return new ct(t)}}),n.layers.forEach(function(t){if(t.parent){var e=t.parent;t.parent=n.layers.find(function(t){return t.index===e})}}),n.reversed=t.reversed||!1,n.reset(n.reversed),n.resize(),u(te(n)),n}var n,i,r;return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&ee(t,e)}(e,l.a),n=e,(i=[{key:"play",value:function(){this.isPlaying||(this.isPaused||this.reset(this.reversed),this.isPaused=!1,this.pausedTime=0,this.isPlaying=!0)}},{key:"stop",value:function(){this.reset(this.reversed),this.isPlaying=!1,this.drawFrame=!0}},{key:"pause",value:function(){this.isPlaying&&(this.isPaused=!0,this.pausedTime=this.time,this.isPlaying=!1)}},{key:"gotoAndPlay",value:function(t){var e=this.getMarker(t);e&&(this.time=e.time,this.pausedTime=0,this.setKeyframes(this.time),this.isPlaying=!0)}},{key:"gotoAndStop",value:function(t){var e=this.getMarker(t);e&&(this.time=e.time,this.setKeyframes(this.time),this.drawFrame=!0,this.isPlaying=!1)}},{key:"getMarker",value:function(t){var e;if("number"==typeof t?e=this.markers[t]:"string"==typeof t&&(e=this.markers.find(function(e){return e.comment===t})),e)return e;console.warn("Marker not found")}},{key:"checkStopMarkers",value:function(t,e){return this.markers.find(function(n){return n.stop&&n.time>t&&n.time<e})}},{key:"preload",value:function(){var t=this.layers.filter(function(t){return t instanceof rt}).map(function(t){return new t.preload});return Promise.all(t).catch(function(t){return console.error(t)})}},{key:"reset",value:function(){var t=this;this.pausedTime=0,this.time=this.reversed?this.duration:0,this.layers.forEach(function(e){return e.reset(t.reversed)})}},{key:"setKeyframes",value:function(t){this.layers.forEach(function(e){return e.setKeyframes(t)})}},{key:"destroy",value:function(){this.isPlaying=!1,this.canvas.parentNode&&this.canvas.parentNode.removeChild(this.canvas),f(this)}},{key:"resize",value:function(t){if(this.fluid){var e=t||this.canvas.clientWidth||this.baseWidth;this.canvas.width=e*this.devicePixelRatio,this.canvas.height=e/this.ratio*this.devicePixelRatio,this.scale=e/this.baseWidth*this.devicePixelRatio,this.ctx.transform(this.scale,0,0,this.scale,0,0),this.setKeyframes(this.time),this.drawFrame=!0}}},{key:"setGradients",value:function(t,e){this.gradients[t]?this.gradients[t].forEach(function(t){t.stops=e}):console.warn("Gradient with name: ".concat(t," not found."))}},{key:"getSpriteSheet",value:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:25,e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:50,n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:4096,i=e/this.baseWidth,r=this.baseHeight*i,s=Math.floor(this.duration/1e3*t),o=document.createElement("canvas"),a=o.getContext("2d"),h=Math.floor(n/e),u=Math.ceil(s/h),f=0,c=0;o.width=h*e,o.height=u*r,this.resize(e);for(var l=0;l<s;l++){var p=l/s*this.duration;this.setKeyframes(p),this.draw(p);var y=f*e,m=c*r;f+1>=h?(f=0,c++):f++,a.drawImage(this.canvas,y,m,e,r)}return{frames:s,canvas:o,offsetX:e,offsetY:r,rowsX:h,rowsY:u}}},{key:"draw",value:function(t){var e=this;this.ctx.clearRect(0,0,this.baseWidth,this.baseHeight),this.layers.forEach(function(n){t>=n.in&&t<=n.out&&n.draw(e.ctx,t)})}},{key:"update",value:function(t){this.then||(this.then=t);var e=t-this.then;if(this.then=t,this.isPlaying){this.time=this.reversed?this.time-e:this.time+e;var n=this.checkStopMarkers(this.time-e,this.time);this.time>this.duration||this.reversed&&this.time<0?(this.time=this.reversed?0:this.duration-1,this.isPlaying=!1,this.emit("complete"),this.loop&&this.play()):n?(this.time=n.time,this.pause(),this.emit("stop",n)):this.draw(this.time),this.emit("update")}else this.drawFrame&&(this.drawFrame=!1,this.draw(this.time),this.emit("update"))}},{key:"step",set:function(t){this.isPlaying=!1,this.time=t*this.duration,this.pausedTime=this.time,this.setKeyframes(this.time),this.drawFrame=!0},get:function(){return this.time/this.duration}},{key:"reversed",get:function(){return this._reversed},set:function(t){this._reversed=t,this.pausedTime?this.time=this.pausedTime:this.isPlaying||(this.time=this.reversed?this.duration:0),this.setKeyframes(this.time)}}])&&Zt(n.prototype,i),r&&Zt(n,r),e}();n.d(e,"Animation",function(){return ne}),n.d(e,"update",function(){return a}),n.d(e,"autoPlay",function(){return h}),n.d(e,"add",function(){return u}),n.d(e,"remove",function(){return f})}])});
-//# sourceMappingURL=index.js.map
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("AE2Canvas", [], factory);
+	else if(typeof exports === 'object')
+		exports["AE2Canvas"] = factory();
+	else
+		root["AE2Canvas"] = factory();
+})((typeof self !== 'undefined' ? self : this), function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+function E () {
+  // Keep this empty so it's easier to inherit from
+  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
+}
+
+E.prototype = {
+  on: function (name, callback, ctx) {
+    var e = this.e || (this.e = {});
+
+    (e[name] || (e[name] = [])).push({
+      fn: callback,
+      ctx: ctx
+    });
+
+    return this;
+  },
+
+  once: function (name, callback, ctx) {
+    var self = this;
+    function listener () {
+      self.off(name, listener);
+      callback.apply(ctx, arguments);
+    };
+
+    listener._ = callback
+    return this.on(name, listener, ctx);
+  },
+
+  emit: function (name) {
+    var data = [].slice.call(arguments, 1);
+    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
+    var i = 0;
+    var len = evtArr.length;
+
+    for (i; i < len; i++) {
+      evtArr[i].fn.apply(evtArr[i].ctx, data);
+    }
+
+    return this;
+  },
+
+  off: function (name, callback) {
+    var e = this.e || (this.e = {});
+    var evts = e[name];
+    var liveEvents = [];
+
+    if (evts && callback) {
+      for (var i = 0, len = evts.length; i < len; i++) {
+        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
+          liveEvents.push(evts[i]);
+      }
+    }
+
+    // Remove event from queue to prevent memory leak
+    // Suggested by https://github.com/lazd
+    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
+
+    (liveEvents.length)
+      ? e[name] = liveEvents
+      : delete e[name];
+
+    return this;
+  }
+};
+
+module.exports = E;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./src/core.js
+var _animations = [];
+var _animationsLength = 0;
+var _autoPlay = false;
+
+var _rafId;
+
+var update = function update(time) {
+  if (_autoPlay) {
+    _rafId = requestAnimationFrame(update);
+  }
+
+  time = time !== undefined ? time : performance.now();
+
+  for (var i = 0; i < _animationsLength; i++) {
+    _animations[i].update(time);
+  }
+};
+
+var autoPlay = function autoPlay(auto) {
+  _autoPlay = auto;
+  _autoPlay ? _rafId = requestAnimationFrame(update) : cancelAnimationFrame(_rafId);
+};
+
+function add(tween) {
+  _animations.push(tween);
+
+  _animationsLength = _animations.length;
+}
+
+function remove(tween) {
+  var i = _animations.indexOf(tween);
+
+  if (i > -1) {
+    _animations.splice(i, 1);
+
+    _animationsLength = _animations.length;
+  }
+}
+
+
+// EXTERNAL MODULE: ./node_modules/tiny-emitter/index.js
+var tiny_emitter = __webpack_require__(0);
+var tiny_emitter_default = /*#__PURE__*/__webpack_require__.n(tiny_emitter);
+
+// CONCATENATED MODULE: ./src/utils/Bezier.js
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Bezier =
+/*#__PURE__*/
+function () {
+  function Bezier(path) {
+    _classCallCheck(this, Bezier);
+
+    this.path = path;
+  }
+
+  _createClass(Bezier, [{
+    key: "getLength",
+    value: function getLength(len) {
+      this.steps = Math.max(Math.floor(len / 10), 1);
+      this.arcLengths = new Array(this.steps + 1);
+      this.arcLengths[0] = 0;
+      var ox = this.cubicN(0, this.path[0], this.path[2], this.path[4], this.path[6]);
+      var oy = this.cubicN(0, this.path[1], this.path[3], this.path[5], this.path[7]);
+      var clen = 0;
+      var iterator = 1 / this.steps;
+
+      for (var i = 1; i <= this.steps; i += 1) {
+        var x = this.cubicN(i * iterator, this.path[0], this.path[2], this.path[4], this.path[6]);
+        var y = this.cubicN(i * iterator, this.path[1], this.path[3], this.path[5], this.path[7]);
+        var dx = ox - x;
+        var dy = oy - y;
+        clen += Math.sqrt(dx * dx + dy * dy);
+        this.arcLengths[i] = clen;
+        ox = x;
+        oy = y;
+      }
+
+      this.length = clen;
+    }
+  }, {
+    key: "map",
+    value: function map(u) {
+      var targetLength = u * this.arcLengths[this.steps];
+      var low = 0;
+      var high = this.steps;
+      var index = 0;
+
+      while (low < high) {
+        index = low + ((high - low) / 2 | 0);
+
+        if (this.arcLengths[index] < targetLength) {
+          low = index + 1;
+        } else {
+          high = index;
+        }
+      }
+
+      if (this.arcLengths[index] > targetLength) {
+        index--;
+      }
+
+      var lengthBefore = this.arcLengths[index];
+
+      if (lengthBefore === targetLength) {
+        return index / this.steps;
+      } else {
+        return (index + (targetLength - lengthBefore) / (this.arcLengths[index + 1] - lengthBefore)) / this.steps;
+      }
+    }
+  }, {
+    key: "getValues",
+    value: function getValues(elapsed) {
+      var t = this.map(elapsed);
+      var x = this.cubicN(t, this.path[0], this.path[2], this.path[4], this.path[6]);
+      var y = this.cubicN(t, this.path[1], this.path[3], this.path[5], this.path[7]);
+      return [x, y];
+    }
+  }, {
+    key: "cubicN",
+    value: function cubicN(pct, a, b, c, d) {
+      var t2 = pct * pct;
+      var t3 = t2 * pct;
+      return a + (-a * 3 + pct * (3 * a - a * pct)) * pct + (3 * b + pct * (-6 * b + b * 3 * pct)) * pct + (c * 3 - c * 3 * pct) * t2 + d * t3;
+    }
+  }]);
+
+  return Bezier;
+}();
+
+/* harmony default export */ var utils_Bezier = (Bezier);
+// CONCATENATED MODULE: ./src/objects/Path.js
+function Path_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Path_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Path_createClass(Constructor, protoProps, staticProps) { if (protoProps) Path_defineProperties(Constructor.prototype, protoProps); if (staticProps) Path_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Path_Path =
+/*#__PURE__*/
+function () {
+  function Path(data) {
+    Path_classCallCheck(this, Path);
+
+    this.closed = data.closed;
+    this.frames = data.frames;
+  }
+
+  Path_createClass(Path, [{
+    key: "draw",
+    value: function draw(ctx, time, trim) {
+      var frame = this.getValue(time);
+      trim && (trim.start !== 0 || trim.end !== 1) ? this.drawTrimmed(frame, ctx, trim) : this.drawNormal(frame, ctx);
+    }
+  }, {
+    key: "drawNormal",
+    value: function drawNormal(frame, ctx) {
+      var vertices = frame.v;
+      var numVertices = this.closed ? vertices.length : vertices.length - 1;
+      var lastVertex = null;
+      var nextVertex = null;
+
+      for (var i = 1; i <= numVertices; i++) {
+        lastVertex = vertices[i - 1];
+        nextVertex = vertices[i] ? vertices[i] : vertices[0];
+        if (i === 1) ctx.moveTo(lastVertex[4], lastVertex[5]);
+        ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+      }
+
+      if (this.closed) {
+        if (!nextVertex) debugger;
+        ctx.bezierCurveTo(nextVertex[0], nextVertex[1], vertices[0][2], vertices[0][3], vertices[0][4], vertices[0][5]);
+        ctx.closePath();
+      }
+    }
+  }, {
+    key: "drawTrimmed",
+    value: function drawTrimmed(frame, ctx, trim) {
+      if (trim.start === trim.end) return;
+      var vertices = frame.v;
+      var numVertices = this.closed ? vertices.length : vertices.length - 1;
+      var nextVertex;
+      var lastVertex;
+
+      var _this$getTrimValues = this.getTrimValues(trim, frame),
+          start = _this$getTrimValues.start,
+          end = _this$getTrimValues.end,
+          endIndex = _this$getTrimValues.endIndex,
+          startIndex = _this$getTrimValues.startIndex,
+          looped = _this$getTrimValues.looped;
+
+      if (looped && this.closed) {
+        var index = startIndex;
+        var firstRound = true;
+
+        for (var i = 1; i <= numVertices + 1; i++) {
+          lastVertex = vertices[index];
+          nextVertex = vertices[index + 1] ? vertices[index + 1] : vertices[0];
+          var _length = frame.len[index];
+
+          if (index === startIndex && firstRound) {
+            firstRound = false;
+            var tv = this.trim(lastVertex, nextVertex, start, 1, _length);
+            ctx.moveTo(tv.start[4], tv.start[5]);
+            ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+          } else if (index === startIndex && index === endIndex) {
+            var _tv = this.trim(lastVertex, nextVertex, 0, end, _length);
+
+            ctx.bezierCurveTo(_tv.start[0], _tv.start[1], _tv.end[2], _tv.end[3], _tv.end[4], _tv.end[5]);
+          } else if (index === endIndex) {
+            var _tv2 = this.trim(lastVertex, nextVertex, 0, end, _length);
+
+            ctx.bezierCurveTo(_tv2.start[0], _tv2.start[1], _tv2.end[2], _tv2.end[3], _tv2.end[4], _tv2.end[5]);
+          } else if (index < endIndex || index > startIndex) {
+            ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+          }
+
+          index + 1 < numVertices ? index++ : index = 0;
+        }
+      } else if (looped && !this.closed) {
+        for (var _i = 1; _i <= numVertices; _i++) {
+          var _index = _i - 1;
+
+          lastVertex = vertices[_index];
+          nextVertex = vertices[_index + 1] ? vertices[_index + 1] : vertices[0];
+          var _length2 = frame.len[_index];
+
+          if (_index === startIndex && _index === endIndex) {
+            var tv1 = this.trim(lastVertex, nextVertex, 0, end, _length2);
+            ctx.bezierCurveTo(tv1.start[0], tv1.start[1], tv1.end[2], tv1.end[3], tv1.end[4], tv1.end[5]);
+            var tv2 = this.trim(lastVertex, nextVertex, start, 1, _length2);
+            ctx.moveTo(tv2.start[4], tv2.start[5]);
+            ctx.bezierCurveTo(tv2.start[0], tv2.start[1], tv2.end[2], tv2.end[3], tv2.end[4], tv2.end[5]);
+          } else if (_index === startIndex) {
+            var _tv3 = this.trim(lastVertex, nextVertex, start, 1, _length2);
+
+            ctx.moveTo(_tv3.start[4], _tv3.start[5]);
+            ctx.bezierCurveTo(_tv3.start[0], _tv3.start[1], _tv3.end[2], _tv3.end[3], _tv3.end[4], _tv3.end[5]);
+          } else if (_index === endIndex) {
+            var _tv4 = this.trim(lastVertex, nextVertex, 0, end, _length2);
+
+            ctx.bezierCurveTo(_tv4.start[0], _tv4.start[1], _tv4.end[2], _tv4.end[3], _tv4.end[4], _tv4.end[5]);
+          } else if (_index < endIndex || _index > startIndex) {
+            ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+          }
+        }
+      } else {
+        for (var _i2 = 1; _i2 <= numVertices; _i2++) {
+          var _index2 = _i2 - 1;
+
+          lastVertex = vertices[_i2 - 1];
+          nextVertex = vertices[_i2] ? vertices[_i2] : vertices[0];
+
+          if (_index2 === startIndex && _index2 === endIndex) {
+            var _tv5 = this.trim(lastVertex, nextVertex, start, end, length);
+
+            ctx.moveTo(_tv5.start[4], _tv5.start[5]);
+            ctx.bezierCurveTo(_tv5.start[0], _tv5.start[1], _tv5.end[2], _tv5.end[3], _tv5.end[4], _tv5.end[5]);
+          } else if (_index2 === startIndex) {
+            var _tv6 = this.trim(lastVertex, nextVertex, start, 1, length);
+
+            ctx.moveTo(_tv6.start[4], _tv6.start[5]);
+            ctx.bezierCurveTo(_tv6.start[0], _tv6.start[1], _tv6.end[2], _tv6.end[3], _tv6.end[4], _tv6.end[5]);
+          } else if (_index2 === endIndex) {
+            var _tv7 = this.trim(lastVertex, nextVertex, 0, end, length);
+
+            ctx.bezierCurveTo(_tv7.start[0], _tv7.start[1], _tv7.end[2], _tv7.end[3], _tv7.end[4], _tv7.end[5]);
+          } else if (_index2 > startIndex && _index2 < endIndex) {
+            ctx.bezierCurveTo(lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]);
+          }
+        }
+      }
+    }
+  }, {
+    key: "getValue",
+    value: function getValue() {
+      return this.frames[0];
+    }
+  }, {
+    key: "getTrimValues",
+    value: function getTrimValues(trim, frame) {
+      var actualTrim = {
+        startIndex: 0,
+        endIndex: 0,
+        start: 0,
+        end: 0,
+        looped: false
+      };
+
+      if (trim.start === 0 && trim.end === 1) {
+        return null;
+      }
+
+      var totalLen = this.sumArray(frame.len);
+      var trimStartAtLength = totalLen * trim.start;
+
+      for (var i = 0; i < frame.len.length; i++) {
+        if (trimStartAtLength === 0 || trimStartAtLength < frame.len[i]) {
+          actualTrim.startIndex = i;
+          actualTrim.start = trimStartAtLength / frame.len[i];
+          break;
+        }
+
+        trimStartAtLength -= frame.len[i];
+      }
+
+      var trimEndAtLength = totalLen * trim.end;
+
+      if (trim.end === 1) {
+        actualTrim.endIndex = frame.len.length;
+        actualTrim.end = 1;
+        return actualTrim;
+      }
+
+      for (var _i3 = 0; _i3 < frame.len.length; _i3++) {
+        if (trimEndAtLength === 0 || trimEndAtLength < frame.len[_i3]) {
+          actualTrim.endIndex = _i3;
+          actualTrim.end = trimEndAtLength / frame.len[_i3];
+          break;
+        }
+
+        trimEndAtLength -= frame.len[_i3];
+      }
+
+      actualTrim.looped = actualTrim.startIndex > actualTrim.endIndex || actualTrim.startIndex === actualTrim.endIndex && actualTrim.start >= actualTrim.end;
+      return actualTrim;
+    }
+  }, {
+    key: "trim",
+    value: function trim(lastVertex, nextVertex, from, to, len) {
+      var values = {
+        start: lastVertex,
+        end: nextVertex
+      };
+
+      if (from === 0 && to === 1) {
+        return values;
+      }
+
+      if (this.isStraight(lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5])) {
+        values.start = [this.lerp(lastVertex[0], nextVertex[0], from), this.lerp(lastVertex[1], nextVertex[1], from), this.lerp(lastVertex[2], nextVertex[2], from), this.lerp(lastVertex[3], nextVertex[3], from), this.lerp(lastVertex[4], nextVertex[4], from), this.lerp(lastVertex[5], nextVertex[5], from)];
+        values.end = [this.lerp(lastVertex[0], nextVertex[0], to), this.lerp(lastVertex[1], nextVertex[1], to), this.lerp(lastVertex[2], nextVertex[2], to), this.lerp(lastVertex[3], nextVertex[3], to), this.lerp(lastVertex[4], nextVertex[4], to), this.lerp(lastVertex[5], nextVertex[5], to)];
+        return values;
+      } else {
+        this.bezier = new utils_Bezier([lastVertex[4], lastVertex[5], lastVertex[0], lastVertex[1], nextVertex[2], nextVertex[3], nextVertex[4], nextVertex[5]]);
+        this.bezier.getLength(len);
+        from = this.bezier.map(from);
+        to = this.bezier.map(to);
+        to = (to - from) / (1 - from);
+        var e1 = [this.lerp(lastVertex[4], lastVertex[0], from), this.lerp(lastVertex[5], lastVertex[1], from)];
+        var f1 = [this.lerp(lastVertex[0], nextVertex[2], from), this.lerp(lastVertex[1], nextVertex[3], from)];
+        var g1 = [this.lerp(nextVertex[2], nextVertex[4], from), this.lerp(nextVertex[3], nextVertex[5], from)];
+        var h1 = [this.lerp(e1[0], f1[0], from), this.lerp(e1[1], f1[1], from)];
+        var j1 = [this.lerp(f1[0], g1[0], from), this.lerp(f1[1], g1[1], from)];
+        var k1 = [this.lerp(h1[0], j1[0], from), this.lerp(h1[1], j1[1], from)];
+        var startVertex = [j1[0], j1[1], h1[0], h1[1], k1[0], k1[1]];
+        var endVertex = [nextVertex[0], nextVertex[1], g1[0], g1[1], nextVertex[4], nextVertex[5]];
+        var e2 = [this.lerp(startVertex[4], startVertex[0], to), this.lerp(startVertex[5], startVertex[1], to)];
+        var f2 = [this.lerp(startVertex[0], endVertex[2], to), this.lerp(startVertex[1], endVertex[3], to)];
+        var g2 = [this.lerp(endVertex[2], endVertex[4], to), this.lerp(endVertex[3], endVertex[5], to)];
+        var h2 = [this.lerp(e2[0], f2[0], to), this.lerp(e2[1], f2[1], to)];
+        var j2 = [this.lerp(f2[0], g2[0], to), this.lerp(f2[1], g2[1], to)];
+        var k2 = [this.lerp(h2[0], j2[0], to), this.lerp(h2[1], j2[1], to)];
+        values.start = [e2[0], e2[1], startVertex[2], startVertex[3], startVertex[4], startVertex[5]];
+        values.end = [j2[0], j2[1], h2[0], h2[1], k2[0], k2[1]];
+        return values;
+      }
+    }
+  }, {
+    key: "lerp",
+    value: function lerp(a, b, t) {
+      var s = 1 - t;
+      return a * s + b * t;
+    }
+  }, {
+    key: "sumArray",
+    value: function sumArray(arr) {
+      function add(a, b) {
+        return a + b;
+      }
+
+      return arr.reduce(add);
+    }
+  }, {
+    key: "isStraight",
+    value: function isStraight(startX, startY, ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY) {
+      return startX === ctrl1X && startY === ctrl1Y && endX === ctrl2X && endY === ctrl2Y;
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {}
+  }, {
+    key: "reset",
+    value: function reset(reversed) {}
+  }]);
+
+  return Path;
+}();
+
+/* harmony default export */ var objects_Path = (Path_Path);
+// CONCATENATED MODULE: ./src/utils/BezierEasing.js
+/**
+ * BezierEasing - use bezier curve for transition easing function
+ * is based on Firefox's nsSMILKeySpline.cpp
+ * Usage:
+ * var spline = BezierEasing(0.25, 0.1, 0.25, 1.0)
+ * spline(x) => returns the easing value | x must be in [0, 1] range
+ *
+ */
+// These values are established by empiricism with tests (tradeoff: performance VS precision)
+var NEWTON_ITERATIONS = 4;
+var NEWTON_MIN_SLOPE = 0.001;
+var SUBDIVISION_PRECISION = 0.0000001;
+var SUBDIVISION_MAX_ITERATIONS = 10;
+var kSplineTableSize = 11;
+var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+var float32ArraySupported = typeof Float32Array === "function";
+
+function BezierEasing(mX1, mY1, mX2, mY2) {
+  // Validate arguments
+  if (arguments.length !== 4) {
+    throw new Error("BezierEasing requires 4 arguments.");
+  }
+
+  for (var i = 0; i < 4; ++i) {
+    if (typeof arguments[i] !== "number" || isNaN(arguments[i]) || !isFinite(arguments[i])) {
+      throw new Error("BezierEasing arguments should be integers.");
+    }
+  }
+
+  if (mX1 < 0 || mX1 > 1 || mX2 < 0 || mX2 > 1) {
+    throw new Error("BezierEasing x values must be in [0, 1] range.");
+  }
+
+  var mSampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+
+  function A(aA1, aA2) {
+    return 1.0 - 3.0 * aA2 + 3.0 * aA1;
+  }
+
+  function B(aA1, aA2) {
+    return 3.0 * aA2 - 6.0 * aA1;
+  }
+
+  function C(aA1) {
+    return 3.0 * aA1;
+  } // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+
+
+  function calcBezier(aT, aA1, aA2) {
+    return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
+  } // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+
+
+  function getSlope(aT, aA1, aA2) {
+    return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
+  }
+
+  function newtonRaphsonIterate(aX, aGuessT) {
+    for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+      var currentSlope = getSlope(aGuessT, mX1, mX2);
+      if (currentSlope === 0.0) return aGuessT;
+      var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+      aGuessT -= currentX / currentSlope;
+    }
+
+    return aGuessT;
+  }
+
+  function calcSampleValues() {
+    for (var i = 0; i < kSplineTableSize; ++i) {
+      mSampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+    }
+  }
+
+  function binarySubdivide(aX, aA, aB) {
+    var currentX,
+        currentT,
+        i = 0;
+
+    do {
+      currentT = aA + (aB - aA) / 2.0;
+      currentX = calcBezier(currentT, mX1, mX2) - aX;
+
+      if (currentX > 0.0) {
+        aB = currentT;
+      } else {
+        aA = currentT;
+      }
+    } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+
+    return currentT;
+  }
+
+  function getTForX(aX) {
+    var intervalStart = 0.0;
+    var currentSample = 1;
+    var lastSample = kSplineTableSize - 1;
+
+    for (; currentSample != lastSample && mSampleValues[currentSample] <= aX; ++currentSample) {
+      intervalStart += kSampleStepSize;
+    }
+
+    --currentSample; // Interpolate to provide an initial guess for t
+
+    var dist = (aX - mSampleValues[currentSample]) / (mSampleValues[currentSample + 1] - mSampleValues[currentSample]);
+    var guessForT = intervalStart + dist * kSampleStepSize;
+    var initialSlope = getSlope(guessForT, mX1, mX2);
+
+    if (initialSlope >= NEWTON_MIN_SLOPE) {
+      return newtonRaphsonIterate(aX, guessForT);
+    } else if (initialSlope == 0.0) {
+      return guessForT;
+    } else {
+      return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize);
+    }
+  }
+
+  if (mX1 != mY1 || mX2 != mY2) calcSampleValues();
+
+  var f = function f(aX) {
+    if (mX1 === mY1 && mX2 === mY2) return aX; // linear
+    // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+
+    if (aX === 0) return 0;
+    if (aX === 1) return 1;
+    return calcBezier(getTForX(aX), mY1, mY2);
+  };
+
+  var str = "BezierEasing(" + [mX1, mY1, mX2, mY2] + ")";
+
+  f.toString = function () {
+    return str;
+  };
+
+  return f;
+} // CSS mapping
+
+
+BezierEasing.css = {
+  "ease": BezierEasing(0.25, 0.1, 0.25, 1.0),
+  "linear": BezierEasing(0.00, 0.0, 1.00, 1.0),
+  "ease-in": BezierEasing(0.42, 0.0, 1.00, 1.0),
+  "ease-out": BezierEasing(0.00, 0.0, 0.58, 1.0),
+  "ease-in-out": BezierEasing(0.42, 0.0, 0.58, 1.0)
+};
+/* harmony default export */ var utils_BezierEasing = (BezierEasing);
+// CONCATENATED MODULE: ./src/objects/AnimatedPath.js
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function AnimatedPath_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function AnimatedPath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function AnimatedPath_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimatedPath_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimatedPath_defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var AnimatedPath_AnimatedPath =
+/*#__PURE__*/
+function (_Path) {
+  _inherits(AnimatedPath, _Path);
+
+  function AnimatedPath(data) {
+    var _this;
+
+    AnimatedPath_classCallCheck(this, AnimatedPath);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AnimatedPath).call(this, data));
+    _this.frameCount = _this.frames.length;
+    _this.verticesCount = _this.frames[0].v.length;
+    return _this;
+  }
+
+  AnimatedPath_createClass(AnimatedPath, [{
+    key: "getValue",
+    value: function getValue(time) {
+      if (this.finished && time >= this.nextFrame.t) {
+        return this.nextFrame;
+      } else if (!this.started && time <= this.lastFrame.t) {
+        return this.lastFrame;
+      } else {
+        this.started = true;
+        this.finished = false;
+
+        if (time > this.nextFrame.t) {
+          if (this.pointer + 1 === this.frameCount) {
+            this.finished = true;
+          } else {
+            this.pointer++;
+            this.lastFrame = this.frames[this.pointer - 1];
+            this.nextFrame = this.frames[this.pointer];
+            this.onKeyframeChange();
+          }
+        } else if (time < this.lastFrame.t) {
+          if (this.pointer < 2) {
+            this.started = false;
+          } else {
+            this.pointer--;
+            this.lastFrame = this.frames[this.pointer - 1];
+            this.nextFrame = this.frames[this.pointer];
+            this.onKeyframeChange();
+          }
+        }
+
+        return this.getValueAtTime(time);
+      }
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      if (time < this.frames[0].t) {
+        this.pointer = 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+      }
+
+      if (time > this.frames[this.frameCount - 1].t) {
+        this.pointer = this.frameCount - 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+      }
+
+      for (var i = 1; i < this.frameCount; i++) {
+        if (time >= this.frames[i - 1].t && time <= this.frames[i]) {
+          this.pointer = i;
+          this.lastFrame = this.frames[i - 1];
+          this.nextFrame = this.frames[i];
+          this.onKeyframeChange();
+          return;
+        }
+      }
+    }
+  }, {
+    key: "onKeyframeChange",
+    value: function onKeyframeChange() {
+      this.setEasing();
+    }
+  }, {
+    key: "lerp",
+    value: function lerp(a, b, t) {
+      return a + t * (b - a);
+    }
+  }, {
+    key: "setEasing",
+    value: function setEasing() {
+      if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
+        this.easing = new utils_BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
+      } else {
+        this.easing = null;
+      }
+    }
+  }, {
+    key: "getValueAtTime",
+    value: function getValueAtTime(time) {
+      var delta = time - this.lastFrame.t;
+      var duration = this.nextFrame.t - this.lastFrame.t;
+      var elapsed = delta / duration;
+      if (elapsed > 1) elapsed = 1;else if (elapsed < 0) elapsed = 0;else if (this.easing) elapsed = this.easing(elapsed);
+      var actualVertices = [];
+      var actualLength = [];
+
+      for (var i = 0; i < this.verticesCount; i++) {
+        var cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed);
+        var cp1y = this.lerp(this.lastFrame.v[i][1], this.nextFrame.v[i][1], elapsed);
+        var cp2x = this.lerp(this.lastFrame.v[i][2], this.nextFrame.v[i][2], elapsed);
+        var cp2y = this.lerp(this.lastFrame.v[i][3], this.nextFrame.v[i][3], elapsed);
+        var x = this.lerp(this.lastFrame.v[i][4], this.nextFrame.v[i][4], elapsed);
+        var y = this.lerp(this.lastFrame.v[i][5], this.nextFrame.v[i][5], elapsed);
+        actualVertices.push([cp1x, cp1y, cp2x, cp2y, x, y]);
+      }
+
+      for (var j = 0; j < this.verticesCount - 1; j++) {
+        actualLength.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed));
+      }
+
+      return {
+        v: actualVertices,
+        len: actualLength
+      };
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.finished = false;
+      this.started = false;
+      this.pointer = reversed ? this.frameCount - 1 : 1;
+      this.nextFrame = this.frames[this.pointer];
+      this.lastFrame = this.frames[this.pointer - 1];
+      this.onKeyframeChange();
+    }
+  }]);
+
+  return AnimatedPath;
+}(objects_Path);
+
+/* harmony default export */ var objects_AnimatedPath = (AnimatedPath_AnimatedPath);
+// CONCATENATED MODULE: ./src/property/Property.js
+function Property_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Property_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Property_createClass(Constructor, protoProps, staticProps) { if (protoProps) Property_defineProperties(Constructor.prototype, protoProps); if (staticProps) Property_defineProperties(Constructor, staticProps); return Constructor; }
+
+var Property =
+/*#__PURE__*/
+function () {
+  function Property(data) {
+    Property_classCallCheck(this, Property);
+
+    this.frames = data;
+  }
+
+  Property_createClass(Property, [{
+    key: "getValue",
+    value: function getValue() {
+      return this.frames[0].v;
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {}
+  }, {
+    key: "reset",
+    value: function reset(reversed) {}
+  }]);
+
+  return Property;
+}();
+
+/* harmony default export */ var property_Property = (Property);
+// CONCATENATED MODULE: ./src/property/AnimatedProperty.js
+function AnimatedProperty_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { AnimatedProperty_typeof = function _typeof(obj) { return typeof obj; }; } else { AnimatedProperty_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return AnimatedProperty_typeof(obj); }
+
+function AnimatedProperty_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function AnimatedProperty_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function AnimatedProperty_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimatedProperty_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimatedProperty_defineProperties(Constructor, staticProps); return Constructor; }
+
+function AnimatedProperty_possibleConstructorReturn(self, call) { if (call && (AnimatedProperty_typeof(call) === "object" || typeof call === "function")) { return call; } return AnimatedProperty_assertThisInitialized(self); }
+
+function AnimatedProperty_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function AnimatedProperty_getPrototypeOf(o) { AnimatedProperty_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return AnimatedProperty_getPrototypeOf(o); }
+
+function AnimatedProperty_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) AnimatedProperty_setPrototypeOf(subClass, superClass); }
+
+function AnimatedProperty_setPrototypeOf(o, p) { AnimatedProperty_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return AnimatedProperty_setPrototypeOf(o, p); }
+
+
+
+
+var AnimatedProperty_AnimatedProperty =
+/*#__PURE__*/
+function (_Property) {
+  AnimatedProperty_inherits(AnimatedProperty, _Property);
+
+  function AnimatedProperty(data) {
+    var _this;
+
+    AnimatedProperty_classCallCheck(this, AnimatedProperty);
+
+    _this = AnimatedProperty_possibleConstructorReturn(this, AnimatedProperty_getPrototypeOf(AnimatedProperty).call(this, data));
+    _this.frameCount = _this.frames.length;
+    return _this;
+  }
+
+  AnimatedProperty_createClass(AnimatedProperty, [{
+    key: "lerp",
+    value: function lerp(a, b, t) {
+      if (a instanceof Array) {
+        var arr = [];
+
+        for (var i = 0; i < a.length; i++) {
+          arr[i] = a[i] + t * (b[i] - a[i]);
+        }
+
+        return arr;
+      } else {
+        return a + t * (b - a);
+      }
+    }
+  }, {
+    key: "setEasing",
+    value: function setEasing() {
+      if (this.nextFrame.easeIn) {
+        this.easing = new utils_BezierEasing(this.lastFrame.easeOut[0], this.lastFrame.easeOut[1], this.nextFrame.easeIn[0], this.nextFrame.easeIn[1]);
+      } else {
+        this.easing = null;
+      }
+    }
+  }, {
+    key: "getValue",
+    value: function getValue(time) {
+      if (this.finished && time >= this.nextFrame.t) {
+        return this.nextFrame.v;
+      } else if (!this.started && time <= this.lastFrame.t) {
+        return this.lastFrame.v;
+      } else {
+        this.started = true;
+        this.finished = false;
+
+        if (time > this.nextFrame.t) {
+          if (this.pointer + 1 === this.frameCount) {
+            this.finished = true;
+          } else {
+            this.pointer++;
+            this.lastFrame = this.frames[this.pointer - 1];
+            this.nextFrame = this.frames[this.pointer];
+            this.onKeyframeChange();
+          }
+        } else if (time < this.lastFrame.t) {
+          if (this.pointer < 2) {
+            this.started = false;
+          } else {
+            this.pointer--;
+            this.lastFrame = this.frames[this.pointer - 1];
+            this.nextFrame = this.frames[this.pointer];
+            this.onKeyframeChange();
+          }
+        }
+
+        return this.getValueAtTime(time);
+      }
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      //console.log(time, this.frames[this.frameCount - 2].t, this.frames[this.frameCount - 1].t);
+      if (time < this.frames[0].t) {
+        this.pointer = 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+      }
+
+      if (time > this.frames[this.frameCount - 1].t) {
+        this.pointer = this.frameCount - 1;
+        this.nextFrame = this.frames[this.pointer];
+        this.lastFrame = this.frames[this.pointer - 1];
+        this.onKeyframeChange();
+        return;
+      }
+
+      for (var i = 1; i < this.frameCount; i++) {
+        if (time >= this.frames[i - 1].t && time <= this.frames[i].t) {
+          this.pointer = i;
+          this.lastFrame = this.frames[i - 1];
+          this.nextFrame = this.frames[i];
+          this.onKeyframeChange();
+          return;
+        }
+      }
+    }
+  }, {
+    key: "onKeyframeChange",
+    value: function onKeyframeChange() {
+      this.setEasing();
+    }
+  }, {
+    key: "getElapsed",
+    value: function getElapsed(time) {
+      var delta = time - this.lastFrame.t;
+      var duration = this.nextFrame.t - this.lastFrame.t;
+      var elapsed = delta / duration;
+      if (elapsed > 1) elapsed = 1;else if (elapsed < 0) elapsed = 0;else if (this.easing) elapsed = this.easing(elapsed);
+      return elapsed;
+    }
+  }, {
+    key: "getValueAtTime",
+    value: function getValueAtTime(time) {
+      return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.finished = false;
+      this.started = false;
+      this.pointer = reversed ? this.frameCount - 1 : 1;
+      this.nextFrame = this.frames[this.pointer];
+      this.lastFrame = this.frames[this.pointer - 1];
+      this.onKeyframeChange();
+    }
+  }]);
+
+  return AnimatedProperty;
+}(property_Property);
+
+/* harmony default export */ var property_AnimatedProperty = (AnimatedProperty_AnimatedProperty);
+// CONCATENATED MODULE: ./src/transform/Position.js
+function Position_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Position_typeof = function _typeof(obj) { return typeof obj; }; } else { Position_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Position_typeof(obj); }
+
+function Position_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Position_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Position_createClass(Constructor, protoProps, staticProps) { if (protoProps) Position_defineProperties(Constructor.prototype, protoProps); if (staticProps) Position_defineProperties(Constructor, staticProps); return Constructor; }
+
+function Position_possibleConstructorReturn(self, call) { if (call && (Position_typeof(call) === "object" || typeof call === "function")) { return call; } return Position_assertThisInitialized(self); }
+
+function Position_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function Position_getPrototypeOf(o) { Position_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return Position_getPrototypeOf(o); }
+
+function Position_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) Position_setPrototypeOf(subClass, superClass); }
+
+function Position_setPrototypeOf(o, p) { Position_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return Position_setPrototypeOf(o, p); }
+
+
+
+
+var Position_Position =
+/*#__PURE__*/
+function (_AnimatedProperty) {
+  Position_inherits(Position, _AnimatedProperty);
+
+  function Position() {
+    Position_classCallCheck(this, Position);
+
+    return Position_possibleConstructorReturn(this, Position_getPrototypeOf(Position).apply(this, arguments));
+  }
+
+  Position_createClass(Position, [{
+    key: "onKeyframeChange",
+    value: function onKeyframeChange() {
+      this.setEasing();
+      this.setMotionPath();
+    }
+  }, {
+    key: "getValueAtTime",
+    value: function getValueAtTime(time) {
+      if (this.motionpath) {
+        return this.motionpath.getValues(this.getElapsed(time));
+      } else {
+        return this.lerp(this.lastFrame.v, this.nextFrame.v, this.getElapsed(time));
+      }
+    }
+  }, {
+    key: "setMotionPath",
+    value: function setMotionPath() {
+      if (this.lastFrame.motionpath) {
+        this.motionpath = new utils_Bezier(this.lastFrame.motionpath);
+        this.motionpath.getLength(this.lastFrame.len);
+      } else {
+        this.motionpath = null;
+      }
+    }
+  }]);
+
+  return Position;
+}(property_AnimatedProperty);
+
+/* harmony default export */ var transform_Position = (Position_Position);
+// CONCATENATED MODULE: ./src/transform/Transform.js
+function Transform_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Transform_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Transform_createClass(Constructor, protoProps, staticProps) { if (protoProps) Transform_defineProperties(Constructor.prototype, protoProps); if (staticProps) Transform_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+var Transform_Transform =
+/*#__PURE__*/
+function () {
+  function Transform(data) {
+    Transform_classCallCheck(this, Transform);
+
+    if (data.position) {
+      if (data.position.length > 1) {
+        this.position = new transform_Position(data.position);
+      } else {
+        this.position = new property_Property(data.position);
+      }
+    }
+
+    if (data.positionX) this.positionX = data.positionX.length > 1 ? new property_AnimatedProperty(data.positionX) : new property_Property(data.positionX);
+    if (data.positionY) this.positionY = data.positionY.length > 1 ? new property_AnimatedProperty(data.positionY) : new property_Property(data.positionY);
+    if (data.anchor) this.anchor = data.anchor.length > 1 ? new property_AnimatedProperty(data.anchor) : new property_Property(data.anchor);
+    if (data.scaleX) this.scaleX = data.scaleX.length > 1 ? new property_AnimatedProperty(data.scaleX) : new property_Property(data.scaleX);
+    if (data.scaleY) this.scaleY = data.scaleY.length > 1 ? new property_AnimatedProperty(data.scaleY) : new property_Property(data.scaleY);
+    if (data.skew) this.skew = data.skew.length > 1 ? new property_AnimatedProperty(data.skew) : new property_Property(data.skew);
+    if (data.skewAxis) this.skewAxis = data.skewAxis.length > 1 ? new property_AnimatedProperty(data.skewAxis) : new property_Property(data.skewAxis);
+    if (data.rotation) this.rotation = data.rotation.length > 1 ? new property_AnimatedProperty(data.rotation) : new property_Property(data.rotation);
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new property_AnimatedProperty(data.opacity) : new property_Property(data.opacity);
+  }
+
+  Transform_createClass(Transform, [{
+    key: "update",
+    value: function update(ctx, time) {
+      var positionX; // FIXME wrong transparency if nested
+
+      var positionY;
+      var anchor = this.anchor ? this.anchor.getValue(time) : [0, 0];
+      var rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0;
+      var skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0;
+      var skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0;
+      var scaleX = this.scaleX ? this.scaleX.getValue(time) : 1;
+      var scaleY = this.scaleY ? this.scaleY.getValue(time) : 1;
+      var opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha;
+
+      if (this.position) {
+        var position = this.position.getValue(time, ctx);
+        positionX = position[0];
+        positionY = position[1];
+      } else {
+        positionX = this.positionX ? this.positionX.getValue(time) : 0;
+        positionY = this.positionY ? this.positionY.getValue(time) : 0;
+      } // console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
+      //order very very important :)
+
+
+      ctx.transform(1, 0, 0, 1, positionX - anchor[0], positionY - anchor[1]);
+      this.setRotation(ctx, rotation, anchor[0], anchor[1]);
+      this.setSkew(ctx, skew, skewAxis, anchor[0], anchor[1]);
+      this.setScale(ctx, scaleX, scaleY, anchor[0], anchor[1]);
+      ctx.globalAlpha = opacity;
+    }
+  }, {
+    key: "setRotation",
+    value: function setRotation(ctx, rad, x, y) {
+      var c = Math.cos(rad);
+      var s = Math.sin(rad);
+      var dx = x - c * x + s * y;
+      var dy = y - s * x - c * y;
+      ctx.transform(c, s, -s, c, dx, dy);
+    }
+  }, {
+    key: "setScale",
+    value: function setScale(ctx, sx, sy, x, y) {
+      ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y);
+    }
+  }, {
+    key: "setSkew",
+    value: function setSkew(ctx, skew, axis, x, y) {
+      var t = Math.tan(-skew);
+      this.setRotation(ctx, -axis, x, y);
+      ctx.transform(1, 0, t, 1, -y * t, 0);
+      this.setRotation(ctx, axis, x, y);
+    }
+  }, {
+    key: "deg2rad",
+    value: function deg2rad(deg) {
+      return deg * (Math.PI / 180);
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      if (this.anchor) this.anchor.setKeyframes(time);
+      if (this.rotation) this.rotation.setKeyframes(time);
+      if (this.skew) this.skew.setKeyframes(time);
+      if (this.skewAxis) this.skewAxis.setKeyframes(time);
+      if (this.position) this.position.setKeyframes(time);
+      if (this.positionX) this.positionX.setKeyframes(time);
+      if (this.positionY) this.positionY.setKeyframes(time);
+      if (this.scaleX) this.scaleX.setKeyframes(time);
+      if (this.scaleY) this.scaleY.setKeyframes(time);
+      if (this.opacity) this.opacity.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      if (this.anchor) this.anchor.reset(reversed);
+      if (this.rotation) this.rotation.reset(reversed);
+      if (this.skew) this.skew.reset(reversed);
+      if (this.skewAxis) this.skewAxis.reset(reversed);
+      if (this.position) this.position.reset(reversed);
+      if (this.positionX) this.positionX.reset(reversed);
+      if (this.positionY) this.positionY.reset(reversed);
+      if (this.scaleX) this.scaleX.reset(reversed);
+      if (this.scaleY) this.scaleY.reset(reversed);
+      if (this.opacity) this.opacity.reset(reversed);
+    }
+  }]);
+
+  return Transform;
+}();
+
+/* harmony default export */ var transform_Transform = (Transform_Transform);
+// CONCATENATED MODULE: ./src/effects/DropShadow.js
+function DropShadow_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function DropShadow_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function DropShadow_createClass(Constructor, protoProps, staticProps) { if (protoProps) DropShadow_defineProperties(Constructor.prototype, protoProps); if (staticProps) DropShadow_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var DropShadow_DropShadow =
+/*#__PURE__*/
+function () {
+  function DropShadow(data) {
+    DropShadow_classCallCheck(this, DropShadow);
+
+    this.color = data.color.length > 1 ? new property_AnimatedProperty(data.color) : new property_Property(data.color);
+    this.opacity = data.opacity.length > 1 ? new property_AnimatedProperty(data.opacity) : new property_Property(data.opacity);
+    this.direction = data.direction.length > 1 ? new property_AnimatedProperty(data.direction) : new property_Property(data.direction);
+    this.distance = data.distance.length > 1 ? new property_AnimatedProperty(data.distance) : new property_Property(data.distance);
+    this.softness = data.softness.length > 1 ? new property_AnimatedProperty(data.softness) : new property_Property(data.softness);
+  }
+
+  DropShadow_createClass(DropShadow, [{
+    key: "getColor",
+    value: function getColor(time) {
+      var color = this.color.getValue(time);
+      var opacity = this.opacity.getValue(time);
+      return "rgba(".concat(Math.round(color[0]), ", ").concat(Math.round(color[1]), ", ").concat(Math.round(color[2]), ", ").concat(opacity, ")");
+    }
+  }, {
+    key: "setShadow",
+    value: function setShadow(ctx, time) {
+      var color = this.getColor(time);
+      var dist = this.distance.getValue(time);
+      var blur = this.softness.getValue(time);
+      ctx.shadowColor = color;
+      ctx.shadowOffsetX = dist;
+      ctx.shadowOffsetY = dist;
+      ctx.shadowBlur = blur;
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.color.setKeyframes(time);
+      this.opacity.setKeyframes(time);
+      this.direction.setKeyframes(time);
+      this.distance.setKeyframes(time);
+      this.softness.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.color.reset(reversed);
+      this.opacity.reset(reversed);
+      this.direction.reset(reversed);
+      this.distance.reset(reversed);
+      this.softness.reset(reversed);
+    }
+  }]);
+
+  return DropShadow;
+}();
+
+/* harmony default export */ var effects_DropShadow = (DropShadow_DropShadow);
+// CONCATENATED MODULE: ./src/layers/BaseLayer.js
+function BaseLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function BaseLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function BaseLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) BaseLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) BaseLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
+var BaseLayer_BaseLayer =
+/*#__PURE__*/
+function () {
+  function BaseLayer(data) {
+    BaseLayer_classCallCheck(this, BaseLayer);
+
+    this.index = data.index;
+    this.in = data.in || 0;
+    this.out = data.out;
+    if (data.parent) this.parent = data.parent;
+    this.transform = new transform_Transform(data.transform);
+
+    if (data.effects) {
+      if (data.effects.dropShadow) {
+        this.dropShadow = new effects_DropShadow(data.effects.dropShadow);
+      }
+    }
+
+    if (data.masks) {
+      this.masks = data.masks.map(function (mask) {
+        return mask.isAnimated ? new objects_AnimatedPath(mask) : new objects_Path(mask);
+      });
+    }
+  }
+
+  BaseLayer_createClass(BaseLayer, [{
+    key: "draw",
+    value: function draw(ctx, time) {
+      ctx.save();
+      if (this.parent) this.parent.setParentTransform(ctx, time);
+      this.transform.update(ctx, time);
+
+      if (this.dropShadow) {
+        this.dropShadow.setShadow(ctx, time);
+      }
+
+      if (this.masks) {
+        ctx.beginPath();
+        this.masks.forEach(function (mask) {
+          return mask.draw(ctx, time);
+        });
+        ctx.clip();
+      }
+    }
+  }, {
+    key: "setParentTransform",
+    value: function setParentTransform(ctx, time) {
+      if (this.parent) this.parent.setParentTransform(ctx, time);
+      this.transform.update(ctx, time);
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.transform.setKeyframes(time);
+      if (this.masks) this.masks.forEach(function (mask) {
+        return mask.setKeyframes(time);
+      });
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.transform.reset(reversed);
+      if (this.masks) this.masks.forEach(function (mask) {
+        return mask.reset(reversed);
+      });
+    }
+  }]);
+
+  return BaseLayer;
+}();
+
+/* harmony default export */ var layers_BaseLayer = (BaseLayer_BaseLayer);
+// CONCATENATED MODULE: ./src/layers/ImageLayer.js
+function ImageLayer_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { ImageLayer_typeof = function _typeof(obj) { return typeof obj; }; } else { ImageLayer_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return ImageLayer_typeof(obj); }
+
+function ImageLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function ImageLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function ImageLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImageLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImageLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+function ImageLayer_possibleConstructorReturn(self, call) { if (call && (ImageLayer_typeof(call) === "object" || typeof call === "function")) { return call; } return ImageLayer_assertThisInitialized(self); }
+
+function ImageLayer_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = ImageLayer_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function ImageLayer_getPrototypeOf(o) { ImageLayer_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return ImageLayer_getPrototypeOf(o); }
+
+function ImageLayer_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) ImageLayer_setPrototypeOf(subClass, superClass); }
+
+function ImageLayer_setPrototypeOf(o, p) { ImageLayer_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return ImageLayer_setPrototypeOf(o, p); }
+
+
+
+var ImageLayer =
+/*#__PURE__*/
+function (_BaseLayer) {
+  ImageLayer_inherits(ImageLayer, _BaseLayer);
+
+  function ImageLayer(data) {
+    var _this;
+
+    ImageLayer_classCallCheck(this, ImageLayer);
+
+    _this = ImageLayer_possibleConstructorReturn(this, ImageLayer_getPrototypeOf(ImageLayer).call(this, data));
+    _this.source = data.source;
+    _this.isLoaded = false;
+    return _this;
+  }
+
+  ImageLayer_createClass(ImageLayer, [{
+    key: "preload",
+    value: function preload(cb) {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        _this2.img = new Image();
+
+        _this2.img.onload = function () {
+          _this2.isLoaded = true;
+          resolve();
+        };
+
+        _this2.img.src = _this2.source;
+      });
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx, time) {
+      _get(ImageLayer_getPrototypeOf(ImageLayer.prototype), "draw", this).call(this, ctx, time);
+
+      ctx.drawImage(this.img, 0, 0);
+      ctx.restore();
+    }
+  }]);
+
+  return ImageLayer;
+}(layers_BaseLayer);
+
+/* harmony default export */ var layers_ImageLayer = (ImageLayer);
+// CONCATENATED MODULE: ./src/layers/NullLayer.js
+function NullLayer_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { NullLayer_typeof = function _typeof(obj) { return typeof obj; }; } else { NullLayer_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return NullLayer_typeof(obj); }
+
+function NullLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function NullLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function NullLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) NullLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) NullLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+function NullLayer_possibleConstructorReturn(self, call) { if (call && (NullLayer_typeof(call) === "object" || typeof call === "function")) { return call; } return NullLayer_assertThisInitialized(self); }
+
+function NullLayer_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function NullLayer_get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { NullLayer_get = Reflect.get; } else { NullLayer_get = function _get(target, property, receiver) { var base = NullLayer_superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return NullLayer_get(target, property, receiver || target); }
+
+function NullLayer_superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = NullLayer_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function NullLayer_getPrototypeOf(o) { NullLayer_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return NullLayer_getPrototypeOf(o); }
+
+function NullLayer_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) NullLayer_setPrototypeOf(subClass, superClass); }
+
+function NullLayer_setPrototypeOf(o, p) { NullLayer_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return NullLayer_setPrototypeOf(o, p); }
+
+
+
+var NullLayer =
+/*#__PURE__*/
+function (_BaseLayer) {
+  NullLayer_inherits(NullLayer, _BaseLayer);
+
+  function NullLayer(data) {
+    NullLayer_classCallCheck(this, NullLayer);
+
+    return NullLayer_possibleConstructorReturn(this, NullLayer_getPrototypeOf(NullLayer).call(this, data));
+  }
+
+  NullLayer_createClass(NullLayer, [{
+    key: "draw",
+    value: function draw(ctx, time) {
+      NullLayer_get(NullLayer_getPrototypeOf(NullLayer.prototype), "draw", this).call(this, ctx, time);
+
+      ctx.restore();
+    }
+  }]);
+
+  return NullLayer;
+}(layers_BaseLayer);
+
+/* harmony default export */ var layers_NullLayer = (NullLayer);
+// CONCATENATED MODULE: ./src/layers/TextLayer.js
+function TextLayer_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { TextLayer_typeof = function _typeof(obj) { return typeof obj; }; } else { TextLayer_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return TextLayer_typeof(obj); }
+
+function TextLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function TextLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function TextLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) TextLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) TextLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+function TextLayer_possibleConstructorReturn(self, call) { if (call && (TextLayer_typeof(call) === "object" || typeof call === "function")) { return call; } return TextLayer_assertThisInitialized(self); }
+
+function TextLayer_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function TextLayer_get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { TextLayer_get = Reflect.get; } else { TextLayer_get = function _get(target, property, receiver) { var base = TextLayer_superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return TextLayer_get(target, property, receiver || target); }
+
+function TextLayer_superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = TextLayer_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function TextLayer_getPrototypeOf(o) { TextLayer_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return TextLayer_getPrototypeOf(o); }
+
+function TextLayer_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) TextLayer_setPrototypeOf(subClass, superClass); }
+
+function TextLayer_setPrototypeOf(o, p) { TextLayer_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return TextLayer_setPrototypeOf(o, p); }
+
+
+
+var TextLayer =
+/*#__PURE__*/
+function (_BaseLayer) {
+  TextLayer_inherits(TextLayer, _BaseLayer);
+
+  function TextLayer(data, baseFont) {
+    var _this;
+
+    TextLayer_classCallCheck(this, TextLayer);
+
+    _this = TextLayer_possibleConstructorReturn(this, TextLayer_getPrototypeOf(TextLayer).call(this, data));
+    _this.text = data.text;
+    _this.leading = data.leading;
+    _this.fontSize = data.fontSize;
+    _this.font = data.font;
+    _this.color = data.color;
+    _this.justification = data.justification;
+    _this.baseFont = baseFont;
+    return _this;
+  }
+
+  TextLayer_createClass(TextLayer, [{
+    key: "draw",
+    value: function draw(ctx, time) {
+      TextLayer_get(TextLayer_getPrototypeOf(TextLayer.prototype), "draw", this).call(this, ctx, time);
+
+      ctx.textAlign = this.justification;
+      ctx.font = "".concat(this.fontSize, "px ").concat(this.baseFont) || this.font;
+      ctx.fillStyle = "rgb(".concat(this.color[0], ", ").concat(this.color[1], ", ").concat(this.color[2], ")");
+
+      for (var j = 0; j < this.text.length; j++) {
+        ctx.fillText(this.text[j], 0, j * this.leading);
+      }
+
+      ctx.restore();
+    }
+  }]);
+
+  return TextLayer;
+}(layers_BaseLayer);
+
+/* harmony default export */ var layers_TextLayer = (TextLayer);
+// CONCATENATED MODULE: ./src/objects/Ellipse.js
+function Ellipse_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Ellipse_typeof = function _typeof(obj) { return typeof obj; }; } else { Ellipse_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Ellipse_typeof(obj); }
+
+function Ellipse_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Ellipse_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Ellipse_createClass(Constructor, protoProps, staticProps) { if (protoProps) Ellipse_defineProperties(Constructor.prototype, protoProps); if (staticProps) Ellipse_defineProperties(Constructor, staticProps); return Constructor; }
+
+function Ellipse_possibleConstructorReturn(self, call) { if (call && (Ellipse_typeof(call) === "object" || typeof call === "function")) { return call; } return Ellipse_assertThisInitialized(self); }
+
+function Ellipse_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function Ellipse_getPrototypeOf(o) { Ellipse_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return Ellipse_getPrototypeOf(o); }
+
+function Ellipse_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) Ellipse_setPrototypeOf(subClass, superClass); }
+
+function Ellipse_setPrototypeOf(o, p) { Ellipse_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return Ellipse_setPrototypeOf(o, p); }
+
+
+
+
+
+var Ellipse_Ellipse =
+/*#__PURE__*/
+function (_Path) {
+  Ellipse_inherits(Ellipse, _Path);
+
+  function Ellipse(data) {
+    var _this;
+
+    Ellipse_classCallCheck(this, Ellipse);
+
+    _this = Ellipse_possibleConstructorReturn(this, Ellipse_getPrototypeOf(Ellipse).call(this, data));
+    _this.closed = true;
+    _this.size = data.size.length > 1 ? new property_AnimatedProperty(data.size) : new property_Property(data.size);
+    if (data.position) _this.position = data.position.length > 1 ? new property_AnimatedProperty(data.position) : new property_Property(data.position);
+    return _this;
+  }
+
+  Ellipse_createClass(Ellipse, [{
+    key: "draw",
+    value: function draw(ctx, time, trim) {
+      var size = this.size.getValue(time);
+      var position = this.position ? this.position.getValue(time) : [0, 0];
+      var i;
+      var j;
+      var w = size[0] / 2;
+      var h = size[1] / 2;
+      var x = position[0] - w;
+      var y = position[1] - h;
+      var ow = w * .5522848;
+      var oh = h * .5522848;
+      var vertices = [[x + w + ow, y, x + w - ow, y, x + w, y], [x + w + w, y + h + oh, x + w + w, y + h - oh, x + w + w, y + h], [x + w - ow, y + h + h, x + w + ow, y + h + h, x + w, y + h + h], [x, y + h - oh, x, y + h + oh, x, y + h]];
+
+      if (trim) {
+        var tv;
+        var len = w + h;
+        trim = this.getTrimValues(trim);
+
+        for (i = 0; i < 4; i++) {
+          j = i + 1;
+          if (j > 3) j = 0;
+
+          if (i > trim.startIndex && i < trim.endIndex) {
+            ctx.bezierCurveTo(vertices[i][0], vertices[i][1], vertices[j][2], vertices[j][3], vertices[j][4], vertices[j][5]);
+          } else if (i === trim.startIndex && i === trim.endIndex) {
+            tv = this.trim(vertices[i], vertices[j], trim.start, trim.end, len);
+            ctx.moveTo(tv.start[4], tv.start[5]);
+            ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+          } else if (i === trim.startIndex) {
+            tv = this.trim(vertices[i], vertices[j], trim.start, 1, len);
+            ctx.moveTo(tv.start[4], tv.start[5]);
+            ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+          } else if (i === trim.endIndex) {
+            tv = this.trim(vertices[i], vertices[j], 0, trim.end, len);
+            ctx.bezierCurveTo(tv.start[0], tv.start[1], tv.end[2], tv.end[3], tv.end[4], tv.end[5]);
+          }
+        }
+      } else {
+        ctx.moveTo(vertices[0][4], vertices[0][5]);
+
+        for (i = 0; i < 4; i++) {
+          j = i + 1;
+          if (j > 3) j = 0;
+          ctx.bezierCurveTo(vertices[i][0], vertices[i][1], vertices[j][2], vertices[j][3], vertices[j][4], vertices[j][5]);
+        }
+      }
+    }
+  }, {
+    key: "getTrimValues",
+    value: function getTrimValues(trim) {
+      var startIndex = Math.floor(trim.start * 4);
+      var endIndex = Math.floor(trim.end * 4);
+      var start = (trim.start - startIndex * 0.25) * 4;
+      var end = (trim.end - endIndex * 0.25) * 4;
+      return {
+        startIndex: startIndex,
+        endIndex: endIndex,
+        start: start,
+        end: end
+      };
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.size.setKeyframes(time);
+      if (this.position) this.position.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.size.reset(reversed);
+      if (this.position) this.position.reset(reversed);
+    }
+  }]);
+
+  return Ellipse;
+}(objects_Path);
+
+/* harmony default export */ var objects_Ellipse = (Ellipse_Ellipse);
+// CONCATENATED MODULE: ./src/objects/Polystar.js
+function Polystar_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Polystar_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Polystar_createClass(Constructor, protoProps, staticProps) { if (protoProps) Polystar_defineProperties(Constructor.prototype, protoProps); if (staticProps) Polystar_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Polystar_Polystar =
+/*#__PURE__*/
+function () {
+  function Polystar(data) {
+    Polystar_classCallCheck(this, Polystar);
+
+    //this.name = data.name;
+    this.closed = true; // TODO ??
+
+    this.starType = data.starType;
+    this.points = data.points.length > 1 ? new property_AnimatedProperty(data.points) : new property_Property(data.points);
+    this.innerRadius = data.innerRadius.length > 1 ? new property_AnimatedProperty(data.innerRadius) : new property_Property(data.innerRadius);
+    this.outerRadius = data.outerRadius.length > 1 ? new property_AnimatedProperty(data.outerRadius) : new property_Property(data.outerRadius);
+    if (data.position) this.position = data.position.length > 1 ? new property_AnimatedProperty(data.position) : new property_Property(data.position);
+    if (data.rotation) this.rotation = data.rotation.length > 1 ? new property_AnimatedProperty(data.rotation) : new property_Property(data.rotation);
+    if (data.innerRoundness) this.innerRoundness = data.innerRoundness.length > 1 ? new property_AnimatedProperty(data.innerRoundness) : new property_Property(data.innerRoundness);
+    if (data.outerRoundness) this.outerRoundness = data.outerRoundness.length > 1 ? new property_AnimatedProperty(data.outerRoundness) : new property_Property(data.outerRoundness);
+  }
+
+  Polystar_createClass(Polystar, [{
+    key: "draw",
+    value: function draw(ctx, time) {
+      var points = this.points.getValue(time);
+      var innerRadius = this.innerRadius.getValue(time);
+      var outerRadius = this.outerRadius.getValue(time);
+      var position = this.position ? this.position.getValue(time) : [0, 0];
+      var rotation = this.rotation ? this.rotation.getValue(time) : 0;
+      var innerRoundness = this.innerRoundness ? this.innerRoundness.getValue(time) : 0;
+      var outerRoundness = this.outerRoundness ? this.outerRoundness.getValue(time) : 0;
+      rotation = this.deg2rad(rotation);
+      var start = this.rotatePoint(0, 0, 0, 0 - outerRadius, rotation);
+      ctx.save();
+      ctx.beginPath();
+      ctx.translate(position[0], position[1]);
+      ctx.moveTo(start[0], start[1]);
+
+      for (var i = 0; i < points; i++) {
+        var pInner = void 0;
+        var pOuter = void 0;
+        var pOuter1Tangent = void 0;
+        var pOuter2Tangent = void 0;
+        var pInner1Tangent = void 0;
+        var pInner2Tangent = void 0;
+        var outerOffset = void 0;
+        var innerOffset = void 0;
+        var rot = void 0;
+        rot = Math.PI / points * 2;
+        pInner = this.rotatePoint(0, 0, 0, 0 - innerRadius, rot * (i + 1) - rot / 2 + rotation);
+        pOuter = this.rotatePoint(0, 0, 0, 0 - outerRadius, rot * (i + 1) + rotation); //FIxME
+
+        if (!outerOffset) outerOffset = (start[0] + pInner[0]) * outerRoundness / 100 * .5522848;
+        if (!innerOffset) innerOffset = (start[0] + pInner[0]) * innerRoundness / 100 * .5522848;
+        pOuter1Tangent = this.rotatePoint(0, 0, outerOffset, 0 - outerRadius, rot * i + rotation);
+        pInner1Tangent = this.rotatePoint(0, 0, innerOffset * -1, 0 - innerRadius, rot * (i + 1) - rot / 2 + rotation);
+        pInner2Tangent = this.rotatePoint(0, 0, innerOffset, 0 - innerRadius, rot * (i + 1) - rot / 2 + rotation);
+        pOuter2Tangent = this.rotatePoint(0, 0, outerOffset * -1, 0 - outerRadius, rot * (i + 1) + rotation);
+
+        if (this.starType === 1) {
+          //star
+          ctx.bezierCurveTo(pOuter1Tangent[0], pOuter1Tangent[1], pInner1Tangent[0], pInner1Tangent[1], pInner[0], pInner[1]);
+          ctx.bezierCurveTo(pInner2Tangent[0], pInner2Tangent[1], pOuter2Tangent[0], pOuter2Tangent[1], pOuter[0], pOuter[1]);
+        } else {
+          //polygon
+          ctx.bezierCurveTo(pOuter1Tangent[0], pOuter1Tangent[1], pOuter2Tangent[0], pOuter2Tangent[1], pOuter[0], pOuter[1]);
+        } //debug
+        //ctx.fillStyle = "black";
+        //ctx.fillRect(pInner[0], pInner[1], 5, 5);
+        //ctx.fillRect(pOuter[0], pOuter[1], 5, 5);
+        //ctx.fillStyle = "blue";
+        //ctx.fillRect(pOuter1Tangent[0], pOuter1Tangent[1], 5, 5);
+        //ctx.fillStyle = "red";
+        //ctx.fillRect(pInner1Tangent[0], pInner1Tangent[1], 5, 5);
+        //ctx.fillStyle = "green";
+        //ctx.fillRect(pInner2Tangent[0], pInner2Tangent[1], 5, 5);
+        //ctx.fillStyle = "brown";
+        //ctx.fillRect(pOuter2Tangent[0], pOuter2Tangent[1], 5, 5);
+
+      }
+
+      ctx.restore();
+    }
+  }, {
+    key: "rotatePoint",
+    value: function rotatePoint(cx, cy, x, y, radians) {
+      var cos = Math.cos(radians);
+      var sin = Math.sin(radians);
+      var nx = cos * (x - cx) - sin * (y - cy) + cx;
+      var ny = sin * (x - cx) + cos * (y - cy) + cy;
+      return [nx, ny];
+    }
+  }, {
+    key: "deg2rad",
+    value: function deg2rad(deg) {
+      return deg * (Math.PI / 180);
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.points.setKeyframes(time);
+      this.innerRadius.setKeyframes(time);
+      this.outerRadius.setKeyframes(time);
+      if (this.position) this.position.setKeyframes(time);
+      if (this.rotation) this.rotation.setKeyframes(time);
+      if (this.innerRoundness) this.innerRoundness.setKeyframes(time);
+      if (this.outerRoundness) this.outerRoundness.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.points.reset(reversed);
+      this.innerRadius.reset(reversed);
+      this.outerRadius.reset(reversed);
+      if (this.position) this.position.reset(reversed);
+      if (this.rotation) this.rotation.reset(reversed);
+      if (this.innerRoundness) this.innerRoundness.reset(reversed);
+      if (this.outerRoundness) this.outerRoundness.reset(reversed);
+    }
+  }]);
+
+  return Polystar;
+}();
+
+/* harmony default export */ var objects_Polystar = (Polystar_Polystar);
+// CONCATENATED MODULE: ./src/objects/Rect.js
+function Rect_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Rect_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Rect_createClass(Constructor, protoProps, staticProps) { if (protoProps) Rect_defineProperties(Constructor.prototype, protoProps); if (staticProps) Rect_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Rect_Rect =
+/*#__PURE__*/
+function () {
+  function Rect(data) {
+    Rect_classCallCheck(this, Rect);
+
+    //this.name = data.name;
+    this.closed = true;
+    this.size = data.size.length > 1 ? new property_AnimatedProperty(data.size) : new property_Property(data.size); //optionals
+
+    if (data.position) this.position = data.position.length > 1 ? new property_AnimatedProperty(data.position) : new property_Property(data.position);
+    if (data.roundness) this.roundness = data.roundness.length > 1 ? new property_AnimatedProperty(data.roundness) : new property_Property(data.roundness);
+  }
+
+  Rect_createClass(Rect, [{
+    key: "draw",
+    value: function draw(ctx, time, trim) {
+      var size = this.size.getValue(time);
+      var position = this.position ? this.position.getValue(time) : [0, 0];
+      var roundness = this.roundness ? this.roundness.getValue(time) : 0;
+      if (size[0] < 2 * roundness) roundness = size[0] / 2;
+      if (size[1] < 2 * roundness) roundness = size[1] / 2;
+      var x = position[0] - size[0] / 2;
+      var y = position[1] - size[1] / 2;
+
+      if (trim) {// let tv;
+        // trim = this.getTrimValues(trim);
+        //TODO add trim
+      } else {
+        ctx.moveTo(x + roundness, y);
+        ctx.arcTo(x + size[0], y, x + size[0], y + size[1], roundness);
+        ctx.arcTo(x + size[0], y + size[1], x, y + size[1], roundness);
+        ctx.arcTo(x, y + size[1], x, y, roundness);
+        ctx.arcTo(x, y, x + size[0], y, roundness);
+      }
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.size.setKeyframes(time);
+      if (this.position) this.position.setKeyframes(time);
+      if (this.roundness) this.roundness.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.size.reset(reversed);
+      if (this.position) this.position.reset(reversed);
+      if (this.roundness) this.roundness.reset(reversed);
+    }
+  }]);
+
+  return Rect;
+}();
+
+/* harmony default export */ var objects_Rect = (Rect_Rect);
+// CONCATENATED MODULE: ./src/property/Fill.js
+function Fill_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Fill_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Fill_createClass(Constructor, protoProps, staticProps) { if (protoProps) Fill_defineProperties(Constructor.prototype, protoProps); if (staticProps) Fill_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Fill_Fill =
+/*#__PURE__*/
+function () {
+  function Fill(data) {
+    Fill_classCallCheck(this, Fill);
+
+    this.color = data.color.length > 1 ? new property_AnimatedProperty(data.color) : new property_Property(data.color);
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new property_AnimatedProperty(data.opacity) : new property_Property(data.opacity);
+  }
+
+  Fill_createClass(Fill, [{
+    key: "getValue",
+    value: function getValue(time) {
+      var color = this.color.getValue(time);
+      var opacity = this.opacity ? this.opacity.getValue(time) : 1;
+      return "rgba(".concat(Math.round(color[0]), ", ").concat(Math.round(color[1]), ", ").concat(Math.round(color[2]), ", ").concat(opacity, ")");
+    }
+  }, {
+    key: "update",
+    value: function update(ctx, time) {
+      var color = this.getValue(time);
+      ctx.fillStyle = color;
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.color.setKeyframes(time);
+      if (this.opacity) this.opacity.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.color.reset(reversed);
+      if (this.opacity) this.opacity.reset(reversed);
+    }
+  }]);
+
+  return Fill;
+}();
+
+/* harmony default export */ var property_Fill = (Fill_Fill);
+// CONCATENATED MODULE: ./src/property/GradientFill.js
+function GradientFill_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function GradientFill_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function GradientFill_createClass(Constructor, protoProps, staticProps) { if (protoProps) GradientFill_defineProperties(Constructor.prototype, protoProps); if (staticProps) GradientFill_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var GradientFill_GradientFill =
+/*#__PURE__*/
+function () {
+  function GradientFill(data, gradients) {
+    GradientFill_classCallCheck(this, GradientFill);
+
+    if (!gradients[data.name]) gradients[data.name] = [];
+    gradients[data.name].push(this);
+    this.stops = data.stops;
+    this.type = data.type;
+    this.startPoint = data.startPoint.length > 1 ? new property_AnimatedProperty(data.startPoint) : new property_Property(data.startPoint);
+    this.endPoint = data.endPoint.length > 1 ? new property_AnimatedProperty(data.endPoint) : new property_Property(data.endPoint);
+    if (data.opacity) this.opacity = data.opacity.length > 1 ? new property_AnimatedProperty(data.opacity) : new property_Property(data.opacity);
+  }
+
+  GradientFill_createClass(GradientFill, [{
+    key: "update",
+    value: function update(ctx, time) {
+      var startPoint = this.startPoint.getValue(time);
+      var endPoint = this.endPoint.getValue(time);
+      var radius = 0;
+
+      if (this.type === 'radial') {
+        var distX = startPoint[0] - endPoint[0];
+        var distY = startPoint[1] - endPoint[1];
+        radius = Math.sqrt(distX * distX + distY * distY);
+      }
+
+      var gradient = this.type === 'radial' ? ctx.createRadialGradient(startPoint[0], startPoint[1], 0, startPoint[0], startPoint[1], radius) : ctx.createLinearGradient(startPoint[0], startPoint[1], endPoint[0], endPoint[1]);
+      var opacity = this.opacity ? this.opacity.getValue(time) : 1;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.stops[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var stop = _step.value;
+          var color = stop.color;
+          gradient.addColorStop(stop.location, "rgba(".concat(color[0], ", ").concat(color[1], ", ").concat(color[2], ", ").concat(color[3] * opacity, ")"));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      ctx.fillStyle = gradient;
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      if (this.opacity) this.opacity.setKeyframes(time);
+      this.startPoint.setKeyframes(time);
+      this.endPoint.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      if (this.opacity) this.opacity.setKeyframes(reversed);
+      this.startPoint.setKeyframes(reversed);
+      this.endPoint.setKeyframes(reversed);
+    }
+  }]);
+
+  return GradientFill;
+}();
+
+/* harmony default export */ var property_GradientFill = (GradientFill_GradientFill);
+// CONCATENATED MODULE: ./src/property/Stroke.js
+function Stroke_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Stroke_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Stroke_createClass(Constructor, protoProps, staticProps) { if (protoProps) Stroke_defineProperties(Constructor.prototype, protoProps); if (staticProps) Stroke_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Stroke_Stroke =
+/*#__PURE__*/
+function () {
+  function Stroke(data) {
+    Stroke_classCallCheck(this, Stroke);
+
+    if (data) {
+      this.join = data.join;
+      this.cap = data.cap;
+
+      if (data.miterLimit) {
+        if (data.miterLimit.length > 1) this.miterLimit = new property_AnimatedProperty(data.miterLimit);else this.miterLimit = new property_Property(data.miterLimit);
+      }
+
+      if (data.color.length > 1) this.color = new property_AnimatedProperty(data.color);else this.color = new property_Property(data.color);
+      if (data.opacity.length > 1) this.opacity = new property_AnimatedProperty(data.opacity);else this.opacity = new property_Property(data.opacity);
+      if (data.width.length > 1) this.width = new property_AnimatedProperty(data.width);else this.width = new property_Property(data.width);
+
+      if (data.dashes) {
+        this.dashes = {};
+        if (data.dashes.dash.length > 1) this.dashes.dash = new property_AnimatedProperty(data.dashes.dash);else this.dashes.dash = new property_Property(data.dashes.dash);
+        if (data.dashes.gap.length > 1) this.dashes.gap = new property_AnimatedProperty(data.dashes.gap);else this.dashes.gap = new property_Property(data.dashes.gap);
+        if (data.dashes.offset.length > 1) this.dashes.offset = new property_AnimatedProperty(data.dashes.offset);else this.dashes.offset = new property_Property(data.dashes.offset);
+      }
+    }
+  }
+
+  Stroke_createClass(Stroke, [{
+    key: "getValue",
+    value: function getValue(time) {
+      var color = this.color.getValue(time);
+      var opacity = this.opacity.getValue(time);
+      color[0] = Math.round(color[0]);
+      color[1] = Math.round(color[1]);
+      color[2] = Math.round(color[2]);
+      var s = color.join(', ');
+      return "rgba(".concat(s, ", ").concat(opacity, ")");
+    }
+  }, {
+    key: "update",
+    value: function update(ctx, time) {
+      var strokeColor = this.getValue(time);
+      var strokeWidth = this.width.getValue(time);
+      var strokeJoin = this.join;
+      var miterLimit;
+      if (strokeJoin === 'miter') miterLimit = this.miterLimit.getValue(time);
+      ctx.lineWidth = strokeWidth;
+      ctx.lineJoin = strokeJoin;
+      if (miterLimit) ctx.miterLimit = miterLimit;
+      ctx.lineCap = this.cap;
+      ctx.strokeStyle = strokeColor;
+
+      if (this.dashes) {
+        ctx.setLineDash([this.dashes.dash.getValue(time), this.dashes.gap.getValue(time)]);
+        ctx.lineDashOffset = this.dashes.offset.getValue(time);
+      }
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.color.setKeyframes(time);
+      this.opacity.setKeyframes(time);
+      this.width.setKeyframes(time);
+      if (this.miterLimit) this.miterLimit.setKeyframes(time);
+
+      if (this.dashes) {
+        this.dashes.dash.setKeyframes(time);
+        this.dashes.gap.setKeyframes(time);
+        this.dashes.offset.setKeyframes(time);
+      }
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      this.color.reset(reversed);
+      this.opacity.reset(reversed);
+      this.width.reset(reversed);
+      if (this.miterLimit) this.miterLimit.reset(reversed);
+
+      if (this.dashes) {
+        this.dashes.dash.reset(reversed);
+        this.dashes.gap.reset(reversed);
+        this.dashes.offset.reset(reversed);
+      }
+    }
+  }]);
+
+  return Stroke;
+}();
+
+/* harmony default export */ var property_Stroke = (Stroke_Stroke);
+// CONCATENATED MODULE: ./src/property/Trim.js
+function Trim_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Trim_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Trim_createClass(Constructor, protoProps, staticProps) { if (protoProps) Trim_defineProperties(Constructor.prototype, protoProps); if (staticProps) Trim_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Trim_Trim =
+/*#__PURE__*/
+function () {
+  function Trim(data) {
+    Trim_classCallCheck(this, Trim);
+
+    this.type = data.type;
+    if (data.start) this.start = data.start.length > 1 ? new property_AnimatedProperty(data.start) : new property_Property(data.start);
+    if (data.end) this.end = data.end.length > 1 ? new property_AnimatedProperty(data.end) : new property_Property(data.end);
+    if (data.offset) this.offset = data.offset.length > 1 ? new property_AnimatedProperty(data.offset) : new property_Property(data.offset);
+  }
+
+  Trim_createClass(Trim, [{
+    key: "getTrim",
+    value: function getTrim(time) {
+      var startValue = this.start ? this.start.getValue(time) : 0;
+      var endValue = this.end ? this.end.getValue(time) : 1;
+      var start = Math.min(startValue, endValue);
+      var end = Math.max(startValue, endValue);
+
+      if (this.offset) {
+        var offset = this.offset.getValue(time) % 1;
+
+        if (offset > 0 && offset < 1 || offset > -1 && offset < 0) {
+          start += offset;
+          end += offset;
+          start = start > 1 ? start - 1 : start;
+          start = start < 0 ? 1 + start : start;
+          end = end > 1 ? end - 1 : end;
+          end = end < 0 ? 1 + end : end;
+        }
+      }
+
+      if (start === 0 && end === 1) {
+        return null;
+      } else {
+        return {
+          start: start,
+          end: end
+        };
+      }
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      if (this.start) this.start.setKeyframes(time);
+      if (this.end) this.end.setKeyframes(time);
+      if (this.offset) this.offset.reset();
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      if (this.start) this.start.reset(reversed);
+      if (this.end) this.end.reset(reversed);
+      if (this.offset) this.offset.reset();
+    }
+  }]);
+
+  return Trim;
+}();
+
+/* harmony default export */ var property_Trim = (Trim_Trim);
+// CONCATENATED MODULE: ./src/layers/VectorLayer.js
+function VectorLayer_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { VectorLayer_typeof = function _typeof(obj) { return typeof obj; }; } else { VectorLayer_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return VectorLayer_typeof(obj); }
+
+function VectorLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function VectorLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function VectorLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) VectorLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) VectorLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+function VectorLayer_possibleConstructorReturn(self, call) { if (call && (VectorLayer_typeof(call) === "object" || typeof call === "function")) { return call; } return VectorLayer_assertThisInitialized(self); }
+
+function VectorLayer_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function VectorLayer_get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { VectorLayer_get = Reflect.get; } else { VectorLayer_get = function _get(target, property, receiver) { var base = VectorLayer_superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return VectorLayer_get(target, property, receiver || target); }
+
+function VectorLayer_superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = VectorLayer_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function VectorLayer_getPrototypeOf(o) { VectorLayer_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return VectorLayer_getPrototypeOf(o); }
+
+function VectorLayer_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) VectorLayer_setPrototypeOf(subClass, superClass); }
+
+function VectorLayer_setPrototypeOf(o, p) { VectorLayer_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return VectorLayer_setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+
+
+
+
+
+var VectorLayer_VectorLayer =
+/*#__PURE__*/
+function (_BaseLayer) {
+  VectorLayer_inherits(VectorLayer, _BaseLayer);
+
+  function VectorLayer(data, gradients) {
+    var _this;
+
+    VectorLayer_classCallCheck(this, VectorLayer);
+
+    _this = VectorLayer_possibleConstructorReturn(this, VectorLayer_getPrototypeOf(VectorLayer).call(this, data));
+    if (data.fill) _this.fill = new property_Fill(data.fill);
+    if (data.gradientFill) _this.fill = new property_GradientFill(data.gradientFill, gradients);
+    if (data.stroke) _this.stroke = new property_Stroke(data.stroke);
+    if (data.trim) _this.trim = new property_Trim(data.trim);
+
+    if (data.groups) {
+      _this.groups = data.groups.map(function (group) {
+        return new VectorLayer(group, gradients);
+      });
+    }
+
+    if (data.shapes) {
+      _this.shapes = data.shapes.map(function (shape) {
+        if (shape.type === 'path') {
+          return shape.isAnimated ? new objects_AnimatedPath(shape) : new objects_Path(shape);
+        } else if (shape.type === 'rect') {
+          return new objects_Rect(shape);
+        } else if (shape.type === 'ellipse') {
+          return new objects_Ellipse(shape);
+        } else if (shape.type === 'polystar') {
+          return new objects_Polystar(shape);
+        }
+      });
+    }
+
+    return _this;
+  }
+
+  VectorLayer_createClass(VectorLayer, [{
+    key: "draw",
+    value: function draw(ctx, time, parentFill, parentStroke, parentTrim) {
+      VectorLayer_get(VectorLayer_getPrototypeOf(VectorLayer.prototype), "draw", this).call(this, ctx, time);
+
+      var fill = this.fill || parentFill;
+      var stroke = this.stroke || parentStroke;
+      var trimValues = this.trim ? this.trim.getTrim(time) : parentTrim;
+      if (fill) fill.update(ctx, time);
+      if (stroke) stroke.update(ctx, time);
+      ctx.beginPath();
+
+      if (this.shapes) {
+        this.shapes.forEach(function (shape) {
+          return shape.draw(ctx, time, trimValues);
+        });
+
+        if (this.shapes[this.shapes.length - 1].closed) {// ctx.closePath();
+        }
+      }
+
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+      if (this.groups) this.groups.forEach(function (group) {
+        return group.draw(ctx, time, fill, stroke, trimValues);
+      });
+      ctx.restore();
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      VectorLayer_get(VectorLayer_getPrototypeOf(VectorLayer.prototype), "setKeyframes", this).call(this, time);
+
+      if (this.shapes) this.shapes.forEach(function (shape) {
+        return shape.setKeyframes(time);
+      });
+      if (this.groups) this.groups.forEach(function (group) {
+        return group.setKeyframes(time);
+      });
+      if (this.fill) this.fill.setKeyframes(time);
+      if (this.stroke) this.stroke.setKeyframes(time);
+      if (this.trim) this.trim.setKeyframes(time);
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      VectorLayer_get(VectorLayer_getPrototypeOf(VectorLayer.prototype), "reset", this).call(this, reversed);
+
+      if (this.shapes) this.shapes.forEach(function (shape) {
+        return shape.reset(reversed);
+      });
+      if (this.groups) this.groups.forEach(function (group) {
+        return group.reset(reversed);
+      });
+      if (this.fill) this.fill.reset(reversed);
+      if (this.stroke) this.stroke.reset(reversed);
+      if (this.trim) this.trim.reset(reversed);
+    }
+  }]);
+
+  return VectorLayer;
+}(layers_BaseLayer);
+
+/* harmony default export */ var layers_VectorLayer = (VectorLayer_VectorLayer);
+// CONCATENATED MODULE: ./src/layers/CompLayer.js
+function CompLayer_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { CompLayer_typeof = function _typeof(obj) { return typeof obj; }; } else { CompLayer_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return CompLayer_typeof(obj); }
+
+function CompLayer_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function CompLayer_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function CompLayer_createClass(Constructor, protoProps, staticProps) { if (protoProps) CompLayer_defineProperties(Constructor.prototype, protoProps); if (staticProps) CompLayer_defineProperties(Constructor, staticProps); return Constructor; }
+
+function CompLayer_possibleConstructorReturn(self, call) { if (call && (CompLayer_typeof(call) === "object" || typeof call === "function")) { return call; } return CompLayer_assertThisInitialized(self); }
+
+function CompLayer_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function CompLayer_get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { CompLayer_get = Reflect.get; } else { CompLayer_get = function _get(target, property, receiver) { var base = CompLayer_superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return CompLayer_get(target, property, receiver || target); }
+
+function CompLayer_superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = CompLayer_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function CompLayer_getPrototypeOf(o) { CompLayer_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return CompLayer_getPrototypeOf(o); }
+
+function CompLayer_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) CompLayer_setPrototypeOf(subClass, superClass); }
+
+function CompLayer_setPrototypeOf(o, p) { CompLayer_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return CompLayer_setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+
+
+var CompLayer_CompLayer =
+/*#__PURE__*/
+function (_BaseLayer) {
+  CompLayer_inherits(CompLayer, _BaseLayer);
+
+  function CompLayer(data, comps, baseFont, gradients, imageBasePath) {
+    var _this;
+
+    CompLayer_classCallCheck(this, CompLayer);
+
+    _this = CompLayer_possibleConstructorReturn(this, CompLayer_getPrototypeOf(CompLayer).call(this, data));
+    var sourceID = data.sourceID;
+    var layers = comps && comps[sourceID] ? comps[sourceID].layers : null;
+
+    if (layers) {
+      _this.layers = layers.map(function (layer) {
+        switch (layer.type) {
+          case 'vector':
+            return new layers_VectorLayer(layer, gradients);
+
+          case 'image':
+            return new layers_ImageLayer(layer, imageBasePath);
+
+          case 'text':
+            return new layers_TextLayer(layer, baseFont);
+
+          case 'comp':
+            return new CompLayer(layer, baseFont, gradients, imageBasePath);
+
+          case 'null':
+            return new layers_NullLayer(layer);
+        }
+      });
+
+      _this.layers.forEach(function (layer) {
+        if (layer.parent) {
+          var parentIndex = layer.parent;
+          layer.parent = _this.layers.find(function (layer) {
+            return layer.index === parentIndex;
+          });
+        }
+      });
+    }
+
+    if (data.timeRemapping) {
+      _this.timeRemapping = data.timeRemapping.length > 1 ? new property_AnimatedProperty(data.timeRemapping) : new property_Property(data.timeRemapping);
+    }
+
+    return _this;
+  }
+
+  CompLayer_createClass(CompLayer, [{
+    key: "draw",
+    value: function draw(ctx, time) {
+      CompLayer_get(CompLayer_getPrototypeOf(CompLayer.prototype), "draw", this).call(this, ctx, time);
+
+      if (this.layers) {
+        var internalTime = time - this.in;
+        if (this.timeRemapping) internalTime = this.timeRemapping.getValue(internalTime);
+        this.layers.forEach(function (layer) {
+          if (internalTime >= layer.in && internalTime <= layer.out) {
+            layer.draw(ctx, internalTime);
+          }
+        });
+      }
+
+      ctx.restore();
+    }
+  }, {
+    key: "setParentTransform",
+    value: function setParentTransform(ctx, time) {
+      CompLayer_get(CompLayer_getPrototypeOf(CompLayer.prototype), "setParentTransform", this).call(this, ctx, time);
+
+      var internalTime = time - this.in;
+      if (this.layers) this.layers.forEach(function (layer) {
+        return layer.setParentTransform(ctx, internalTime);
+      });
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      CompLayer_get(CompLayer_getPrototypeOf(CompLayer.prototype), "setKeyframes", this).call(this, time);
+
+      var internalTime = time - this.in;
+      if (this.timeRemapping) this.timeRemapping.setKeyframes(internalTime);
+      if (this.layers) this.layers.forEach(function (layer) {
+        return layer.setKeyframes(internalTime);
+      });
+    }
+  }, {
+    key: "reset",
+    value: function reset(reversed) {
+      CompLayer_get(CompLayer_getPrototypeOf(CompLayer.prototype), "reset", this).call(this, reversed);
+
+      if (this.timeRemapping) this.timeRemapping.reset(reversed);
+      if (this.layers) this.layers.forEach(function (layer) {
+        return layer.reset(reversed);
+      });
+    }
+  }]);
+
+  return CompLayer;
+}(layers_BaseLayer);
+
+/* harmony default export */ var layers_CompLayer = (CompLayer_CompLayer);
+// CONCATENATED MODULE: ./src/Animation.js
+function Animation_typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Animation_typeof = function _typeof(obj) { return typeof obj; }; } else { Animation_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Animation_typeof(obj); }
+
+function Animation_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Animation_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Animation_createClass(Constructor, protoProps, staticProps) { if (protoProps) Animation_defineProperties(Constructor.prototype, protoProps); if (staticProps) Animation_defineProperties(Constructor, staticProps); return Constructor; }
+
+function Animation_possibleConstructorReturn(self, call) { if (call && (Animation_typeof(call) === "object" || typeof call === "function")) { return call; } return Animation_assertThisInitialized(self); }
+
+function Animation_getPrototypeOf(o) { Animation_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return Animation_getPrototypeOf(o); }
+
+function Animation_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function Animation_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) Animation_setPrototypeOf(subClass, superClass); }
+
+function Animation_setPrototypeOf(o, p) { Animation_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return Animation_setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+
+
+var Animation_Animation =
+/*#__PURE__*/
+function (_Emitter) {
+  Animation_inherits(Animation, _Emitter);
+
+  function Animation(options) {
+    var _this;
+
+    Animation_classCallCheck(this, Animation);
+
+    _this = Animation_possibleConstructorReturn(this, Animation_getPrototypeOf(Animation).call(this));
+    _this.gradients = {};
+    _this.pausedTime = 0;
+    _this.duration = options.data.duration;
+    _this.baseWidth = options.data.width;
+    _this.baseHeight = options.data.height;
+    _this.ratio = options.data.width / options.data.height;
+    _this.markers = options.data.markers;
+    _this.baseFont = options.baseFont;
+    _this.loop = options.loop || false;
+    _this.devicePixelRatio = options.devicePixelRatio || (typeof window !== 'undefined' && window.devicePixelRatio ? window.devicePixelRatio : 1);
+    _this.fluid = options.fluid || true;
+    _this.imageBasePath = options.imageBasePath || '';
+    var comps = options.data.comps;
+    _this.isPaused = false;
+    _this.isPlaying = false;
+    _this.drawFrame = true;
+    _this.canvas = options.canvas || document.createElement('canvas');
+    _this.canvas.width = _this.baseWidth;
+    _this.canvas.height = _this.baseHeight;
+    _this.ctx = _this.canvas.getContext('2d');
+    _this.layers = options.data.layers.map(function (layer) {
+      switch (layer.type) {
+        case 'vector':
+          return new layers_VectorLayer(layer, _this.gradients);
+
+        case 'image':
+          return new layers_ImageLayer(layer, _this.imageBasePath);
+
+        case 'text':
+          return new layers_TextLayer(layer, _this.baseFont);
+
+        case 'comp':
+          return new layers_CompLayer(layer, comps, _this.baseFont, _this.gradients, _this.imageBasePath);
+
+        case 'null':
+        default:
+          return new layers_NullLayer(layer);
+      }
+    });
+
+    _this.layers.forEach(function (layer) {
+      if (layer.parent) {
+        var parentIndex = layer.parent;
+        layer.parent = _this.layers.find(function (layer) {
+          return layer.index === parentIndex;
+        });
+      }
+    });
+
+    _this.reversed = options.reversed || false;
+
+    _this.reset(_this.reversed);
+
+    _this.resize();
+
+    add(Animation_assertThisInitialized(_this));
+    return _this;
+  }
+
+  Animation_createClass(Animation, [{
+    key: "play",
+    value: function play() {
+      if (!this.isPlaying) {
+        if (!this.isPaused) this.reset(this.reversed);
+        this.isPaused = false;
+        this.pausedTime = 0;
+        this.isPlaying = true;
+      }
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.reset(this.reversed);
+      this.isPlaying = false;
+      this.drawFrame = true;
+    }
+  }, {
+    key: "pause",
+    value: function pause() {
+      if (this.isPlaying) {
+        this.isPaused = true;
+        this.pausedTime = this.time;
+        this.isPlaying = false;
+      }
+    }
+  }, {
+    key: "gotoAndPlay",
+    value: function gotoAndPlay(id) {
+      var marker = this.getMarker(id);
+
+      if (marker) {
+        this.time = marker.time;
+        this.pausedTime = 0;
+        this.setKeyframes(this.time);
+        this.isPlaying = true;
+      }
+    }
+  }, {
+    key: "gotoAndStop",
+    value: function gotoAndStop(id) {
+      var marker = this.getMarker(id);
+
+      if (marker) {
+        this.time = marker.time;
+        this.setKeyframes(this.time);
+        this.drawFrame = true;
+        this.isPlaying = false;
+      }
+    }
+  }, {
+    key: "getMarker",
+    value: function getMarker(id) {
+      var marker;
+
+      if (typeof id === 'number') {
+        marker = this.markers[id];
+      } else if (typeof id === 'string') {
+        marker = this.markers.find(function (marker) {
+          return marker.comment === id;
+        });
+      }
+
+      if (marker) return marker;
+      console.warn('Marker not found');
+    }
+  }, {
+    key: "checkStopMarkers",
+    value: function checkStopMarkers(from, to) {
+      return this.markers.find(function (marker) {
+        return marker.stop && marker.time > from && marker.time < to;
+      });
+    }
+  }, {
+    key: "preload",
+    value: function preload() {
+      var promises = this.layers.filter(function (layer) {
+        return layer instanceof layers_ImageLayer;
+      }).map(function (layer) {
+        return new layer.preload();
+      });
+      return Promise.all(promises).catch(function (error) {
+        return console.error(error);
+      });
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      var _this2 = this;
+
+      this.pausedTime = 0;
+      this.time = this.reversed ? this.duration : 0;
+      this.layers.forEach(function (layer) {
+        return layer.reset(_this2.reversed);
+      });
+    }
+  }, {
+    key: "setKeyframes",
+    value: function setKeyframes(time) {
+      this.layers.forEach(function (layer) {
+        return layer.setKeyframes(time);
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.isPlaying = false;
+      if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
+      remove(this);
+    }
+  }, {
+    key: "resize",
+    value: function resize(w) {
+      if (this.fluid) {
+        var width = w || this.canvas.clientWidth || this.baseWidth;
+        this.canvas.width = width * this.devicePixelRatio;
+        this.canvas.height = width / this.ratio * this.devicePixelRatio;
+        this.scale = width / this.baseWidth * this.devicePixelRatio;
+        this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
+        this.setKeyframes(this.time);
+        this.drawFrame = true;
+      }
+    }
+  }, {
+    key: "setGradients",
+    value: function setGradients(name, stops) {
+      if (!this.gradients[name]) {
+        console.warn("Gradient with name: ".concat(name, " not found."));
+        return;
+      }
+
+      this.gradients[name].forEach(function (gradient) {
+        gradient.stops = stops;
+      });
+    }
+  }, {
+    key: "getSpriteSheet",
+    value: function getSpriteSheet() {
+      var fps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 25;
+      var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 50;
+      var maxWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 4096;
+      var ratio = width / this.baseWidth;
+      var height = this.baseHeight * ratio;
+      var numFrames = Math.floor(this.duration / 1000 * fps);
+      var buffer = document.createElement('canvas');
+      var ctx = buffer.getContext('2d');
+      var rowsX = Math.floor(maxWidth / width);
+      var rowsY = Math.ceil(numFrames / rowsX);
+      var indexX = 0;
+      var indexY = 0;
+      buffer.width = rowsX * width;
+      buffer.height = rowsY * height;
+      this.resize(width);
+
+      for (var i = 0; i < numFrames; i++) {
+        var step = i / numFrames;
+        var time = step * this.duration;
+        this.setKeyframes(time);
+        this.draw(time);
+        var x = indexX * width;
+        var y = indexY * height;
+
+        if (indexX + 1 >= rowsX) {
+          indexX = 0;
+          indexY++;
+        } else {
+          indexX++;
+        }
+
+        ctx.drawImage(this.canvas, x, y, width, height);
+      }
+
+      return {
+        frames: numFrames,
+        canvas: buffer,
+        offsetX: width,
+        offsetY: height,
+        rowsX: rowsX,
+        rowsY: rowsY
+      };
+    }
+  }, {
+    key: "draw",
+    value: function draw(time) {
+      var _this3 = this;
+
+      this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight);
+      this.layers.forEach(function (layer) {
+        if (time >= layer.in && time <= layer.out) {
+          layer.draw(_this3.ctx, time);
+        }
+      });
+    }
+  }, {
+    key: "update",
+    value: function update(time) {
+      if (!this.then) this.then = time;
+      var delta = time - this.then;
+      this.then = time;
+
+      if (this.isPlaying) {
+        this.time = this.reversed ? this.time - delta : this.time + delta;
+        var stopMarker = this.checkStopMarkers(this.time - delta, this.time);
+
+        if (this.time > this.duration || this.reversed && this.time < 0) {
+          this.time = this.reversed ? 0 : this.duration - 1;
+          this.isPlaying = false;
+          this.emit('complete');
+
+          if (this.loop) {
+            this.play();
+          }
+        } else if (stopMarker) {
+          this.time = stopMarker.time;
+          this.pause();
+          this.emit('stop', stopMarker);
+        } else {
+          this.draw(this.time);
+        }
+
+        this.emit('update');
+      } else if (this.drawFrame) {
+        this.drawFrame = false;
+        this.draw(this.time);
+        this.emit('update');
+      }
+    }
+  }, {
+    key: "step",
+    set: function set(step) {
+      this.isPlaying = false;
+      this.time = step * this.duration;
+      this.pausedTime = this.time;
+      this.setKeyframes(this.time);
+      this.drawFrame = true;
+    },
+    get: function get() {
+      return this.time / this.duration;
+    }
+  }, {
+    key: "reversed",
+    get: function get() {
+      return this._reversed;
+    },
+    set: function set(bool) {
+      this._reversed = bool;
+
+      if (this.pausedTime) {
+        this.time = this.pausedTime;
+      } else if (!this.isPlaying) {
+        this.time = this.reversed ? this.duration : 0;
+      }
+
+      this.setKeyframes(this.time);
+    }
+  }]);
+
+  return Animation;
+}(tiny_emitter_default.a);
+
+/* harmony default export */ var src_Animation = (Animation_Animation);
+// CONCATENATED MODULE: ./src/index.js
+/* concated harmony reexport Animation */__webpack_require__.d(__webpack_exports__, "Animation", function() { return src_Animation; });
+/* concated harmony reexport update */__webpack_require__.d(__webpack_exports__, "update", function() { return update; });
+/* concated harmony reexport autoPlay */__webpack_require__.d(__webpack_exports__, "autoPlay", function() { return autoPlay; });
+/* concated harmony reexport add */__webpack_require__.d(__webpack_exports__, "add", function() { return add; });
+/* concated harmony reexport remove */__webpack_require__.d(__webpack_exports__, "remove", function() { return remove; });
+
+
+
+
+/***/ })
+/******/ ]);
+});
