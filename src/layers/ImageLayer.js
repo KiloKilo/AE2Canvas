@@ -1,9 +1,9 @@
-import BaseLayer from './BaseLayer';
+import BaseLayer from './BaseLayer'
 
 class ImageLayer extends BaseLayer {
-    constructor(data) {
+    constructor(data, imageBasePath) {
         super(data);
-        this.source = data.source;
+        this.source = `${imageBasePath}${data.source}`
         this.isLoaded = false;
     }
 

@@ -125,7 +125,7 @@ class Animation extends Emitter {
 
 
     preload() {
-        const promises = this.layers.filter(layer => layer instanceof ImageLayer).map(layer => new layer.preload());
+        const promises = this.layers.filter(layer => layer instanceof ImageLayer).map(layer => layer.preload())
         return Promise.all(promises).catch(error => console.error(error));
     }
 
