@@ -1456,13 +1456,13 @@ var ImageLayer =
 function (_BaseLayer) {
   ImageLayer_inherits(ImageLayer, _BaseLayer);
 
-  function ImageLayer(data) {
+  function ImageLayer(data, imageBasePath) {
     var _this;
 
     ImageLayer_classCallCheck(this, ImageLayer);
 
     _this = ImageLayer_possibleConstructorReturn(this, ImageLayer_getPrototypeOf(ImageLayer).call(this, data));
-    _this.source = data.source;
+    _this.source = "".concat(imageBasePath).concat(data.source);
     _this.isLoaded = false;
     return _this;
   }
@@ -2693,7 +2693,7 @@ function (_Emitter) {
       var promises = this.layers.filter(function (layer) {
         return layer instanceof layers_ImageLayer;
       }).map(function (layer) {
-        return new layer.preload();
+        return layer.preload();
       });
       return Promise.all(promises).catch(function (error) {
         return console.error(error);
@@ -2888,3 +2888,4 @@ function (_Emitter) {
 /***/ })
 /******/ ]);
 });
+//# sourceMappingURL=index.js.map
