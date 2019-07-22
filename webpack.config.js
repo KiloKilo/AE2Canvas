@@ -3,6 +3,7 @@ var path = require('path');
 
 var config = {
     entry: path.join(__dirname, 'src/index.js'),
+    devtool: 'source-map',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'index.js',
