@@ -8,7 +8,7 @@
         html {
             width: 100%;
             height: 100%;
-            font-family: "helvetica neue", helvetica, arial, verdana;
+            font-family: sans-serif;
             font-size: 16px;
         }
 
@@ -16,14 +16,13 @@
             width: 100%;
             margin: 0;
             text-align: center;
-            background: #DDD;
+            background: #CCC;
         }
 
         #canvasWrapper {
             width: 100%;
             max-width: 1680px;
             margin: 0 auto 30px auto;
-            /*background: url(test.jpg);*/
             background-size: contain;
         }
 
@@ -34,7 +33,7 @@
 
         canvas {
             width: 100%;
-            /*max-width: 1280px;*/
+            max-width: 1280px;
         }
 
         #slider {
@@ -59,24 +58,24 @@
 <input id="slider" type="range" min="0" max="1" step="0.001" value="0">
 <input id="reversed" type="checkbox"><label for="reversed">Reversed</label>
 
-<script src="/public/index.js"></script>
+<script src="/dist/index.js"></script>
 <script>
-    var animation;
-    var slider = document.getElementById('slider');
-    var canvasWrapper = document.getElementById('canvasWrapper');
-    var canvas = canvasWrapper.querySelector('canvas');
-    var ctx = canvas.getContext('2d');
-    var playButton = document.getElementById('play');
-    var stopButton = document.getElementById('stop');
-    var pauseButton = document.getElementById('pause');
-    var gotoAndPlayButton = document.getElementById('gotoAndPlay');
-    var gotoAndStopButton = document.getElementById('gotoAndStop');
-    var checkbox = document.getElementById('reversed');
-    var step = 0;
+    let animation;
+
+    const slider = document.getElementById('slider');
+    const canvasWrapper = document.getElementById('canvasWrapper');
+    const canvas = canvasWrapper.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const playButton = document.getElementById('play');
+    const stopButton = document.getElementById('stop');
+    const pauseButton = document.getElementById('pause');
+    const gotoAndPlayButton = document.getElementById('gotoAndPlay');
+    const gotoAndStopButton = document.getElementById('gotoAndStop');
+    const checkbox = document.getElementById('reversed');
 
     AE2Canvas.autoPlay(true);
 
-    fetch('loader.json')
+    fetch('data.json')
         .then(result => result.json())
         .then(data => {
 
