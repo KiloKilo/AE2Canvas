@@ -73,13 +73,13 @@
     const gotoAndStopButton = document.getElementById('gotoAndStop');
     const checkbox = document.getElementById('reversed');
 
-    AE2Canvas.autoPlay(true);
+    ae2canvas.autoPlay(true);
 
     fetch('data.json')
         .then(result => result.json())
         .then(data => {
 
-            animation = new AE2Canvas.Animation({
+            animation = new ae2canvas.Animation({
                 canvas: canvas,
                 data,
             });
