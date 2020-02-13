@@ -1,17 +1,15 @@
 class Property {
-    constructor(data) {
-        this.frames = data;
-    }
+	constructor(data) {
+		this.frames = data
+	}
 
-    getValue() {
-        return this.frames[0].v;
-    }
+	getValue() {
+		return this.frames[0].v
+	}
 
-    setKeyframes(time) {
-    }
+	setKeyframes(time) {}
 
-    reset(reversed) {
-    }
+	reset(reversed) {}
 }
 
-export default Property;
+export default Property

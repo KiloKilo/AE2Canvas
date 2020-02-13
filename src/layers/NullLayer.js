@@ -1,39 +1,14 @@
-import BaseLayer from './BaseLayer';
+import BaseLayer from './BaseLayer'
 
 class NullLayer extends BaseLayer {
-    constructor(data) {
-        super(data);
-    }
+	constructor(data) {
+		super(data)
+	}
 
-    draw(ctx, time) {
-        super.draw(ctx, time);
-        ctx.restore();
-    }
+	draw(ctx, time) {
+		super.draw(ctx, time)
+		ctx.restore()
+	}
 }
 
-export default NullLayer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default NullLayer

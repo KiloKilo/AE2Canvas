@@ -1,36 +1,36 @@
-const _animations = [];
-let _animationsLength = 0;
+const _animations = []
+let _animationsLength = 0
 
-let _autoPlay = false;
-let _rafId;
+let _autoPlay = false
+let _rafId
 
 const update = time => {
-    if (_autoPlay) {
-        _rafId = requestAnimationFrame(update);
-    }
-    time = time !== undefined ? time : performance.now();
+	if (_autoPlay) {
+		_rafId = requestAnimationFrame(update)
+	}
+	time = time !== undefined ? time : performance.now()
 
-    for (let i = 0; i < _animationsLength; i++) {
-        _animations[i].update(time);
-    }
-};
+	for (let i = 0; i < _animationsLength; i++) {
+		_animations[i].update(time)
+	}
+}
 
 const autoPlay = auto => {
-    _autoPlay = auto;
-    _autoPlay ? _rafId = requestAnimationFrame(update) : cancelAnimationFrame(_rafId);
-};
+	_autoPlay = auto
+	_autoPlay ? (_rafId = requestAnimationFrame(update)) : cancelAnimationFrame(_rafId)
+}
 
 function add(tween) {
-    _animations.push(tween);
-    _animationsLength = _animations.length;
+	_animations.push(tween)
+	_animationsLength = _animations.length
 }
 
 function remove(tween) {
-    const i = _animations.indexOf(tween);
-    if (i > -1) {
-        _animations.splice(i, 1);
-        _animationsLength = _animations.length;
-    }
+	const i = _animations.indexOf(tween)
+	if (i > -1) {
+		_animations.splice(i, 1)
+		_animationsLength = _animations.length
+	}
 }
 
-export {update, autoPlay, add, remove};
+export { update, autoPlay, add, remove }

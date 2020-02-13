@@ -1,43 +1,338 @@
-{"name":"Loader 2 small","layers":[{"name":"bg","index":4,"type":"vector","out":3120,"effects":{
-
-},"groups":[{"name":"Rectangle 1","type":"vector","effects":{
-
-},"shapes":[{"type":"rect","size":[{"t":0,"v":[3000,3000]}]}],"fill":{"color":[{"t":0,"v":[0,0,0]}]},"transform":{
-
-}}],"transform":{"position":[{"t":0,"v":[600,600]}]}},{"name":"circle","index":3,"type":"vector","out":1280,"effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[1600,1600]}]}],"fill":{"color":[{"t":0,"v":[255,255,255]}]},"transform":{"position":[{"t":0,"v":[600,600]}],"scaleX":[{"t":0,"v":2.1,"easeOut":[0.902,0]},{"t":355.546875,"v":0.1675,"easeIn":[0.95,0.921],"easeOut":[0.019,0.908]},{"t":1280,"v":0.0052,"easeIn":[0.147,1]}],"scaleY":[{"t":0,"v":2.1,"easeOut":[0.902,0]},{"t":355.546875,"v":0.1675,"easeIn":[0.95,0.921],"easeOut":[0.019,0.908]},{"t":1280,"v":0.0052,"easeIn":[0.147,1]}]}},{"name":"circles","index":2,"type":"vector","in":1280,"out":2480,"effects":{
-
-},"groups":[{"name":"circle1","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1480,"v":[0,0],"easeOut":[0,0]},{"t":2000,"v":[82,83],"easeIn":[0,1]}],"scaleX":[{"t":1480,"v":1,"easeOut":[0.011,0]},{"t":2400,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1480,"v":1,"easeOut":[0.011,0]},{"t":2400,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle2","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1440,"v":[0,0],"easeOut":[0,0]},{"t":1960,"v":[-83,83],"easeIn":[0,1]}],"scaleX":[{"t":1440,"v":1,"easeOut":[0.011,0]},{"t":2360,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1440,"v":1,"easeOut":[0.011,0]},{"t":2360,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle3","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1400,"v":[0,0],"easeOut":[0,0]},{"t":1920,"v":[82,-84],"easeIn":[0,1]}],"scaleX":[{"t":1400,"v":1,"easeOut":[0.011,0]},{"t":2320,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1400,"v":1,"easeOut":[0.011,0]},{"t":2320,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle4","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1360,"v":[0,0],"easeOut":[0,0]},{"t":1880,"v":[-84,-84],"easeIn":[0,1]}],"scaleX":[{"t":1360,"v":1,"easeOut":[0.011,0]},{"t":2280,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1360,"v":1,"easeOut":[0.011,0]},{"t":2280,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle5","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1320,"v":[0,0],"easeOut":[0,0]},{"t":1840,"v":[-84,0],"easeIn":[0,1]}],"scaleX":[{"t":1320,"v":1,"easeOut":[0.011,0]},{"t":2240,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1320,"v":1,"easeOut":[0.011,0]},{"t":2240,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle6","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"position":[{"t":1280,"v":[0,0],"easeOut":[0,0]},{"t":1800,"v":[0,-84],"easeIn":[0,0.998]}],"scaleX":[{"t":1280,"v":1,"easeOut":[0.011,0]},{"t":2200,"v":0,"easeIn":[0.416,1]}],"scaleY":[{"t":1280,"v":1,"easeOut":[0.011,0]},{"t":2200,"v":0,"easeIn":[0.416,1]}]}},{"name":"circle7","type":"vector","effects":{
-
-},"shapes":[{"type":"ellipse","size":[{"t":0,"v":[24,24]}]}],"transform":{"scaleX":[{"t":1480,"v":1,"easeOut":[0.014,0]},{"t":2200,"v":0,"easeIn":[0.412,1]}],"scaleY":[{"t":1480,"v":1,"easeOut":[0.014,0]},{"t":2200,"v":0,"easeIn":[0.412,1]}]}}],"fill":{"color":[{"t":0,"v":[255,255,255]}]},"transform":{"position":[{"t":0,"v":[600,600]}],"scaleX":[{"t":0,"v":0.35}],"scaleY":[{"t":0,"v":0.35}]}},{"name":"logo","index":1,"type":"vector","in":1720,"out":3120,"effects":{
-
-},"groups":[{"name":"Shape 1","type":"vector","effects":{
-
-},"shapes":[{"type":"path","closed":false,"frames":[{"t":0,"v":[[-83.25,-83.5,-83.25,-83.5,-83.25,-83.5],[-83.25,0.5,-83.25,0.5,-83.25,0.5],[0.25,-83.5,0.25,-83.5,0.25,-83.5]],"len":[83.975,118.406]}],"isAnimated":false}],"trim":{"type":1,"end":[{"t":2000,"v":0,"easeOut":[0,0]},{"t":2400,"v":1,"easeIn":[0,1]}]},"stroke":{"index":3,"join":"round","cap":"round","color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":6}]},"transform":{
-
-}},{"name":"Shape 2","type":"vector","effects":{
-
-},"shapes":[{"type":"path","closed":false,"frames":[{"t":0,"v":[[82.25,-83.5,82.25,-83.5,82.25,-83.5],[-83.25,82.75,-83.25,82.75,-83.25,82.75]],"len":[234.513]}],"isAnimated":false}],"stroke":{"index":2,"join":"miter","miterLimit":[{"t":0,"v":4}],"cap":"round","color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":6}]},"trim":{"type":1,"end":[{"t":1720,"v":0,"easeOut":[0,0]},{"t":2120,"v":1,"easeIn":[0,1]}]},"transform":{
-
-}},{"name":"Shape 3","type":"vector","effects":{
-
-},"shapes":[{"type":"path","closed":false,"frames":[{"t":0,"v":[[0.25,0.5,0.25,0.5,0.25,0.5],[82.25,82.75,82.25,82.75,82.25,82.75]],"len":[116.108]}],"isAnimated":false}],"stroke":{"index":2,"join":"miter","miterLimit":[{"t":0,"v":4}],"cap":"round","color":[{"t":0,"v":[255,255,255]}],"opacity":[{"t":0,"v":1}],"width":[{"t":0,"v":6}]},"trim":{"type":1,"end":[{"t":2000,"v":0,"easeOut":[0,0]},{"t":2400,"v":1,"easeIn":[0,1]}]},"transform":{
-
-}}],"transform":{"position":[{"t":0,"v":[600,600]}],"scaleX":[{"t":0,"v":0.35}],"scaleY":[{"t":0,"v":0.35}],"opacity":[{"t":2720,"v":1},{"t":3080,"v":0}]}}],"comps":{
-
-},"duration":3120,"width":1200,"height":1200,"markers":[
-
-]}
+{
+	"name": "Loader 2 small",
+	"layers": [
+		{
+			"name": "bg",
+			"index": 4,
+			"type": "vector",
+			"out": 3120,
+			"effects": {},
+			"groups": [
+				{
+					"name": "Rectangle 1",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "rect", "size": [{ "t": 0, "v": [3000, 3000] }] }],
+					"fill": { "color": [{ "t": 0, "v": [0, 0, 0] }] },
+					"transform": {}
+				}
+			],
+			"transform": { "position": [{ "t": 0, "v": [600, 600] }] }
+		},
+		{
+			"name": "circle",
+			"index": 3,
+			"type": "vector",
+			"out": 1280,
+			"effects": {},
+			"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [1600, 1600] }] }],
+			"fill": { "color": [{ "t": 0, "v": [255, 255, 255] }] },
+			"transform": {
+				"position": [{ "t": 0, "v": [600, 600] }],
+				"scaleX": [
+					{ "t": 0, "v": 2.1, "easeOut": [0.902, 0] },
+					{ "t": 355.546875, "v": 0.1675, "easeIn": [0.95, 0.921], "easeOut": [0.019, 0.908] },
+					{ "t": 1280, "v": 0.0052, "easeIn": [0.147, 1] }
+				],
+				"scaleY": [
+					{ "t": 0, "v": 2.1, "easeOut": [0.902, 0] },
+					{ "t": 355.546875, "v": 0.1675, "easeIn": [0.95, 0.921], "easeOut": [0.019, 0.908] },
+					{ "t": 1280, "v": 0.0052, "easeIn": [0.147, 1] }
+				]
+			}
+		},
+		{
+			"name": "circles",
+			"index": 2,
+			"type": "vector",
+			"in": 1280,
+			"out": 2480,
+			"effects": {},
+			"groups": [
+				{
+					"name": "circle1",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1480, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 2000, "v": [82, 83], "easeIn": [0, 1] }
+						],
+						"scaleX": [
+							{ "t": 1480, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2400, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1480, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2400, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle2",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1440, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 1960, "v": [-83, 83], "easeIn": [0, 1] }
+						],
+						"scaleX": [
+							{ "t": 1440, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2360, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1440, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2360, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle3",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1400, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 1920, "v": [82, -84], "easeIn": [0, 1] }
+						],
+						"scaleX": [
+							{ "t": 1400, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2320, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1400, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2320, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle4",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1360, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 1880, "v": [-84, -84], "easeIn": [0, 1] }
+						],
+						"scaleX": [
+							{ "t": 1360, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2280, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1360, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2280, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle5",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1320, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 1840, "v": [-84, 0], "easeIn": [0, 1] }
+						],
+						"scaleX": [
+							{ "t": 1320, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2240, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1320, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2240, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle6",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"position": [
+							{ "t": 1280, "v": [0, 0], "easeOut": [0, 0] },
+							{ "t": 1800, "v": [0, -84], "easeIn": [0, 0.998] }
+						],
+						"scaleX": [
+							{ "t": 1280, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2200, "v": 0, "easeIn": [0.416, 1] }
+						],
+						"scaleY": [
+							{ "t": 1280, "v": 1, "easeOut": [0.011, 0] },
+							{ "t": 2200, "v": 0, "easeIn": [0.416, 1] }
+						]
+					}
+				},
+				{
+					"name": "circle7",
+					"type": "vector",
+					"effects": {},
+					"shapes": [{ "type": "ellipse", "size": [{ "t": 0, "v": [24, 24] }] }],
+					"transform": {
+						"scaleX": [
+							{ "t": 1480, "v": 1, "easeOut": [0.014, 0] },
+							{ "t": 2200, "v": 0, "easeIn": [0.412, 1] }
+						],
+						"scaleY": [
+							{ "t": 1480, "v": 1, "easeOut": [0.014, 0] },
+							{ "t": 2200, "v": 0, "easeIn": [0.412, 1] }
+						]
+					}
+				}
+			],
+			"fill": { "color": [{ "t": 0, "v": [255, 255, 255] }] },
+			"transform": {
+				"position": [{ "t": 0, "v": [600, 600] }],
+				"scaleX": [{ "t": 0, "v": 0.35 }],
+				"scaleY": [{ "t": 0, "v": 0.35 }]
+			}
+		},
+		{
+			"name": "logo",
+			"index": 1,
+			"type": "vector",
+			"in": 1720,
+			"out": 3120,
+			"effects": {},
+			"groups": [
+				{
+					"name": "Shape 1",
+					"type": "vector",
+					"effects": {},
+					"shapes": [
+						{
+							"type": "path",
+							"closed": false,
+							"frames": [
+								{
+									"t": 0,
+									"v": [
+										[-83.25, -83.5, -83.25, -83.5, -83.25, -83.5],
+										[-83.25, 0.5, -83.25, 0.5, -83.25, 0.5],
+										[0.25, -83.5, 0.25, -83.5, 0.25, -83.5]
+									],
+									"len": [83.975, 118.406]
+								}
+							],
+							"isAnimated": false
+						}
+					],
+					"trim": {
+						"type": 1,
+						"end": [
+							{ "t": 2000, "v": 0, "easeOut": [0, 0] },
+							{ "t": 2400, "v": 1, "easeIn": [0, 1] }
+						]
+					},
+					"stroke": {
+						"index": 3,
+						"join": "round",
+						"cap": "round",
+						"color": [{ "t": 0, "v": [255, 255, 255] }],
+						"opacity": [{ "t": 0, "v": 1 }],
+						"width": [{ "t": 0, "v": 6 }]
+					},
+					"transform": {}
+				},
+				{
+					"name": "Shape 2",
+					"type": "vector",
+					"effects": {},
+					"shapes": [
+						{
+							"type": "path",
+							"closed": false,
+							"frames": [
+								{
+									"t": 0,
+									"v": [
+										[82.25, -83.5, 82.25, -83.5, 82.25, -83.5],
+										[-83.25, 82.75, -83.25, 82.75, -83.25, 82.75]
+									],
+									"len": [234.513]
+								}
+							],
+							"isAnimated": false
+						}
+					],
+					"stroke": {
+						"index": 2,
+						"join": "miter",
+						"miterLimit": [{ "t": 0, "v": 4 }],
+						"cap": "round",
+						"color": [{ "t": 0, "v": [255, 255, 255] }],
+						"opacity": [{ "t": 0, "v": 1 }],
+						"width": [{ "t": 0, "v": 6 }]
+					},
+					"trim": {
+						"type": 1,
+						"end": [
+							{ "t": 1720, "v": 0, "easeOut": [0, 0] },
+							{ "t": 2120, "v": 1, "easeIn": [0, 1] }
+						]
+					},
+					"transform": {}
+				},
+				{
+					"name": "Shape 3",
+					"type": "vector",
+					"effects": {},
+					"shapes": [
+						{
+							"type": "path",
+							"closed": false,
+							"frames": [
+								{
+									"t": 0,
+									"v": [
+										[0.25, 0.5, 0.25, 0.5, 0.25, 0.5],
+										[82.25, 82.75, 82.25, 82.75, 82.25, 82.75]
+									],
+									"len": [116.108]
+								}
+							],
+							"isAnimated": false
+						}
+					],
+					"stroke": {
+						"index": 2,
+						"join": "miter",
+						"miterLimit": [{ "t": 0, "v": 4 }],
+						"cap": "round",
+						"color": [{ "t": 0, "v": [255, 255, 255] }],
+						"opacity": [{ "t": 0, "v": 1 }],
+						"width": [{ "t": 0, "v": 6 }]
+					},
+					"trim": {
+						"type": 1,
+						"end": [
+							{ "t": 2000, "v": 0, "easeOut": [0, 0] },
+							{ "t": 2400, "v": 1, "easeIn": [0, 1] }
+						]
+					},
+					"transform": {}
+				}
+			],
+			"transform": {
+				"position": [{ "t": 0, "v": [600, 600] }],
+				"scaleX": [{ "t": 0, "v": 0.35 }],
+				"scaleY": [{ "t": 0, "v": 0.35 }],
+				"opacity": [
+					{ "t": 2720, "v": 1 },
+					{ "t": 3080, "v": 0 }
+				]
+			}
+		}
+	],
+	"comps": {},
+	"duration": 3120,
+	"width": 1200,
+	"height": 1200,
+	"markers": []
+}
