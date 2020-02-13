@@ -1,3 +1,5 @@
-import {update, autoPlay, add, remove} from './core'
-import Animation from './Animation';
-export {Animation, update, autoPlay, add, remove};
+import {update, autoPlay} from './core'
+import Animation from './Animation'
+
+export default {Animation, update, autoPlay}
+export {Animation, update, autoPlay}
