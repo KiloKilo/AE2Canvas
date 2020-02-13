@@ -1,16 +1,13 @@
-var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 
-var config = {
+const config = {
     entry: path.join(__dirname, 'src/index.js'),
     devtool:  'source-maps',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'index.js',
-        library: 'AE2Canvas',
+        library: 'ae2canvas',
         libraryTarget: 'umd',
-        umdNamedDefine: true,
-        globalObject: `(typeof self !== 'undefined' ? self : this)`
     },
     module: {
         rules: [
@@ -22,7 +19,7 @@ var config = {
     },
     devServer: {
         contentBase: path.join(__dirname, 'examples'),
-        publicPath: '/public',
+        publicPath: '/dist',
         stats: 'errors-only',
         port: 8000,
         host: '0.0.0.0',
