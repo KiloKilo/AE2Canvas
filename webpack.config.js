@@ -8,6 +8,7 @@ const config = {
 		filename: 'index.js',
 		library: 'ae2canvas',
 		libraryTarget: 'umd',
+		globalObject: `(typeof self !== 'undefined' ? self : this)`,
 	},
 	module: {
 		rules: [{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }],
