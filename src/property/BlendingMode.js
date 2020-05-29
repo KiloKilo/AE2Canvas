@@ -1,10 +1,10 @@
 class BlendingMode {
 	constructor(type) {
-		this.type = type.toLowerCase().replace("_", "-");
+		this.type = type.toLowerCase().replace('_', '-')
 	}
 
 	setCompositeOperation(ctx) {
-		ctx.globalCompositeOperation = this.type;
+		ctx.globalCompositeOperation = this.type
 	}
 }
 
