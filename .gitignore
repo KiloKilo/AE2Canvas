@@ -49,3 +49,5 @@ node_modules/
 
 # Bower Files
 bower_components/
+
+dist/
