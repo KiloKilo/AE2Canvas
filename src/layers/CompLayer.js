@@ -23,7 +23,7 @@ class CompLayer extends BaseLayer {
 					case 'text':
 						return new TextLayer(layer, baseFont)
 					case 'comp':
-						return new CompLayer(layer, baseFont, gradients, imageBasePath)
+						return new CompLayer(layer, comps, baseFont, gradients, imageBasePath)
 					case 'null':
 						return new NullLayer(layer)
 				}
