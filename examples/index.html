@@ -33,7 +33,6 @@
 
         canvas {
             width: 100%;
-            max-width: 640px;
         }
 
         #slider {
@@ -80,8 +79,9 @@
         .then(data => {
 
             animation = new ae2canvas.Animation({
-                canvas: canvas,
-                data,
+              canvas: canvas,
+              baseFont: "arial",
+              data
             });
 
             animation
