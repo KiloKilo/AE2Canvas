@@ -6,6 +6,7 @@ import BlendingMode from '../property/BlendingMode'
 
 class BaseLayer {
 	constructor(data) {
+		this.name = data.name
 		this.index = data.index
 		this.in = data.in || 0
 		this.out = data.out
