@@ -121,22 +121,23 @@ class Animation extends Emitter {
 	}
 
 	getLayerByName(name) {
-		const getLayer = (layers, hit) => {
-			layers.forEach(layer => {
-				if (layer.name === name) {
-					hit = layer
-				} else if (layer instanceof CompLayer) {
-					getLayer(layer.layers, hit)
+		const getLayer = (name, layer) => {
+			if (name === layer.name) {
+				return layer
+			} else if (layer.layers) {
+				for (let i = 0; i < layer.layers.length; i += 1) {
+					const hit = getLayer(name, layer.layers[i])
+					if (hit) {
+						return hit
+					}
 				}
-			})
+			}
+			return null
 		}
 
-		let hit = null
-
-		getLayer(this.layers, hit)
-
-		return hit
+		return getLayer(name, this)
 	}
+
 
 	checkStopMarkers(from, to) {
 		return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to)
