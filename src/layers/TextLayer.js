@@ -16,7 +16,7 @@ class TextLayer extends BaseLayer {
 		super.draw(ctx, time)
 
 		ctx.textAlign = this.justification
-		ctx.font = `${this.fontSize}px ${this.baseFont}` || this.font
+		ctx.font = `${this.fontSize}px ${this.baseFont || this.font}`
 		ctx.fillStyle = `rgb(${this.color[0]}, ${this.color[1]}, ${this.color[2]})`
 		for (let j = 0; j < this.text.length; j++) {
 			ctx.fillText(this.text[j], 0, j * this.leading)
