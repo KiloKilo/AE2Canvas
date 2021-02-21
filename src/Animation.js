@@ -125,7 +125,18 @@ class Animation extends Emitter {
 	}
 
 	preload() {
-		const promises = this.layers.filter(layer => layer instanceof ImageLayer).map(layer => layer.preload())
+		const promises = []
+		const preloadLayer = (layers, promises) => {
+			layers.forEach(layer => {
+				if (layer instanceof ImageLayer) {
+					promises.push(layer.preload())
+				} else if (layer instanceof CompLayer) {
+					preloadLayer(layer.layers, promises)
+				}
+			})
+		}
+
+		preloadLayer(this.layers)
 		return Promise.all(promises).catch(error => console.error(error))
 	}
 
