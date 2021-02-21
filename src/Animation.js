@@ -136,7 +136,7 @@ class Animation extends Emitter {
 			})
 		}
 
-		preloadLayer(this.layers)
+		preloadLayer(this.layers, promises)
 		return Promise.all(promises).catch(error => console.error(error))
 	}
 
