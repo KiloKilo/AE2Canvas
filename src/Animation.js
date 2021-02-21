@@ -120,6 +120,24 @@ class Animation extends Emitter {
 		console.warn('Marker not found')
 	}
 
+	getLayerByName(name) {
+		const getLayer = (layers, hit) => {
+			layers.forEach(layer => {
+				if (layer.name === name) {
+					hit = layer
+				} else if (layer instanceof CompLayer) {
+					getLayer(layer.layers, hit)
+				}
+			})
+		}
+
+		let hit = null
+
+		getLayer(this.layers, hit)
+
+		return hit
+	}
+
 	checkStopMarkers(from, to) {
 		return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to)
 	}
