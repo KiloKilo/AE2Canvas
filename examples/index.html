@@ -57,8 +57,9 @@
 <input id="slider" type="range" min="0" max="1" step="0.001" value="0">
 <input id="reversed" type="checkbox"><label for="reversed">Reversed</label>
 
-<script src="/dist/index.js"></script>
-<script>
+<script type="module">
+    import * as ae2canvas from "/dist/index.js";
+
     let animation;
 
     const slider = document.getElementById('slider');

@@ -1,8 +1,22 @@
 import Property from './Property'
 import AnimatedProperty from './AnimatedProperty'
 
+export type TrimProps = {
+	type: string
+	start: []
+	end: []
+	offset: []
+}
+
+export type TrimValues = { start: number; end: number } | null
+
 class Trim {
-	constructor(data) {
+	private type: string
+	private readonly start?: Property<number>
+	private readonly end?: Property<number>
+	private readonly offset?: Property<number>
+
+	constructor(data: TrimProps) {
 		this.type = data.type
 
 		if (data.start) this.start = data.start.length > 1 ? new AnimatedProperty(data.start) : new Property(data.start)
@@ -11,7 +25,7 @@ class Trim {
 			this.offset = data.offset.length > 1 ? new AnimatedProperty(data.offset) : new Property(data.offset)
 	}
 
-	getTrim(time) {
+	getTrim(time: number): TrimValues {
 		const startValue = this.start ? this.start.getValue(time) : 0
 		const endValue = this.end ? this.end.getValue(time) : 1
 
@@ -37,16 +51,16 @@ class Trim {
 		}
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		if (this.start) this.start.setKeyframes(time)
 		if (this.end) this.end.setKeyframes(time)
-		if (this.offset) this.offset.reset()
+		if (this.offset) this.offset.setKeyframes(time)
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		if (this.start) this.start.reset(reversed)
 		if (this.end) this.end.reset(reversed)
-		if (this.offset) this.offset.reset()
+		if (this.offset) this.offset.reset(reversed)
 	}
 }
 

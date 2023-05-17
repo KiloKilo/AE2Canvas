@@ -1,17 +1,24 @@
 import Property from '../property/Property'
 import AnimatedProperty from '../property/AnimatedProperty'
-import Path from './Path'
+import Path, { type PathProps, Vertex } from './Path'
+import { TrimValues } from '../property/Trim'
 
 class Ellipse extends Path {
-	constructor(data) {
+	private readonly size: Property<[number, number]>
+	private readonly position?: Property<[number, number]>
+
+	constructor(data: PathProps) {
 		super(data)
 		this.closed = true
+
 		this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size)
-		if (data.position)
+
+		if (data.position) {
 			this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position)
+		}
 	}
 
-	draw(ctx, time, trim) {
+	draw(ctx: CanvasRenderingContext2D, time: number, parentTrim: TrimValues) {
 		const size = this.size.getValue(time)
 		const position = this.position ? this.position.getValue(time) : [0, 0]
 
@@ -24,18 +31,22 @@ class Ellipse extends Path {
 		const ow = w * 0.5522848
 		const oh = h * 0.5522848
 
-		const vertices = [
+		const vertices: Vertex[] = [
 			[x + w + ow, y, x + w - ow, y, x + w, y],
 			[x + w + w, y + h + oh, x + w + w, y + h - oh, x + w + w, y + h],
 			[x + w - ow, y + h + h, x + w + ow, y + h + h, x + w, y + h + h],
 			[x, y + h - oh, x, y + h + oh, x, y + h],
 		]
 
-		if (trim) {
+		if (parentTrim) {
 			let tv
 			const len = w + h
 
-			trim = this.getTrimValues(trim)
+			const trim = this.getTrimValues(parentTrim)
+
+			if (trim === null) {
+				return
+			}
 
 			for (i = 0; i < 4; i++) {
 				j = i + 1
@@ -79,7 +90,12 @@ class Ellipse extends Path {
 		}
 	}
 
-	getTrimValues(trim) {
+	getTrimValues(
+		trim: TrimValues
+	): { start: number; end: number; startIndex: number; endIndex: number; looped: boolean } | null {
+		if (trim === null) {
+			return null
+		}
 		const startIndex = Math.floor(trim.start * 4)
 		const endIndex = Math.floor(trim.end * 4)
 		const start = (trim.start - startIndex * 0.25) * 4
@@ -90,15 +106,16 @@ class Ellipse extends Path {
 			endIndex,
 			start,
 			end,
+			looped: false,
 		}
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		this.size.setKeyframes(time)
 		if (this.position) this.position.setKeyframes(time)
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		this.size.reset(reversed)
 		if (this.position) this.position.reset(reversed)
 	}

@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"outDir": "dist",
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		"strictNullChecks": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"esModuleInterop": true,
+		"lib": ["dom", "esnext"]
+	}
+}

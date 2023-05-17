@@ -1,22 +1,34 @@
 import Property from '../property/Property'
 import AnimatedProperty from '../property/AnimatedProperty'
+import { TrimValues } from '../property/Trim'
+
+type Options = {
+	size: []
+	roundness?: []
+	position?: []
+}
 
 class Rect {
-	constructor(data) {
-		//this.name = data.name;
-		this.closed = true
+	private readonly size: Property<[number, number]>
+	private readonly position?: Property<[number, number]>
+	private readonly roundness?: Property<number>
 
+	public readonly closed = true
+
+	constructor(data: Options) {
 		this.size = data.size.length > 1 ? new AnimatedProperty(data.size) : new Property(data.size)
 
-		//optionals
-		if (data.position)
+		if (data.position) {
 			this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position)
-		if (data.roundness)
+		}
+
+		if (data.roundness) {
 			this.roundness =
 				data.roundness.length > 1 ? new AnimatedProperty(data.roundness) : new Property(data.roundness)
+		}
 	}
 
-	draw(ctx, time, trim) {
+	draw(ctx: CanvasRenderingContext2D, time: number, trim: TrimValues) {
 		const size = this.size.getValue(time)
 		const position = this.position ? this.position.getValue(time) : [0, 0]
 		let roundness = this.roundness ? this.roundness.getValue(time) : 0
@@ -40,13 +52,13 @@ class Rect {
 		}
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		this.size.setKeyframes(time)
 		if (this.position) this.position.setKeyframes(time)
 		if (this.roundness) this.roundness.setKeyframes(time)
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		this.size.reset(reversed)
 		if (this.position) this.position.reset(reversed)
 		if (this.roundness) this.roundness.reset(reversed)

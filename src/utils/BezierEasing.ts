@@ -18,7 +18,7 @@ var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0)
 
 var float32ArraySupported = typeof Float32Array === 'function'
 
-function BezierEasing(mX1, mY1, mX2, mY2) {
+function BezierEasing(mX1: number, mY1: number, mX2: number, mY2: number) {
 	// Validate arguments
 	if (arguments.length !== 4) {
 		throw new Error('BezierEasing requires 4 arguments.')
@@ -34,27 +34,27 @@ function BezierEasing(mX1, mY1, mX2, mY2) {
 
 	var mSampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize)
 
-	function A(aA1, aA2) {
+	function A(aA1: number, aA2: number) {
 		return 1.0 - 3.0 * aA2 + 3.0 * aA1
 	}
-	function B(aA1, aA2) {
+	function B(aA1: number, aA2: number) {
 		return 3.0 * aA2 - 6.0 * aA1
 	}
-	function C(aA1) {
+	function C(aA1: number) {
 		return 3.0 * aA1
 	}
 
 	// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-	function calcBezier(aT, aA1, aA2) {
+	function calcBezier(aT: number, aA1: number, aA2: number) {
 		return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT
 	}
 
 	// Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-	function getSlope(aT, aA1, aA2) {
+	function getSlope(aT: number, aA1: number, aA2: number) {
 		return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1)
 	}
 
-	function newtonRaphsonIterate(aX, aGuessT) {
+	function newtonRaphsonIterate(aX: number, aGuessT: number) {
 		for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
 			var currentSlope = getSlope(aGuessT, mX1, mX2)
 			if (currentSlope === 0.0) return aGuessT
@@ -70,7 +70,7 @@ function BezierEasing(mX1, mY1, mX2, mY2) {
 		}
 	}
 
-	function binarySubdivide(aX, aA, aB) {
+	function binarySubdivide(aX: number, aA: number, aB: number) {
 		var currentX,
 			currentT,
 			i = 0
@@ -86,7 +86,7 @@ function BezierEasing(mX1, mY1, mX2, mY2) {
 		return currentT
 	}
 
-	function getTForX(aX) {
+	function getTForX(aX: number) {
 		var intervalStart = 0.0
 		var currentSample = 1
 		var lastSample = kSplineTableSize - 1
@@ -113,7 +113,7 @@ function BezierEasing(mX1, mY1, mX2, mY2) {
 
 	if (mX1 != mY1 || mX2 != mY2) calcSampleValues()
 
-	var f = function(aX) {
+	var f = function (aX: number) {
 		if (mX1 === mY1 && mX2 === mY2) return aX // linear
 		// Because JavaScript number are imprecise, we should guarantee the extremes are right.
 		if (aX === 0) return 0
@@ -121,7 +121,7 @@ function BezierEasing(mX1, mY1, mX2, mY2) {
 		return calcBezier(getTForX(aX), mY1, mY2)
 	}
 	var str = 'BezierEasing(' + [mX1, mY1, mX2, mY2] + ')'
-	f.toString = function() {
+	f.toString = function () {
 		return str
 	}
 

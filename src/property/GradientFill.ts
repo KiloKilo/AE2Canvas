@@ -1,8 +1,29 @@
 import Property from './Property'
 import AnimatedProperty from './AnimatedProperty'
 
+type Stop = {
+	location: number
+	color: [number, number, number, number]
+}
+
+export type GradientFillProps = {
+	opacity: []
+	name: string
+	stops: Stop[]
+	type: string
+	startPoint: []
+	endPoint: []
+}
+
 class GradientFill {
-	constructor(data, gradients) {
+	private readonly type: string
+	private readonly startPoint: Property<[number, number]>
+	private readonly endPoint: Property<[number, number]>
+	private readonly opacity?: Property<number>
+
+	public stops: Stop[]
+
+	constructor(data: GradientFillProps, gradients: { [key: string]: GradientFill[] }) {
 		if (!gradients[data.name]) gradients[data.name] = []
 		gradients[data.name].push(this)
 
@@ -11,11 +32,12 @@ class GradientFill {
 		this.startPoint =
 			data.startPoint.length > 1 ? new AnimatedProperty(data.startPoint) : new Property(data.startPoint)
 		this.endPoint = data.endPoint.length > 1 ? new AnimatedProperty(data.endPoint) : new Property(data.endPoint)
-		if (data.opacity)
+		if (data.opacity) {
 			this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity)
+		}
 	}
 
-	update(ctx, time) {
+	update(ctx: CanvasRenderingContext2D, time: number) {
 		const startPoint = this.startPoint.getValue(time)
 		const endPoint = this.endPoint.getValue(time)
 		let radius = 0
@@ -41,16 +63,16 @@ class GradientFill {
 		ctx.fillStyle = gradient
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		if (this.opacity) this.opacity.setKeyframes(time)
 		this.startPoint.setKeyframes(time)
 		this.endPoint.setKeyframes(time)
 	}
 
-	reset(reversed) {
-		if (this.opacity) this.opacity.setKeyframes(reversed)
-		this.startPoint.setKeyframes(reversed)
-		this.endPoint.setKeyframes(reversed)
+	reset(reversed: boolean) {
+		if (this.opacity) this.opacity.reset(reversed)
+		this.startPoint.reset(reversed)
+		this.endPoint.reset(reversed)
 	}
 }
 

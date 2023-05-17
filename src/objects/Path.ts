@@ -1,17 +1,41 @@
 import Bezier from '../utils/Bezier'
+import { type Frame } from '../property/Property'
+import { type TrimValues } from '../property/Trim'
+
+export type PathProps = {
+	position?: []
+	size: []
+	closed: boolean
+	frames: Frame<Vertex[]>[]
+	isAnimated?: boolean
+	type: 'path' | 'rect' | 'ellipse' | 'polystar'
+	outerRoundness?: []
+	innerRoundness?: []
+	rotation?: []
+	outerRadius: []
+	innerRadius: []
+	points: []
+	starType: number
+}
+
+export type Vertex = [number, number, number, number, number, number]
 
 class Path {
-	constructor(data) {
+	public closed: boolean
+	public frames: Frame<Vertex[]>[]
+	private bezier?: Bezier
+
+	constructor(data: PathProps) {
 		this.closed = data.closed
 		this.frames = data.frames
 	}
 
-	draw(ctx, time, trim) {
+	draw(ctx: CanvasRenderingContext2D, time: number, trim?: TrimValues) {
 		const frame = this.getValue(time)
 		trim && (trim.start !== 0 || trim.end !== 1) ? this.drawTrimmed(frame, ctx, trim) : this.drawNormal(frame, ctx)
 	}
 
-	drawNormal(frame, ctx) {
+	drawNormal(frame: { v: Vertex[]; len: number[] }, ctx: CanvasRenderingContext2D) {
 		const vertices = frame.v
 		const numVertices = this.closed ? vertices.length : vertices.length - 1
 		let lastVertex = null
@@ -25,7 +49,11 @@ class Path {
 		}
 
 		if (this.closed) {
-			if (!nextVertex) debugger
+			//todo check
+			if (!nextVertex) {
+				debugger
+				return
+			}
 			ctx.bezierCurveTo(
 				nextVertex[0],
 				nextVertex[1],
@@ -38,17 +66,22 @@ class Path {
 		}
 	}
 
-	drawTrimmed(frame, ctx, trim) {
-		if (trim.start === trim.end) return
+	drawTrimmed(frame: { v: Vertex[]; len: number[] }, ctx: CanvasRenderingContext2D, trim: TrimValues) {
+		if (trim?.start === trim?.end) return
 
 		const vertices = frame.v
 		const numVertices = this.closed ? vertices.length : vertices.length - 1
 
-		let nextVertex
-		let lastVertex
+		let nextVertex: Vertex
+		let lastVertex: Vertex
 
-		const { start, end, endIndex, startIndex, looped } = this.getTrimValues(trim, frame)
+		const trimValues = this.getTrimValues(trim, frame)
 
+		if (trimValues === null) {
+			return
+		}
+
+		const { start, end, endIndex, startIndex, looped } = trimValues
 		if (looped && this.closed) {
 			let index = startIndex
 			let firstRound = true
@@ -144,17 +177,24 @@ class Path {
 		}
 	}
 
-	getValue() {
-		return this.frames[0]
+	getValue(time: number): { v: Vertex[]; len: number[] } {
+		return { v: this.frames[0].v as Vertex[], len: this.frames[0].len }
 	}
 
-	getTrimValues(trim, frame) {
+	getTrimValues(
+		trim: TrimValues,
+		frame: { v: Vertex[]; len: number[] }
+	): { start: number; end: number; endIndex: number; startIndex: number; looped: boolean } | null {
 		const actualTrim = {
 			startIndex: 0,
 			endIndex: 0,
 			start: 0,
 			end: 0,
 			looped: false,
+		}
+
+		if (trim === null) {
+			return null
 		}
 
 		if (trim.start === 0 && trim.end === 1) {
@@ -197,7 +237,7 @@ class Path {
 		return actualTrim
 	}
 
-	trim(lastVertex, nextVertex, from, to, len) {
+	trim(lastVertex: Vertex, nextVertex: Vertex, from: number, to: number, len: number) {
 		const values = {
 			start: lastVertex,
 			end: nextVertex,
@@ -279,26 +319,35 @@ class Path {
 		}
 	}
 
-	lerp(a, b, t) {
+	lerp(a: number, b: number, t: number) {
 		const s = 1 - t
 		return a * s + b * t
 	}
 
-	sumArray(arr) {
-		function add(a, b) {
+	sumArray(arr: number[]) {
+		function add(a: number, b: number) {
 			return a + b
 		}
 
 		return arr.reduce(add)
 	}
 
-	isStraight(startX, startY, ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY) {
+	isStraight(
+		startX: number,
+		startY: number,
+		ctrl1X: number,
+		ctrl1Y: number,
+		ctrl2X: number,
+		ctrl2Y: number,
+		endX: number,
+		endY: number
+	) {
 		return startX === ctrl1X && startY === ctrl1Y && endX === ctrl2X && endY === ctrl2Y
 	}
 
-	setKeyframes(time) {}
+	setKeyframes(time: number) {}
 
-	reset(reversed) {}
+	reset(reversed: boolean) {}
 }
 
 export default Path

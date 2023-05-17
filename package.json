@@ -2,25 +2,23 @@
 	"name": "@kilokilo/ae2canvas",
 	"version": "1.5.1",
 	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"author": "Lukas Zgraggen <lukas.zgraggen@kilokilo.com>",
+	"type": "module",
 	"devDependencies": {
-		"@babel/core": "^7.3.4",
-		"@babel/plugin-transform-spread": "^7.2.2",
-		"@babel/preset-env": "^7.3.4",
-		"babel-loader": "^8.0.5",
+		"esbuild": "^0.17.19",
+		"fs-extra": "^11.1.1",
 		"path": "^0.12.7",
-		"webpack": "^4.29.5",
-		"webpack-cli": "^3.2.3",
-		"webpack-dev-server": "^3.2.1"
+		"prettier": "^2.8.8",
+		"typescript": "^5.0.4"
 	},
 	"dependencies": {
-		"prettier": "^1.19.1",
 		"tiny-emitter": "^2.0.2"
 	},
 	"scripts": {
-		"build": "webpack --mode=production",
-		"dev": "webpack-dev-server",
-		"prettier": "prettier --write \"**/*.{js,jsx,json,md}\"",
+		"dev": "node esbuild.config.js mode=development",
+		"build": "tsc && node esbuild.config.js mode=production",
 		"prepublishOnly": "yarn run build"
 	}
 }
