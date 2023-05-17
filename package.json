@@ -7,14 +7,14 @@
 	"author": "Lukas Zgraggen <lukas.zgraggen@kilokilo.com>",
 	"type": "module",
 	"devDependencies": {
-		"esbuild": "^0.17.19",
-		"fs-extra": "^11.1.1",
-		"path": "^0.12.7",
-		"prettier": "^2.8.8",
-		"typescript": "^5.0.4"
+		"esbuild": "0.17.19",
+		"fs-extra": "11.1.1",
+		"path": "0.12.7",
+		"prettier": "2.8.8",
+		"typescript": "5.0.4"
 	},
 	"dependencies": {
-		"tiny-emitter": "^2.0.2"
+		"tiny-emitter": "2.0.2"
 	},
 	"scripts": {
 		"dev": "node esbuild.config.js mode=development",
