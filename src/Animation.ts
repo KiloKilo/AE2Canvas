@@ -5,13 +5,66 @@ import NullLayer from './layers/NullLayer'
 import TextLayer from './layers/TextLayer'
 import CompLayer from './layers/CompLayer'
 import VectorLayer from './layers/VectorLayer'
+import GradientFill from './property/GradientFill'
+import BaseLayer, { BaseLayerProps } from './layers/BaseLayer'
+
+type Marker = {
+	time: number
+	stop: number
+	comment: string
+}
+
+type AnimationProps = {
+	reversed?: boolean
+	canvas?: HTMLCanvasElement
+	imageBasePath?: string
+	fluid?: boolean
+	devicePixelRatio?: number
+	loop?: boolean
+	baseFont?: string
+
+	data: {
+		layers: []
+		comps: { [key: string]: BaseLayerProps }
+		markers: Marker[]
+		height: number
+		width: number
+		duration: number
+	}
+}
+
+export type Gradients = { [key: string]: GradientFill[] }
 
 class Animation extends Emitter {
-	constructor(options) {
+	private readonly gradients: Gradients
+	private readonly duration: number
+	private readonly baseWidth: number
+	private readonly baseHeight: number
+	private readonly ratio: number
+	private readonly markers: Marker[]
+	private readonly baseFont?: string
+	private readonly loop: boolean
+	private readonly devicePixelRatio: number
+	private readonly fluid: boolean
+	private readonly imageBasePath: string
+	private readonly canvas: HTMLCanvasElement
+	private readonly ctx: CanvasRenderingContext2D | null
+	private readonly layers: BaseLayer[]
+
+	private _reversed = false
+	private isPaused = false
+	private isPlaying = false
+	private drawFrame = true
+
+	private pausedTime = 0
+	private time = 0
+	private scale = 1
+	private then = 0
+
+	constructor(options: AnimationProps) {
 		super()
 
 		this.gradients = {}
-		this.pausedTime = 0
 		this.duration = options.data.duration
 		this.baseWidth = options.data.width
 		this.baseHeight = options.data.height
@@ -26,16 +79,12 @@ class Animation extends Emitter {
 		this.imageBasePath = options.imageBasePath || ''
 		const comps = options.data.comps
 
-		this.isPaused = false
-		this.isPlaying = false
-		this.drawFrame = true
-
 		this.canvas = options.canvas || document.createElement('canvas')
 		this.canvas.width = this.baseWidth
 		this.canvas.height = this.baseHeight
 		this.ctx = this.canvas.getContext('2d')
 
-		this.layers = options.data.layers.map(layer => {
+		this.layers = options.data.layers.map((layer: BaseLayerProps) => {
 			switch (layer.type) {
 				case 'vector':
 					return new VectorLayer(layer, this.gradients)
@@ -51,15 +100,15 @@ class Animation extends Emitter {
 			}
 		})
 
-		this.layers.forEach(layer => {
+		this.layers.forEach((layer) => {
 			if (layer.parent) {
-				const parentIndex = layer.parent
-				layer.parent = this.layers.find(layer => layer.index === parentIndex)
+				const parentIndex = layer.parent.index
+				layer.parent = this.layers.find((layer) => layer.index === parentIndex)
 			}
 		})
 
 		this.reversed = options.reversed || false
-		this.reset(this.reversed)
+		this.reset()
 		this.resize()
 
 		add(this)
@@ -67,7 +116,7 @@ class Animation extends Emitter {
 
 	play() {
 		if (!this.isPlaying) {
-			if (!this.isPaused) this.reset(this.reversed)
+			if (!this.isPaused) this.reset()
 			this.isPaused = false
 			this.pausedTime = 0
 			this.isPlaying = true
@@ -75,7 +124,7 @@ class Animation extends Emitter {
 	}
 
 	stop() {
-		this.reset(this.reversed)
+		this.reset()
 		this.isPlaying = false
 		this.drawFrame = true
 	}
@@ -88,7 +137,7 @@ class Animation extends Emitter {
 		}
 	}
 
-	gotoAndPlay(id) {
+	gotoAndPlay(id: number | string) {
 		const marker = this.getMarker(id)
 		if (marker) {
 			this.time = marker.time
@@ -98,7 +147,7 @@ class Animation extends Emitter {
 		}
 	}
 
-	gotoAndStop(id) {
+	gotoAndStop(id: number | string) {
 		const marker = this.getMarker(id)
 		if (marker) {
 			this.time = marker.time
@@ -108,20 +157,20 @@ class Animation extends Emitter {
 		}
 	}
 
-	getMarker(id) {
+	getMarker(id: number | string) {
 		let marker
 		if (typeof id === 'number') {
 			marker = this.markers[id]
-		} else if (typeof id === 'string') {
-			marker = this.markers.find(marker => marker.comment === id)
+		} else {
+			marker = this.markers.find((marker) => marker.comment === id)
 		}
 
 		if (marker) return marker
 		console.warn('Marker not found')
 	}
 
-	getLayerByName(name) {
-		const getLayer = (name, layer) => {
+	getLayerByName(name: string): BaseLayer | null {
+		const getLayer = (name: string, layer: BaseLayer): BaseLayer | null => {
 			if (name === layer.name) {
 				return layer
 			} else if (layer.layers) {
@@ -135,18 +184,17 @@ class Animation extends Emitter {
 			return null
 		}
 
-		return getLayer(name, this)
+		return this.layers.find((layer) => getLayer(name, layer)) || null
 	}
 
-
-	checkStopMarkers(from, to) {
-		return this.markers.find(marker => marker.stop && marker.time > from && marker.time < to)
+	checkStopMarkers(from: number, to: number) {
+		return this.markers.find((marker) => marker.stop && marker.time > from && marker.time < to)
 	}
 
 	preload() {
-		const promises = []
-		const preloadLayer = (layers, promises) => {
-			layers.forEach(layer => {
+		const promises: Promise<void>[] = []
+		const preloadLayer = (layers: BaseLayer[], promises: Promise<void>[]) => {
+			layers.forEach((layer) => {
 				if (layer instanceof ImageLayer) {
 					promises.push(layer.preload())
 				} else if (layer instanceof CompLayer) {
@@ -156,17 +204,17 @@ class Animation extends Emitter {
 		}
 
 		preloadLayer(this.layers, promises)
-		return Promise.all(promises).catch(error => console.error(error))
+		return Promise.all(promises).catch((error) => console.error(error))
 	}
 
 	reset() {
 		this.pausedTime = 0
 		this.time = this.reversed ? this.duration : 0
-		this.layers.forEach(layer => layer.reset(this.reversed))
+		this.layers.forEach((layer) => layer.reset(this.reversed))
 	}
 
-	setKeyframes(time) {
-		this.layers.forEach(layer => layer.setKeyframes(time))
+	setKeyframes(time: number) {
+		this.layers.forEach((layer) => layer.setKeyframes(time))
 	}
 
 	destroy() {
@@ -175,26 +223,26 @@ class Animation extends Emitter {
 		remove(this)
 	}
 
-	resize(w) {
+	resize(w?: number) {
 		if (this.fluid) {
 			const width = w || this.canvas.clientWidth || this.baseWidth
 			this.canvas.width = width * this.devicePixelRatio
 			this.canvas.height = (width / this.ratio) * this.devicePixelRatio
 
 			this.scale = (width / this.baseWidth) * this.devicePixelRatio
-			this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0)
+			this.ctx?.transform(this.scale, 0, 0, this.scale, 0, 0)
 			this.setKeyframes(this.time)
 			this.drawFrame = true
 		}
 	}
 
-	setGradients(name, stops) {
+	setGradients(name: string, stops: any) {
 		if (!this.gradients[name]) {
 			console.warn(`Gradient with name: ${name} not found.`)
 			return
 		}
 
-		this.gradients[name].forEach(gradient => {
+		this.gradients[name].forEach((gradient) => {
 			gradient.stops = stops
 		})
 	}
@@ -233,7 +281,7 @@ class Animation extends Emitter {
 				indexX++
 			}
 
-			ctx.drawImage(this.canvas, x, y, width, height)
+			ctx?.drawImage(this.canvas, x, y, width, height)
 		}
 
 		return {
@@ -246,17 +294,19 @@ class Animation extends Emitter {
 		}
 	}
 
-	draw(time) {
+	draw(time: number) {
+		if (!this.ctx) return
+
 		this.ctx.clearRect(0, 0, this.baseWidth, this.baseHeight)
 
-		this.layers.forEach(layer => {
-			if (time >= layer.in && time <= layer.out) {
+		this.layers.forEach((layer) => {
+			if (this.ctx && time >= layer.in && time <= layer.out) {
 				layer.draw(this.ctx, time)
 			}
 		})
 	}
 
-	update(time) {
+	update(time: number) {
 		if (!this.then) this.then = time
 
 		const delta = time - this.then

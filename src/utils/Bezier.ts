@@ -1,9 +1,16 @@
+type Path = [number, number, number, number, number, number, number, number]
+
 class Bezier {
-	constructor(path) {
+	private readonly path: Path
+	private steps = 0
+	private length = 0
+	private arcLengths: number[] = []
+
+	constructor(path: Path) {
 		this.path = path
 	}
 
-	getLength(len) {
+	getLength(len: number) {
 		this.steps = Math.max(Math.floor(len / 10), 1)
 		this.arcLengths = new Array(this.steps + 1)
 		this.arcLengths[0] = 0
@@ -29,7 +36,7 @@ class Bezier {
 		this.length = clen
 	}
 
-	map(u) {
+	map(u: number) {
 		const targetLength = u * this.arcLengths[this.steps]
 		let low = 0
 		let high = this.steps
@@ -55,7 +62,7 @@ class Bezier {
 		}
 	}
 
-	getValues(elapsed) {
+	getValues(elapsed: number): [number, number] {
 		const t = this.map(elapsed)
 		const x = this.cubicN(t, this.path[0], this.path[2], this.path[4], this.path[6])
 		const y = this.cubicN(t, this.path[1], this.path[3], this.path[5], this.path[7])
@@ -63,7 +70,7 @@ class Bezier {
 		return [x, y]
 	}
 
-	cubicN(pct, a, b, c, d) {
+	cubicN(pct: number, a: number, b: number, c: number, d: number) {
 		const t2 = pct * pct
 		const t3 = t2 * pct
 		return (

@@ -2,8 +2,32 @@ import Property from '../property/Property'
 import AnimatedProperty from '../property/AnimatedProperty'
 import Position from './Position'
 
+export type TransformProps = {
+	position?: []
+	positionX?: []
+	positionY?: []
+	anchor?: []
+	scaleX?: []
+	scaleY?: []
+	skew?: []
+	skewAxis?: []
+	rotation?: []
+	opacity?: []
+}
+
 class Transform {
-	constructor(data) {
+	private readonly position?: Property<[number, number]>
+	private readonly positionX?: Property<number>
+	private readonly positionY?: Property<number>
+	private readonly anchor?: Property<[number, number]>
+	private readonly scaleX?: Property<number>
+	private readonly scaleY?: Property<number>
+	private readonly skew?: Property<number>
+	private readonly skewAxis?: Property<number>
+	private readonly rotation?: Property<number>
+	private readonly opacity?: Property<number>
+
+	constructor(data: TransformProps) {
 		if (data.position) {
 			if (data.position.length > 1) {
 				this.position = new Position(data.position)
@@ -12,28 +36,38 @@ class Transform {
 			}
 		}
 
-		if (data.positionX)
+		if (data.positionX) {
 			this.positionX =
 				data.positionX.length > 1 ? new AnimatedProperty(data.positionX) : new Property(data.positionX)
-		if (data.positionY)
+		}
+		if (data.positionY) {
 			this.positionY =
 				data.positionY.length > 1 ? new AnimatedProperty(data.positionY) : new Property(data.positionY)
-		if (data.anchor)
+		}
+		if (data.anchor) {
 			this.anchor = data.anchor.length > 1 ? new AnimatedProperty(data.anchor) : new Property(data.anchor)
-		if (data.scaleX)
+		}
+		if (data.scaleX) {
 			this.scaleX = data.scaleX.length > 1 ? new AnimatedProperty(data.scaleX) : new Property(data.scaleX)
-		if (data.scaleY)
+		}
+		if (data.scaleY) {
 			this.scaleY = data.scaleY.length > 1 ? new AnimatedProperty(data.scaleY) : new Property(data.scaleY)
-		if (data.skew) this.skew = data.skew.length > 1 ? new AnimatedProperty(data.skew) : new Property(data.skew)
-		if (data.skewAxis)
+		}
+		if (data.skew) {
+			this.skew = data.skew.length > 1 ? new AnimatedProperty(data.skew) : new Property(data.skew)
+		}
+		if (data.skewAxis) {
 			this.skewAxis = data.skewAxis.length > 1 ? new AnimatedProperty(data.skewAxis) : new Property(data.skewAxis)
-		if (data.rotation)
+		}
+		if (data.rotation) {
 			this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation)
-		if (data.opacity)
+		}
+		if (data.opacity) {
 			this.opacity = data.opacity.length > 1 ? new AnimatedProperty(data.opacity) : new Property(data.opacity)
+		}
 	}
 
-	update(ctx, time) {
+	update(ctx: CanvasRenderingContext2D, time: number) {
 		let positionX // FIXME wrong transparency if nested
 		let positionY
 		const anchor = this.anchor ? this.anchor.getValue(time) : [0, 0]
@@ -45,7 +79,7 @@ class Transform {
 		const opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha
 
 		if (this.position) {
-			const position = this.position.getValue(time, ctx)
+			const position = this.position.getValue(time)
 			positionX = position[0]
 			positionY = position[1]
 		} else {
@@ -63,7 +97,7 @@ class Transform {
 		ctx.globalAlpha = opacity
 	}
 
-	setRotation(ctx, rad, x, y) {
+	setRotation(ctx: CanvasRenderingContext2D, rad: number, x: number, y: number) {
 		const c = Math.cos(rad)
 		const s = Math.sin(rad)
 		const dx = x - c * x + s * y
@@ -71,22 +105,22 @@ class Transform {
 		ctx.transform(c, s, -s, c, dx, dy)
 	}
 
-	setScale(ctx, sx, sy, x, y) {
+	setScale(ctx: CanvasRenderingContext2D, sx: number, sy: number, x: number, y: number) {
 		ctx.transform(sx, 0, 0, sy, -x * sx + x, -y * sy + y)
 	}
 
-	setSkew(ctx, skew, axis, x, y) {
+	setSkew(ctx: CanvasRenderingContext2D, skew: number, axis: number, x: number, y: number) {
 		const t = Math.tan(-skew)
 		this.setRotation(ctx, -axis, x, y)
 		ctx.transform(1, 0, t, 1, -y * t, 0)
 		this.setRotation(ctx, axis, x, y)
 	}
 
-	deg2rad(deg) {
+	deg2rad(deg: number) {
 		return deg * (Math.PI / 180)
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		if (this.anchor) this.anchor.setKeyframes(time)
 		if (this.rotation) this.rotation.setKeyframes(time)
 		if (this.skew) this.skew.setKeyframes(time)
@@ -99,7 +133,7 @@ class Transform {
 		if (this.opacity) this.opacity.setKeyframes(time)
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		if (this.anchor) this.anchor.reset(reversed)
 		if (this.rotation) this.rotation.reset(reversed)
 		if (this.skew) this.skew.reset(reversed)

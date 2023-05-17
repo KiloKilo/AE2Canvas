@@ -1,7 +1,16 @@
 import BaseLayer from './BaseLayer'
+import { BaseLayerProps } from './BaseLayer'
 
 class TextLayer extends BaseLayer {
-	constructor(data, baseFont) {
+	private readonly text: string
+	private readonly leading: number
+	private readonly fontSize: number
+	private readonly font: string
+	private readonly color: string
+	private readonly justification: CanvasTextAlign
+	private readonly baseFont?: string
+
+	constructor(data: BaseLayerProps, baseFont?: string) {
 		super(data)
 		this.text = data.text
 		this.leading = data.leading
@@ -12,7 +21,7 @@ class TextLayer extends BaseLayer {
 		this.baseFont = baseFont
 	}
 
-	draw(ctx, time) {
+	draw(ctx: CanvasRenderingContext2D, time: number) {
 		super.draw(ctx, time)
 
 		ctx.textAlign = this.justification

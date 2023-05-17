@@ -2,20 +2,23 @@
 	"name": "@kilokilo/ae2canvas",
 	"version": "1.5.1",
 	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"author": "Lukas Zgraggen <lukas.zgraggen@kilokilo.com>",
 	"type": "module",
 	"devDependencies": {
 		"esbuild": "^0.17.19",
 		"fs-extra": "^11.1.1",
 		"path": "^0.12.7",
-		"prettier": "^2.8.8"
+		"prettier": "^2.8.8",
+		"typescript": "^5.0.4"
 	},
 	"dependencies": {
 		"tiny-emitter": "^2.0.2"
 	},
 	"scripts": {
 		"dev": "node esbuild.config.js mode=development",
-		"build": "node esbuild.config.js mode=production",
+		"build": "tsc && node esbuild.config.js mode=production",
 		"prepublishOnly": "yarn run build"
 	}
 }

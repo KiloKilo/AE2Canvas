@@ -1,14 +1,29 @@
-import Path from './Path'
+import Path, { type PathProps, Vertex } from './Path'
 import BezierEasing from '../utils/BezierEasing'
+import { Frame } from '../property/Property'
 
 class AnimatedPath extends Path {
-	constructor(data) {
+	private frameCount: number
+
+	private nextFrame: Frame<Vertex[]>
+	private lastFrame: Frame<Vertex[]>
+	private easing?: any | null
+	private finished = false
+	private started = false
+	private pointer = 0
+	private verticesCount: number
+
+	constructor(data: PathProps) {
 		super(data)
 		this.frameCount = this.frames.length
-		this.verticesCount = this.frames[0].v.length
+		this.verticesCount = this.frames[0].v?.length
+
+		//todo check
+		this.nextFrame = this.frames[1]
+		this.lastFrame = this.frames[0]
 	}
 
-	getValue(time) {
+	getValue(time: number): Omit<Frame<Vertex[]>, 't'> {
 		if (this.finished && time >= this.nextFrame.t) {
 			return this.nextFrame
 		} else if (!this.started && time <= this.lastFrame.t) {
@@ -39,7 +54,7 @@ class AnimatedPath extends Path {
 		}
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		if (time < this.frames[0].t) {
 			this.pointer = 1
 			this.nextFrame = this.frames[this.pointer]
@@ -57,7 +72,7 @@ class AnimatedPath extends Path {
 		}
 
 		for (let i = 1; i < this.frameCount; i++) {
-			if (time >= this.frames[i - 1].t && time <= this.frames[i]) {
+			if (time >= this.frames[i - 1].t && time <= this.frames[i].t) {
 				this.pointer = i
 				this.lastFrame = this.frames[i - 1]
 				this.nextFrame = this.frames[i]
@@ -71,13 +86,13 @@ class AnimatedPath extends Path {
 		this.setEasing()
 	}
 
-	lerp(a, b, t) {
+	lerp(a: number, b: number, t: number) {
 		return a + t * (b - a)
 	}
 
 	setEasing() {
 		if (this.lastFrame.easeOut && this.nextFrame.easeIn) {
-			this.easing = new BezierEasing(
+			this.easing = new (BezierEasing as any)(
 				this.lastFrame.easeOut[0],
 				this.lastFrame.easeOut[1],
 				this.nextFrame.easeIn[0],
@@ -88,15 +103,15 @@ class AnimatedPath extends Path {
 		}
 	}
 
-	getValueAtTime(time) {
+	getValueAtTime(time: number): Omit<Frame<Vertex[]>, 't'> {
 		const delta = time - this.lastFrame.t
 		const duration = this.nextFrame.t - this.lastFrame.t
 		let elapsed = delta / duration
 		if (elapsed > 1) elapsed = 1
 		else if (elapsed < 0) elapsed = 0
 		else if (this.easing) elapsed = this.easing(elapsed)
-		const actualVertices = []
-		const actualLength = []
+		const actualVertices: Vertex[] = []
+		const actualLengths = []
 
 		for (let i = 0; i < this.verticesCount; i++) {
 			const cp1x = this.lerp(this.lastFrame.v[i][0], this.nextFrame.v[i][0], elapsed)
@@ -110,16 +125,16 @@ class AnimatedPath extends Path {
 		}
 
 		for (let j = 0; j < this.verticesCount - 1; j++) {
-			actualLength.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed))
+			actualLengths.push(this.lerp(this.lastFrame.len[j], this.nextFrame.len[j], elapsed))
 		}
 
 		return {
 			v: actualVertices,
-			len: actualLength,
+			len: actualLengths,
 		}
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		this.finished = false
 		this.started = false
 		this.pointer = reversed ? this.frameCount - 1 : 1

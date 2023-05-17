@@ -1,11 +1,7 @@
 import BaseLayer from './BaseLayer'
 
 class NullLayer extends BaseLayer {
-	constructor(data) {
-		super(data)
-	}
-
-	draw(ctx, time) {
+	draw(ctx: CanvasRenderingContext2D, time: number) {
 		super.draw(ctx, time)
 		ctx.restore()
 	}

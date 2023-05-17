@@ -1,34 +1,51 @@
 import Property from '../property/Property'
 import AnimatedProperty from '../property/AnimatedProperty'
+import { PathProps } from './Path'
 
 class Polystar {
-	constructor(data) {
-		//this.name = data.name;
-		this.closed = true // TODO ??
+	private readonly starType: number
+	private readonly points: Property<number>
+	private readonly innerRadius: Property<number>
+	private readonly outerRadius: Property<number>
+	private readonly position?: Property<[number, number]>
+	private readonly rotation?: Property<number>
+	private readonly innerRoundness?: Property<number>
+	private readonly outerRoundness?: Property<number>
 
+	public readonly closed = true // TODO ??
+
+	constructor(data: PathProps) {
 		this.starType = data.starType
 		this.points = data.points.length > 1 ? new AnimatedProperty(data.points) : new Property(data.points)
+
 		this.innerRadius =
 			data.innerRadius.length > 1 ? new AnimatedProperty(data.innerRadius) : new Property(data.innerRadius)
 		this.outerRadius =
 			data.outerRadius.length > 1 ? new AnimatedProperty(data.outerRadius) : new Property(data.outerRadius)
-		if (data.position)
+
+		if (data.position) {
 			this.position = data.position.length > 1 ? new AnimatedProperty(data.position) : new Property(data.position)
-		if (data.rotation)
+		}
+		if (data.rotation) {
 			this.rotation = data.rotation.length > 1 ? new AnimatedProperty(data.rotation) : new Property(data.rotation)
-		if (data.innerRoundness)
+		}
+		if (data.innerRoundness) {
 			this.innerRoundness =
 				data.innerRoundness.length > 1
 					? new AnimatedProperty(data.innerRoundness)
 					: new Property(data.innerRoundness)
-		if (data.outerRoundness)
+		}
+		if (data.outerRoundness) {
 			this.outerRoundness =
 				data.outerRoundness.length > 1
 					? new AnimatedProperty(data.outerRoundness)
 					: new Property(data.outerRoundness)
+		}
 	}
 
-	draw(ctx, time) {
+	draw(ctx: CanvasRenderingContext2D, time: number) {
+		//todo add trim
+
 		const points = this.points.getValue(time)
 		const innerRadius = this.innerRadius.getValue(time)
 		const outerRadius = this.outerRadius.getValue(time)
@@ -123,7 +140,7 @@ class Polystar {
 		ctx.restore()
 	}
 
-	rotatePoint(cx, cy, x, y, radians) {
+	rotatePoint(cx: number, cy: number, x: number, y: number, radians: number) {
 		const cos = Math.cos(radians)
 		const sin = Math.sin(radians)
 		const nx = cos * (x - cx) - sin * (y - cy) + cx
@@ -131,11 +148,11 @@ class Polystar {
 		return [nx, ny]
 	}
 
-	deg2rad(deg) {
+	deg2rad(deg: number) {
 		return deg * (Math.PI / 180)
 	}
 
-	setKeyframes(time) {
+	setKeyframes(time: number) {
 		this.points.setKeyframes(time)
 		this.innerRadius.setKeyframes(time)
 		this.outerRadius.setKeyframes(time)
@@ -145,7 +162,7 @@ class Polystar {
 		if (this.outerRoundness) this.outerRoundness.setKeyframes(time)
 	}
 
-	reset(reversed) {
+	reset(reversed: boolean) {
 		this.points.reset(reversed)
 		this.innerRadius.reset(reversed)
 		this.outerRadius.reset(reversed)
