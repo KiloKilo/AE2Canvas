@@ -18,7 +18,7 @@
 	},
 	"scripts": {
 		"dev": "node esbuild.config.js mode=development",
-		"build": "tsc && node esbuild.config.js mode=production",
+		"build": "node esbuild.config.js mode=production && tsc",
 		"prepublishOnly": "yarn run build"
 	}
 }
