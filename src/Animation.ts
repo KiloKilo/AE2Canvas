@@ -101,10 +101,7 @@ class Animation extends Emitter {
 		})
 
 		this.layers.forEach((layer) => {
-			if (layer.parent) {
-				const parentIndex = layer.parent.index
-				layer.parent = this.layers.find((layer) => layer.index === parentIndex)
-			}
+			layer.parent = this.layers.find((l) => l.index === layer.parentIndex)
 		})
 
 		this.reversed = options.reversed || false

@@ -60,13 +60,14 @@ class BaseLayer {
 	public timeRemapping?: any
 	public layers: BaseLayer[] = []
 	public parent?: BaseLayer
+	public parentIndex?: number
 
 	constructor(data: BaseLayerProps) {
 		this.name = data.name
 		this.index = data.index
 		this.in = data.in || 0
 		this.out = data.out
-		if (data.parent) this.parent = data.parent
+		if (data.parent) this.parentIndex = data.parent
 		if (data.blendMode) this.blendMode = new BlendingMode(data.blendMode)
 		this.transform = new Transform(data.transform)
 
@@ -92,8 +93,8 @@ class BaseLayer {
 	) {
 		ctx.save()
 
-		if (this.parent) this.parent.setParentTransform(ctx, time)
-		if (this.blendMode) this.blendMode.setCompositeOperation(ctx)
+		this.parent?.setParentTransform(ctx, time)
+		this.blendMode?.setCompositeOperation(ctx)
 
 		this.transform.update(ctx, time)
 
@@ -108,7 +109,7 @@ class BaseLayer {
 	}
 
 	setParentTransform(ctx: CanvasRenderingContext2D, time: number) {
-		if (this.parent) this.parent.setParentTransform(ctx, time)
+		this.parent?.setParentTransform(ctx, time)
 		this.transform.update(ctx, time)
 	}
 
