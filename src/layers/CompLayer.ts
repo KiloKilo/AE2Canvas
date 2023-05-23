@@ -56,15 +56,15 @@ class CompLayer extends BaseLayer {
 		}
 	}
 
-	draw(ctx: CanvasRenderingContext2D, time: number) {
-		super.draw(ctx, time)
+	draw(ctx: CanvasRenderingContext2D, time: number, scale: number) {
+		super.draw(ctx, time, scale)
 
 		if (this.layers) {
 			let internalTime = time - this.in
 			if (this.timeRemapping) internalTime = this.timeRemapping.getValue(internalTime)
 			this.layers.forEach((layer) => {
 				if (internalTime >= layer.in && internalTime <= layer.out) {
-					layer.draw(ctx, internalTime)
+					layer.draw(ctx, internalTime, scale)
 				}
 			})
 		}

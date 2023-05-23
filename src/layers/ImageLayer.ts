@@ -22,8 +22,8 @@ class ImageLayer extends BaseLayer {
 		})
 	}
 
-	draw(ctx: CanvasRenderingContext2D, time: number) {
-		super.draw(ctx, time)
+	draw(ctx: CanvasRenderingContext2D, time: number, scale: number) {
+		super.draw(ctx, time, scale)
 
 		if (this.img) {
 			ctx.drawImage(this.img, 0, 0)

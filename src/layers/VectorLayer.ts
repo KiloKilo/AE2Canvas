@@ -49,11 +49,12 @@ class VectorLayer extends BaseLayer {
 	draw(
 		ctx: CanvasRenderingContext2D,
 		time: number,
+		scale: number,
 		parentFill: Fill | GradientFill,
 		parentStroke: Stroke,
 		parentTrim: TrimValues
 	) {
-		super.draw(ctx, time)
+		super.draw(ctx, time, scale)
 
 		const fill = this.fill || parentFill
 		const stroke = this.stroke || parentStroke
@@ -73,7 +74,7 @@ class VectorLayer extends BaseLayer {
 		if (fill) ctx.fill()
 		if (stroke) ctx.stroke()
 
-		if (this.groups) this.groups.forEach((group) => group.draw(ctx, time, fill, stroke, trimValues))
+		if (this.groups) this.groups.forEach((group) => group.draw(ctx, time, scale, fill, stroke, trimValues))
 		ctx.restore()
 	}
 

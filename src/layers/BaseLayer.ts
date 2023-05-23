@@ -85,6 +85,7 @@ class BaseLayer {
 	draw(
 		ctx: CanvasRenderingContext2D,
 		time: number,
+		scale: number,
 		parentFill?: Fill | GradientFill,
 		parentStroke?: Stroke,
 		parentTrim?: TrimValues
@@ -97,7 +98,7 @@ class BaseLayer {
 		this.transform.update(ctx, time)
 
 		this.dropShadow?.setShadow(ctx, time)
-		this.blur?.setBlur(ctx, time)
+		this.blur?.setBlur(ctx, time, scale)
 
 		if (this.masks) {
 			ctx.beginPath()

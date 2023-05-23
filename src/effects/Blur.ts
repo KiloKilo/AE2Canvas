@@ -12,8 +12,8 @@ class Blur {
 		this.radius = data.radius.length > 1 ? new AnimatedProperty(data.radius) : new Property(data.radius)
 	}
 
-	setBlur(ctx: CanvasRenderingContext2D, time: number) {
-		const blur = this.radius.getValue(time)
+	setBlur(ctx: CanvasRenderingContext2D, time: number, scale: number) {
+		const blur = this.radius.getValue(time) * scale
 		ctx.filter = `blur(${blur}px)`
 	}
 

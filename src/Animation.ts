@@ -301,7 +301,7 @@ class Animation extends Emitter {
 
 		this.layers.forEach((layer) => {
 			if (this.ctx && time >= layer.in && time <= layer.out) {
-				layer.draw(this.ctx, time)
+				layer.draw(this.ctx, time, this.scale)
 			}
 		})
 	}

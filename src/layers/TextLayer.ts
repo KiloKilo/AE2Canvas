@@ -21,8 +21,8 @@ class TextLayer extends BaseLayer {
 		this.baseFont = baseFont
 	}
 
-	draw(ctx: CanvasRenderingContext2D, time: number) {
-		super.draw(ctx, time)
+	draw(ctx: CanvasRenderingContext2D, time: number, scale: number) {
+		super.draw(ctx, time, scale)
 
 		ctx.textAlign = this.justification
 		ctx.font = `${this.fontSize}px ${this.baseFont || this.font}`
