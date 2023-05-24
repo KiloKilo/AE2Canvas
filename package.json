@@ -1,6 +1,6 @@
 {
 	"name": "@kilokilo/ae2canvas",
-	"version": "1.7.2",
+	"version": "1.7.3",
 	"main": "dist/index.js",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
