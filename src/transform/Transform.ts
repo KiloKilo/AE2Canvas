@@ -67,16 +67,22 @@ class Transform {
 		}
 	}
 
-	update(ctx: CanvasRenderingContext2D, time: number) {
-		let positionX // FIXME wrong transparency if nested
+	update(ctx: CanvasRenderingContext2D, time: number, setOpacity = true) {
+		// FIXME wrong transparency if nested
+		let positionX
 		let positionY
+		let opacity = 1
+
 		const anchor = this.anchor ? this.anchor.getValue(time) : [0, 0]
 		const rotation = this.rotation ? this.deg2rad(this.rotation.getValue(time)) : 0
 		const skew = this.skew ? this.deg2rad(this.skew.getValue(time)) : 0
 		const skewAxis = this.skewAxis ? this.deg2rad(this.skewAxis.getValue(time)) : 0
 		const scaleX = this.scaleX ? this.scaleX.getValue(time) : 1
 		const scaleY = this.scaleY ? this.scaleY.getValue(time) : 1
-		const opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha
+
+		if (setOpacity) {
+			opacity = this.opacity ? this.opacity.getValue(time) * ctx.globalAlpha : ctx.globalAlpha
+		}
 
 		if (this.position) {
 			const position = this.position.getValue(time)
@@ -87,14 +93,15 @@ class Transform {
 			positionY = this.positionY ? this.positionY.getValue(time) : 0
 		}
 
-		// console.log(ctx, positionX, positionY, anchor, rotation, skew, skewAxis, scaleX, scaleY, opacity);
-
 		//order very very important :)
 		ctx.transform(1, 0, 0, 1, positionX - anchor[0], positionY - anchor[1])
 		this.setRotation(ctx, rotation, anchor[0], anchor[1])
 		this.setSkew(ctx, skew, skewAxis, anchor[0], anchor[1])
 		this.setScale(ctx, scaleX, scaleY, anchor[0], anchor[1])
-		ctx.globalAlpha = opacity
+
+		if (setOpacity) {
+			ctx.globalAlpha = opacity
+		}
 	}
 
 	setRotation(ctx: CanvasRenderingContext2D, rad: number, x: number, y: number) {

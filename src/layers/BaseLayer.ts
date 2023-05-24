@@ -110,7 +110,7 @@ class BaseLayer {
 
 	setParentTransform(ctx: CanvasRenderingContext2D, time: number) {
 		this.parent?.setParentTransform(ctx, time)
-		this.transform.update(ctx, time)
+		this.transform.update(ctx, time, false)
 	}
 
 	setKeyframes(time: number) {
